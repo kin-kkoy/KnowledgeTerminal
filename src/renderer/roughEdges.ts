@@ -12,6 +12,8 @@
  * launch you may well have forgotten.
  */
 
+import { store } from './store'
+
 export interface RoughEdge {
   id: string
   title: string
@@ -96,11 +98,7 @@ export function guarded(id: string, action: () => void): () => void {
       return
     }
     setPendingAction(action)
-    // Imported lazily: this module is plain logic and must not depend on the
-    // store, which imports half the renderer.
-    void import('./store').then(({ store }) => {
-      store.get().setPendingRoughEdge(id)
-      store.get().openModal('roughEdge')
-    })
+    store.get().setPendingRoughEdge(id)
+    store.get().openModal('roughEdge')
   }
 }
