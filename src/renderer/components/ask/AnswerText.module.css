@@ -1,0 +1,106 @@
+/*
+ * Answer prose. Sits between UI chrome (13px) and document prose (16px), and
+ * every block inherits that — an answer should never out-shout the document
+ * it is talking about.
+ */
+.prose {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+.prose p {
+  margin: 0 0 var(--s-5);
+}
+
+/* A model's `##` means "new section", not "bigger type" — see AnswerText.tsx. */
+.heading {
+  margin: var(--s-6) 0 var(--s-3);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 var(--s-5);
+  padding-left: var(--s-7);
+}
+
+.prose li {
+  margin-bottom: var(--s-2);
+}
+
+.prose li::marker {
+  color: var(--text-muted);
+}
+
+.prose code {
+  padding: 1px var(--s-2);
+  border-radius: var(--r-sm);
+  background: var(--bg-raised);
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+/* Not syntax-highlighted on purpose: Shiki belongs to the document pipeline,
+   and an answer's code is usually a fragment with no reliable language. */
+.prose pre {
+  margin: 0 0 var(--s-5);
+  overflow-x: auto;
+  padding: var(--s-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-raised);
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+  font-size: var(--fs-code);
+}
+
+.prose blockquote {
+  margin: 0 0 var(--s-5);
+  padding-left: var(--s-5);
+  border-left: 2px solid var(--border-strong);
+  color: var(--text-muted);
+}
+
+.prose hr {
+  margin: var(--s-6) 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.prose table {
+  margin: 0 0 var(--s-5);
+  border-collapse: collapse;
+  font-size: var(--fs-ui);
+}
+
+.prose th,
+.prose td {
+  padding: var(--s-3) var(--s-5);
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+.prose th {
+  background: var(--bg-raised);
+  font-weight: 600;
+}
+
+.link {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

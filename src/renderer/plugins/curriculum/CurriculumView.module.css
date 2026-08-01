@@ -1,0 +1,127 @@
+.view {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: var(--s-6);
+}
+
+.branch {
+  border-bottom: 1px solid var(--border);
+}
+
+.branchTitle {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  padding: var(--s-4) var(--panel-pad) var(--s-2);
+  font-size: var(--fs-ui-xs);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* The branch's own colour, as a 6px square. Flat, no gradient. */
+.swatch {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+}
+
+.count {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.row {
+  display: flex;
+  gap: var(--s-2);
+  align-items: center;
+  min-height: var(--row-h);
+  /* Chapters carry a 2px rule in their branch colour; topics do not. */
+  border-left: 2px solid transparent;
+  transition: background var(--t-fast);
+}
+
+.row:hover {
+  background: var(--bg-hover);
+}
+
+.check {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--r-sm);
+  color: var(--text-faint);
+  transition: color var(--t-fast);
+}
+
+.check:hover {
+  color: var(--green);
+}
+
+.label,
+.labelPlain {
+  display: flex;
+  gap: var(--s-3);
+  align-items: baseline;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--s-1) 0;
+}
+
+.text,
+.textDone {
+  overflow: hidden;
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.label:hover .text {
+  color: var(--text);
+}
+
+/* Completed work stays legible — struck through, not faded out. Dimming with
+   opacity is banned in this design for exactly this reason. */
+.textDone {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.est {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.expand {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: 0 var(--s-3);
+  color: var(--text-faint);
+}
+
+.expand:hover {
+  color: var(--text-muted);
+}
+
+.summary {
+  padding: var(--s-2) var(--panel-pad) var(--s-4) 0;
+  font-size: var(--fs-ui-xs);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+.empty {
+  padding: var(--s-6) var(--panel-pad);
+  font-size: var(--fs-ui-sm);
+  line-height: 1.5;
+  color: var(--text-faint);
+}

@@ -1,0 +1,1571 @@
+{
+  "meta": {
+    "title": "C#/.NET \u2014 Skill Tree",
+    "version": "2.0",
+    "dotnet": "10 (LTS)",
+    "csharp": "14",
+    "updated": "2026-07",
+    "note": "Big nodes = chapters (modules). Small nodes = topics (day-blocks). Diamonds = crossroads. Hexagons = checkpoints / project defenses. Progress is tracked by the app, not stored here."
+  },
+  "branches": {
+    "core": {
+      "label": "C# Core",
+      "color": "#61afef",
+      "icon": "fa-solid fa-microchip",
+      "lane": 0,
+      "side": 1,
+      "order": 0
+    },
+    "backend": {
+      "label": "Backend / Web .NET",
+      "color": "#98c379",
+      "icon": "fa-solid fa-server",
+      "lane": -600,
+      "side": -1,
+      "order": 1
+    },
+    "cloud": {
+      "label": "Cloud & DevOps (Azure)",
+      "color": "#e5c07b",
+      "icon": "fa-solid fa-cloud",
+      "lane": 0,
+      "side": -1,
+      "order": 2
+    },
+    "game": {
+      "label": "Game Dev (C#)",
+      "color": "#c678dd",
+      "icon": "fa-solid fa-gamepad",
+      "lane": 620,
+      "side": 1,
+      "order": 3
+    }
+  },
+  "nodes": [
+    {
+      "id": "start",
+      "kind": "crossroad",
+      "branch": "core",
+      "tier": -1,
+      "label": "START",
+      "icon": "fa-solid fa-flag-checkered",
+      "summary": "Your entry point. Work down the core spine, then pick a specialization at the crossroad.",
+      "prereqs": []
+    },
+    {
+      "_section": "CORE SPINE (tiers 0-4)"
+    },
+    {
+      "id": "m01",
+      "kind": "chapter",
+      "branch": "core",
+      "tier": 0,
+      "label": "C# Fundamentals",
+      "icon": "fa-solid fa-bolt",
+      "est": "5 days",
+      "doc": "plan/1-core/module-01-csharp-fundamentals.md",
+      "chapter": "chapters/1-core/01-fundamentals.md",
+      "cert": "Foundational C# (free, Microsoft \u00d7 freeCodeCamp)",
+      "summary": "Where C# differs from C/Java: value vs reference types, nullability, patterns, the Try-pattern. Interviewers screen on this in the first 10 minutes.",
+      "prereqs": [
+        "start"
+      ],
+      "checkpoint": "cp1",
+      "topics": [
+        "m01-t1",
+        "m01-t2",
+        "m01-t3",
+        "m01-t4",
+        "m01-t5"
+      ],
+      "atlas": [
+        "01-introduction",
+        "02-program-structure",
+        "03-variables",
+        "04-types",
+        "05-operators",
+        "06-control-flow",
+        "07-methods",
+        "08-parameters",
+        "09-scope",
+        "10-namespaces",
+        "11-files",
+        "12-exceptions"
+      ]
+    },
+    {
+      "id": "m01-t1",
+      "kind": "topic",
+      "group": "m01",
+      "order": 1,
+      "label": "Value vs reference",
+      "summary": "struct (copied) vs class (shared); stack vs heap; == semantics; boxing.",
+      "example": "struct P { public int X; }\nclass C { public int X; }\n\nvar a = new P { X = 1 };\nvar b = a;        // struct: b is a copy\nb.X = 99;\n\nvar c = new C { X = 1 };\nvar d = c;        // class: d is the same object\nd.X = 99;\n\nSystem.Console.WriteLine($\"struct a.X={a.X} (unchanged), class c.X={c.X} (changed)\");",
+      "atlas": [
+        "04-types",
+        "22-structs"
+      ]
+    },
+    {
+      "id": "m01-t2",
+      "kind": "topic",
+      "group": "m01",
+      "order": 2,
+      "label": "Nullability & patterns",
+      "summary": "Nullable reference types, switch expressions, property/relational patterns \u2014 no if-chains.",
+      "example": "string Describe(int? n) => n switch\n{\n    null         => \"nothing\",\n    < 0          => \"negative\",\n    0            => \"zero\",\n    > 0 and < 10 => \"small\",\n    _            => \"big\"\n};\n\nforeach (int? x in new int?[] { null, -3, 0, 7, 42 })\n    System.Console.WriteLine($\"{x}: {Describe(x)}\");",
+      "atlas": [
+        "33-nullable-reference-types",
+        "34-pattern-matching"
+      ]
+    },
+    {
+      "id": "m01-t3",
+      "kind": "topic",
+      "group": "m01",
+      "order": 3,
+      "label": "Methods & the C-corner",
+      "summary": "Try-pattern, ref/out, optional & named params, extension methods, tuples.",
+      "example": "bool TryHalve(int n, out int result)\n{\n    result = n / 2;\n    return n % 2 == 0;\n}\n\n(int min, int max) Range(int[] a) => (a.Min(), a.Max());\n\nvar ok = TryHalve(10, out int h);\nvar (lo, hi) = Range(new[] { 5, 2, 9, 1 });\nSystem.Console.WriteLine($\"halve ok={ok} h={h}; range {lo}..{hi}\");",
+      "atlas": [
+        "07-methods",
+        "08-parameters"
+      ]
+    },
+    {
+      "id": "m01-t4",
+      "kind": "topic",
+      "group": "m01",
+      "order": 4,
+      "label": "Errors & IO",
+      "summary": "Typed exceptions (never bare catch), exit codes, robust CLI, first xUnit tests.",
+      "example": null,
+      "atlas": [
+        "12-exceptions",
+        "49-file-io"
+      ]
+    },
+    {
+      "id": "m01-t5",
+      "kind": "topic",
+      "group": "m01",
+      "order": 5,
+      "label": "Mini-project: C\u2192C# port",
+      "summary": "Port a small C program to idiomatic C#: properties, records, nullable-clean, typed errors, tests.",
+      "example": null
+    },
+    {
+      "id": "cp1",
+      "kind": "checkpoint",
+      "group": "m01",
+      "branch": "core",
+      "label": "Checkpoint 1",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": "checkpoints/cp1.md",
+      "summary": "Closed-book, timed, no AI. Prove you can write idiomatic fundamentals from scratch.",
+      "prereqs": [
+        "m01"
+      ]
+    },
+    {
+      "id": "m02",
+      "kind": "chapter",
+      "branch": "core",
+      "tier": 1,
+      "label": "OOP",
+      "icon": "fa-solid fa-fire",
+      "est": "5 days",
+      "doc": "plan/1-core/module-02-oop.md",
+      "chapter": "chapters/1-core/02-oop.md",
+      "checkpoint": "cp2",
+      "summary": "Encapsulation, inheritance vs composition, interfaces, polymorphism, records. Model behavior, not just data.",
+      "prereqs": [
+        "cp1"
+      ],
+      "topics": [
+        "m02-t1",
+        "m02-t2",
+        "m02-t3",
+        "m02-t4"
+      ],
+      "important": true,
+      "atlas": [
+        "13-classes",
+        "14-objects",
+        "15-constructors",
+        "16-properties",
+        "17-encapsulation",
+        "18-inheritance",
+        "19-polymorphism",
+        "20-interfaces",
+        "21-records",
+        "22-structs",
+        "23-enums"
+      ]
+    },
+    {
+      "id": "m02-t1",
+      "kind": "topic",
+      "group": "m02",
+      "order": 1,
+      "label": "Encapsulation & properties",
+      "summary": "Access modifiers, auto-properties, init-only, invariants over public fields.",
+      "example": null,
+      "atlas": [
+        "16-properties",
+        "17-encapsulation"
+      ]
+    },
+    {
+      "id": "m02-t2",
+      "kind": "topic",
+      "group": "m02",
+      "order": 2,
+      "label": "Inheritance & polymorphism",
+      "summary": "abstract/virtual/override, base calls, when to prefer composition.",
+      "example": "interface IShape { double Area(); }\n\nabstract class Shape : IShape\n{\n    public string Name = \"\";\n    public abstract double Area();\n}\n\nclass Circle : Shape\n{\n    public double R;\n    public Circle(double r) { R = r; Name = \"circle\"; }\n    public override double Area() => 3.14159 * R * R;\n}\n\nclass Square : Shape\n{\n    public double S;\n    public Square(double s) { S = s; Name = \"square\"; }\n    public override double Area() => S * S;\n}\n\nShape[] shapes = { new Circle(2), new Square(3) };\nforeach (var s in shapes)\n    System.Console.WriteLine($\"{s.Name}: {s.Area():F2}\");",
+      "atlas": [
+        "18-inheritance",
+        "19-polymorphism"
+      ]
+    },
+    {
+      "id": "m02-t3",
+      "kind": "topic",
+      "group": "m02",
+      "order": 3,
+      "label": "Interfaces & abstraction",
+      "summary": "Program to interfaces, default members, dependency-friendly design.",
+      "example": null,
+      "atlas": [
+        "20-interfaces"
+      ]
+    },
+    {
+      "id": "m02-t4",
+      "kind": "topic",
+      "group": "m02",
+      "order": 4,
+      "label": "Records & value equality",
+      "summary": "record vs class, with-expressions, immutability, value-based equality.",
+      "example": null,
+      "atlas": [
+        "21-records",
+        "31-equality"
+      ]
+    },
+    {
+      "id": "cp2",
+      "kind": "checkpoint",
+      "group": "m02",
+      "branch": "core",
+      "label": "Checkpoint 2",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": "checkpoints/cp2.md",
+      "summary": "Design a small type hierarchy from scratch under time.",
+      "prereqs": [
+        "m02"
+      ]
+    },
+    {
+      "id": "m03",
+      "kind": "chapter",
+      "branch": "core",
+      "tier": 2,
+      "label": "Collections & Generics",
+      "icon": "fa-solid fa-layer-group",
+      "est": "4 days",
+      "doc": "plan/1-core/module-03-collections-generics.md",
+      "chapter": "chapters/1-core/03-collections-generics.md",
+      "checkpoint": "cp3",
+      "summary": "List/Dictionary/HashSet and when each; generics; iterators; equality & comparers. The data structures you use every day.",
+      "prereqs": [
+        "cp2"
+      ],
+      "topics": [
+        "m03-t1",
+        "m03-t2",
+        "m03-t3"
+      ],
+      "important": true,
+      "atlas": [
+        "24-arrays",
+        "25-list",
+        "26-dictionary",
+        "27-hashset",
+        "28-queue",
+        "29-stack",
+        "30-generics",
+        "31-equality",
+        "32-iterators"
+      ]
+    },
+    {
+      "id": "m03-t1",
+      "kind": "topic",
+      "group": "m03",
+      "order": 1,
+      "label": "The core collections",
+      "summary": "List, Dictionary, HashSet, Queue/Stack \u2014 Big-O and the right tool.",
+      "example": "var seen = new HashSet<int>();\nvar counts = new Dictionary<string, int>();\n\nforeach (var w in new[] { \"a\", \"b\", \"a\", \"c\", \"b\", \"a\" })\n    counts[w] = counts.TryGetValue(w, out var n) ? n + 1 : 1;\n\nforeach (var kv in counts)\n    System.Console.WriteLine($\"{kv.Key} => {kv.Value}\");",
+      "atlas": [
+        "24-arrays",
+        "25-list",
+        "26-dictionary",
+        "27-hashset",
+        "28-queue",
+        "29-stack"
+      ]
+    },
+    {
+      "id": "m03-t2",
+      "kind": "topic",
+      "group": "m03",
+      "order": 2,
+      "label": "Generics & constraints",
+      "summary": "Generic methods/types, where-constraints, why generics beat object.",
+      "example": null,
+      "atlas": [
+        "30-generics"
+      ]
+    },
+    {
+      "id": "m03-t3",
+      "kind": "topic",
+      "group": "m03",
+      "order": 3,
+      "label": "Iterators & equality",
+      "summary": "yield return, IEnumerable, IEquatable, custom comparers.",
+      "example": null,
+      "atlas": [
+        "31-equality",
+        "32-iterators"
+      ]
+    },
+    {
+      "id": "cp3",
+      "kind": "checkpoint",
+      "group": "m03",
+      "branch": "core",
+      "label": "Checkpoint 3",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": "checkpoints/cp3.md",
+      "summary": "Pick correct structures and implement generic code cold.",
+      "prereqs": [
+        "m03"
+      ]
+    },
+    {
+      "id": "m04",
+      "kind": "chapter",
+      "branch": "core",
+      "tier": 3,
+      "label": "LINQ",
+      "icon": "fa-solid fa-diagram-project",
+      "est": "5 days",
+      "doc": "plan/1-core/module-04-linq.md",
+      "chapter": "chapters/1-core/04-linq.md",
+      "checkpoint": "cp4",
+      "summary": "The query language inside C#: pipelines, deferred execution, GroupBy/Join/SelectMany. Unlocks project p1.",
+      "prereqs": [
+        "cp3"
+      ],
+      "topics": [
+        "m04-t1",
+        "m04-t2",
+        "m04-t3",
+        "m04-t4"
+      ],
+      "important": true,
+      "atlas": [
+        "40-linq",
+        "39-lambdas",
+        "36-extension-methods",
+        "35-expression-bodied-members"
+      ]
+    },
+    {
+      "id": "m04-t1",
+      "kind": "topic",
+      "group": "m04",
+      "order": 1,
+      "label": "The core five + pipelines",
+      "summary": "Where, Select, OrderBy, First/Single, Aggregate \u2014 composing pipelines.",
+      "example": "int[] nums = { 5, 2, 8, 1, 9, 3, 7 };\n\nvar top3odds = nums.Where(n => n % 2 == 1)\n                   .OrderByDescending(n => n)\n                   .Take(3)\n                   .ToList();\nvar sum = nums.Where(n => n > 4).Sum();\n\nSystem.Console.WriteLine($\"top-3 odds: {string.Join(\", \", top3odds)}; sum>4: {sum}\");",
+      "atlas": [
+        "40-linq",
+        "39-lambdas"
+      ]
+    },
+    {
+      "id": "m04-t2",
+      "kind": "topic",
+      "group": "m04",
+      "order": 2,
+      "label": "Deferred execution",
+      "summary": "The interview day: lazy evaluation, multiple enumeration, ToList timing.",
+      "example": null,
+      "atlas": [
+        "40-linq"
+      ]
+    },
+    {
+      "id": "m04-t3",
+      "kind": "topic",
+      "group": "m04",
+      "order": 3,
+      "label": "GroupBy, Join, SelectMany",
+      "summary": "Grouping, joining sequences, flattening \u2014 real reporting queries.",
+      "example": null,
+      "atlas": [
+        "40-linq"
+      ]
+    },
+    {
+      "id": "m04-t4",
+      "kind": "topic",
+      "group": "m04",
+      "order": 4,
+      "label": "Delegates & events",
+      "atlas": [
+        "37-delegates",
+        "38-events"
+      ],
+      "example": null,
+      "summary": "Delegates, events and the publish/subscribe pattern \u2014 the callback types lambdas, LINQ and async all build on."
+    },
+    {
+      "id": "cp4",
+      "kind": "checkpoint",
+      "group": "m04",
+      "branch": "core",
+      "label": "Checkpoint 4",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": "checkpoints/cp4.md",
+      "summary": "Write non-trivial LINQ (GroupBy/Join) from memory.",
+      "prereqs": [
+        "m04"
+      ]
+    },
+    {
+      "id": "p1",
+      "kind": "project",
+      "branch": "core",
+      "label": "Project 1 \u2014 Console Analyzer",
+      "icon": "fa-solid fa-diagram-project",
+      "summary": "Ship a LINQ-powered console data tool. Defense: explain it to Claude Code \u2014 why these queries, where deferred execution bit you.",
+      "defense": true,
+      "prereqs": [
+        "cp4"
+      ]
+    },
+    {
+      "id": "m05",
+      "kind": "chapter",
+      "branch": "core",
+      "tier": 4,
+      "label": "Async / Await",
+      "icon": "fa-solid fa-stopwatch",
+      "est": "4 days",
+      "doc": "plan/1-core/module-05-async.md",
+      "chapter": "chapters/1-core/05-async.md",
+      "checkpoint": "cp5",
+      "summary": "Task, async/await, cancellation, parallelism and the classic gotchas (deadlocks, async void). Concurrency without the pain.",
+      "prereqs": [
+        "cp4"
+      ],
+      "topics": [
+        "m05-t1",
+        "m05-t2",
+        "m05-t3"
+      ],
+      "important": true,
+      "atlas": [
+        "41-tasks",
+        "42-async-await",
+        "43-cancellation",
+        "44-parallelism"
+      ]
+    },
+    {
+      "id": "m05-t1",
+      "kind": "topic",
+      "group": "m05",
+      "order": 1,
+      "label": "Tasks & await",
+      "summary": "Task vs Thread, await mechanics, async all the way.",
+      "example": null,
+      "atlas": [
+        "41-tasks",
+        "42-async-await"
+      ]
+    },
+    {
+      "id": "m05-t2",
+      "kind": "topic",
+      "group": "m05",
+      "order": 2,
+      "label": "Cancellation & parallelism",
+      "summary": "CancellationToken, Task.WhenAll, Parallel, throttling.",
+      "example": null,
+      "atlas": [
+        "43-cancellation",
+        "44-parallelism"
+      ]
+    },
+    {
+      "id": "m05-t3",
+      "kind": "topic",
+      "group": "m05",
+      "order": 3,
+      "label": "Async gotchas",
+      "summary": "Deadlocks, async void, ConfigureAwait, exception flow.",
+      "example": null,
+      "atlas": [
+        "42-async-await"
+      ]
+    },
+    {
+      "id": "cp5",
+      "kind": "checkpoint",
+      "group": "m05",
+      "branch": "core",
+      "label": "Checkpoint 5",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": "checkpoints/cp5.md",
+      "summary": "Concurrency exam \u2014 build correct async code cold.",
+      "prereqs": [
+        "m05"
+      ]
+    },
+    {
+      "id": "cross",
+      "kind": "crossroad",
+      "branch": "core",
+      "tier": 5,
+      "label": "SPECIALIZE",
+      "icon": "fa-solid fa-code-fork",
+      "summary": "C# fluency proven. Now branch \u2014 not either/or, just separation of concerns to streamline your focus. Backend gets you hired; Cloud makes you deployable; Game is where you want to build.",
+      "prereqs": [
+        "cp5"
+      ]
+    },
+    {
+      "_section": "BACKEND / WEB .NET BRANCH (tiers 6-10)"
+    },
+    {
+      "id": "m06",
+      "kind": "chapter",
+      "branch": "backend",
+      "tier": 6,
+      "label": "ASP.NET Core",
+      "icon": "fa-solid fa-globe",
+      "est": "8 days",
+      "doc": "plan/2-backend/module-06-aspnet-core.md",
+      "chapter": "chapters/2-backend/06-aspnet-core.md",
+      "checkpoint": "cp6",
+      "summary": "Minimal APIs, middleware, DI, model binding & validation, ProblemDetails, OpenAPI. Builds project p2's skeleton.",
+      "prereqs": [
+        "cross"
+      ],
+      "topics": [
+        "m06-t1",
+        "m06-t2",
+        "m06-t3",
+        "m06-t4",
+        "m06-t5"
+      ],
+      "important": true,
+      "atlas": [
+        "53-dependency-injection",
+        "52-configuration",
+        "51-logging"
+      ]
+    },
+    {
+      "id": "m06-t1",
+      "kind": "topic",
+      "group": "m06",
+      "order": 1,
+      "label": "Hosting & minimal API",
+      "summary": "The host, endpoints, routing, the request pipeline.",
+      "example": null
+    },
+    {
+      "id": "m06-t2",
+      "kind": "topic",
+      "group": "m06",
+      "order": 2,
+      "label": "Middleware & DI",
+      "summary": "Middleware order, service lifetimes (transient/scoped/singleton).",
+      "example": null,
+      "important": true,
+      "atlas": [
+        "53-dependency-injection"
+      ]
+    },
+    {
+      "id": "m06-t3",
+      "kind": "topic",
+      "group": "m06",
+      "order": 3,
+      "label": "Binding, DTOs & validation",
+      "summary": "Model binding, DTO boundaries, data annotations / FluentValidation.",
+      "example": null
+    },
+    {
+      "id": "m06-t4",
+      "kind": "topic",
+      "group": "m06",
+      "order": 4,
+      "label": "Errors & ProblemDetails",
+      "summary": "Consistent error responses, exception middleware, RFC 7807.",
+      "example": null
+    },
+    {
+      "id": "m06-t5",
+      "kind": "topic",
+      "group": "m06",
+      "order": 5,
+      "label": "Config, logging, OpenAPI, tests",
+      "summary": "Configuration, structured logging, Swagger/OpenAPI, integration tests.",
+      "example": null
+    },
+    {
+      "id": "cp6",
+      "kind": "checkpoint",
+      "group": "m06",
+      "branch": "backend",
+      "label": "Checkpoint 6",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": "checkpoints/cp6.md",
+      "summary": "Build a small API with DI + validation from scratch.",
+      "prereqs": [
+        "m06"
+      ]
+    },
+    {
+      "id": "m07",
+      "kind": "chapter",
+      "branch": "backend",
+      "tier": 7,
+      "label": "SQL + EF Core",
+      "icon": "fa-solid fa-database",
+      "est": "8 days",
+      "doc": "plan/2-backend/module-07-sql-efcore.md",
+      "chapter": "chapters/2-backend/07-sql-efcore.md",
+      "checkpoint": "cp7",
+      "summary": "Relational modeling, EF Core, migrations, relationships, transactions. Puts p2 on a real Postgres database.",
+      "prereqs": [
+        "cp6"
+      ],
+      "topics": [
+        "m07-t1",
+        "m07-t2",
+        "m07-t3",
+        "m07-t4"
+      ],
+      "important": true,
+      "atlas": [
+        "50-serialization"
+      ]
+    },
+    {
+      "id": "m07-t1",
+      "kind": "topic",
+      "group": "m07",
+      "order": 1,
+      "label": "SQL foundations",
+      "summary": "Write real SQL by hand \u2014 SELECT / JOIN / GROUP BY, aggregates & subqueries; CREATE/ALTER tables, keys, indexes, transactions \u2014 then read the SQL EF Core generates for you.",
+      "example": null
+    },
+    {
+      "id": "m07-t2",
+      "kind": "topic",
+      "group": "m07",
+      "order": 2,
+      "label": "EF Core modeling & migrations",
+      "summary": "DbContext, entities, conventions, code-first migrations.",
+      "example": null
+    },
+    {
+      "id": "m07-t3",
+      "kind": "topic",
+      "group": "m07",
+      "order": 3,
+      "label": "Querying & relationships",
+      "summary": "LINQ-to-SQL translation, includes, tracking vs no-tracking, N+1.",
+      "example": null
+    },
+    {
+      "id": "m07-t4",
+      "kind": "topic",
+      "group": "m07",
+      "order": 4,
+      "label": "Transactions & performance",
+      "summary": "Unit of work, transactions, query performance, projections.",
+      "example": null
+    },
+    {
+      "id": "cp7",
+      "kind": "checkpoint",
+      "group": "m07",
+      "branch": "backend",
+      "label": "Checkpoint 7",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": "checkpoints/cp7.md",
+      "summary": "Model + migrate + query a schema cold.",
+      "prereqs": [
+        "m07"
+      ]
+    },
+    {
+      "id": "m08",
+      "kind": "chapter",
+      "branch": "backend",
+      "tier": 8,
+      "label": "Auth (N + Z)",
+      "icon": "fa-solid fa-lock",
+      "est": "5 days",
+      "doc": "plan/2-backend/module-08-auth.md",
+      "chapter": "chapters/2-backend/08-auth.md",
+      "checkpoint": "cp8",
+      "summary": "Authentication (JWT), authorization (policies/roles), Identity, security hardening. Locks p2 down.",
+      "prereqs": [
+        "cp7"
+      ],
+      "topics": [
+        "m08-t1",
+        "m08-t2",
+        "m08-t3"
+      ]
+    },
+    {
+      "id": "m08-t1",
+      "kind": "topic",
+      "group": "m08",
+      "order": 1,
+      "label": "Authentication & JWT",
+      "summary": "Tokens, claims, the auth middleware, login flow.",
+      "example": null
+    },
+    {
+      "id": "m08-t2",
+      "kind": "topic",
+      "group": "m08",
+      "order": 2,
+      "label": "Authorization",
+      "summary": "Roles, policies, resource-based authorization.",
+      "example": null
+    },
+    {
+      "id": "m08-t3",
+      "kind": "topic",
+      "group": "m08",
+      "order": 3,
+      "label": "Security hardening",
+      "summary": "Hashing, secrets, HTTPS, common OWASP pitfalls.",
+      "example": null
+    },
+    {
+      "id": "cp8",
+      "kind": "checkpoint",
+      "group": "m08",
+      "branch": "backend",
+      "label": "Checkpoint 8",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": "checkpoints/cp8.md",
+      "summary": "Secure an endpoint end-to-end under time.",
+      "prereqs": [
+        "m08"
+      ]
+    },
+    {
+      "id": "p2",
+      "kind": "project",
+      "branch": "backend",
+      "label": "Project 2 \u2014 Data-backed API",
+      "icon": "fa-solid fa-database",
+      "summary": "Build a real REST API on Postgres with EF Core \u2014 model the schema, migrations, relationships, transactions \u2014 then lock it down with JWT auth. Defense: justify your schema + indexes and show Claude Code where you killed N+1.",
+      "defense": true,
+      "prereqs": [
+        "cp8"
+      ]
+    },
+    {
+      "id": "m09",
+      "kind": "chapter",
+      "branch": "backend",
+      "tier": 9,
+      "label": "Deployment",
+      "icon": "fa-solid fa-rocket",
+      "est": "5 days",
+      "doc": "plan/2-backend/module-09-deployment.md",
+      "chapter": "chapters/2-backend/09-deployment.md",
+      "checkpoint": "cp9",
+      "summary": "Docker, CI/CD, public HTTPS, monitoring. Puts p2 live on the internet. (Bridges into the Cloud branch.)",
+      "prereqs": [
+        "cp8"
+      ],
+      "topics": [
+        "m09-t1",
+        "m09-t2",
+        "m09-t3"
+      ],
+      "atlas": [
+        "45-dotnet-cli",
+        "46-projects-csproj",
+        "47-solutions-sln",
+        "48-nuget"
+      ]
+    },
+    {
+      "id": "m09-t1",
+      "kind": "topic",
+      "group": "m09",
+      "order": 1,
+      "label": "Docker & images",
+      "summary": "Dockerfile for .NET, multi-stage builds, running containers.",
+      "example": null
+    },
+    {
+      "id": "m09-t2",
+      "kind": "topic",
+      "group": "m09",
+      "order": 2,
+      "label": "CI/CD",
+      "summary": "GitHub Actions pipeline: build, test, publish.",
+      "example": null
+    },
+    {
+      "id": "m09-t3",
+      "kind": "topic",
+      "group": "m09",
+      "order": 3,
+      "label": "Hosting, HTTPS & monitoring",
+      "summary": "Deploy target, TLS, health checks, logs/metrics.",
+      "example": null
+    },
+    {
+      "id": "cp9",
+      "kind": "checkpoint",
+      "group": "m09",
+      "branch": "backend",
+      "label": "Checkpoint 9",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": "checkpoints/cp9.md",
+      "summary": "Containerize + deploy a service cold.",
+      "prereqs": [
+        "m09"
+      ]
+    },
+    {
+      "id": "m10",
+      "kind": "chapter",
+      "branch": "backend",
+      "tier": 10,
+      "label": "Capstone",
+      "icon": "fa-solid fa-trophy",
+      "est": "4 weeks",
+      "doc": "plan/2-backend/module-10-capstone-final-project.md",
+      "chapter": "chapters/2-backend/10-capstone.md",
+      "checkpoint": "cp10",
+      "summary": "Repeat the whole arc solo, bigger, against a formal spec. Your portfolio centerpiece \u2014 deployed and documented.",
+      "prereqs": [
+        "cp9"
+      ],
+      "topics": [
+        "m10-t1",
+        "m10-t2",
+        "m10-t3"
+      ]
+    },
+    {
+      "id": "m10-t1",
+      "kind": "topic",
+      "group": "m10",
+      "order": 1,
+      "label": "Spec & design",
+      "summary": "Write the spec, model the domain, plan the build.",
+      "example": null
+    },
+    {
+      "id": "m10-t2",
+      "kind": "topic",
+      "group": "m10",
+      "order": 2,
+      "label": "Build & test",
+      "summary": "Implement the vertical slices with tests and CI.",
+      "example": null
+    },
+    {
+      "id": "m10-t3",
+      "kind": "topic",
+      "group": "m10",
+      "order": 3,
+      "label": "Ship & document",
+      "summary": "Deploy, write the README, polish for reviewers.",
+      "example": null
+    },
+    {
+      "id": "cp10",
+      "kind": "checkpoint",
+      "group": "m10",
+      "branch": "backend",
+      "label": "Checkpoint 10 (rubric)",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": "checkpoints/cp10.md",
+      "summary": "Capstone rubric review.",
+      "prereqs": [
+        "m10"
+      ]
+    },
+    {
+      "id": "p3",
+      "kind": "project",
+      "branch": "backend",
+      "label": "Project 3 \u2014 Capstone Defense",
+      "icon": "fa-solid fa-trophy",
+      "summary": "The big one. Defense: hand the repo to Claude Code \u2014 explain every architectural choice like I'm 5, and justify why not the alternatives.",
+      "defense": true,
+      "prereqs": [
+        "cp10"
+      ]
+    },
+    {
+      "_section": "CLOUD & DEVOPS (AZURE) BRANCH (tiers 6-11)"
+    },
+    {
+      "id": "c01",
+      "kind": "chapter",
+      "branch": "cloud",
+      "tier": 6,
+      "label": "Cloud & Azure Foundations",
+      "icon": "fa-solid fa-cloud",
+      "est": "4 days",
+      "doc": "plan/3-cloud/cloud-01-foundations.md",
+      "chapter": "chapters/3-cloud/11-cloud-foundations.md",
+      "cert": "AZ-900 (optional) \u2192 AI-200 path",
+      "summary": "The cloud model, Azure portal + CLI, resource groups, RBAC, cost. Orientation before you deploy.",
+      "prereqs": [
+        "cross"
+      ],
+      "topics": [
+        "c01-t1",
+        "c01-t2",
+        "c01-t3"
+      ]
+    },
+    {
+      "id": "c01-t1",
+      "kind": "topic",
+      "group": "c01",
+      "order": 1,
+      "label": "Cloud model & Azure map",
+      "summary": "IaaS/PaaS/serverless, regions, the service landscape.",
+      "example": null
+    },
+    {
+      "id": "c01-t2",
+      "kind": "topic",
+      "group": "c01",
+      "order": 2,
+      "label": "Portal, CLI & resource model",
+      "summary": "az CLI, resource groups, ARM, tagging.",
+      "example": null
+    },
+    {
+      "id": "c01-t3",
+      "kind": "topic",
+      "group": "c01",
+      "order": 3,
+      "label": "Identity, RBAC & cost",
+      "summary": "Entra ID basics, role assignments, budgets/cost alerts.",
+      "example": null
+    },
+    {
+      "id": "c02",
+      "kind": "chapter",
+      "branch": "cloud",
+      "tier": 7,
+      "label": "Containers",
+      "icon": "fa-brands fa-docker",
+      "est": "4 days",
+      "doc": "plan/3-cloud/cloud-02-containers.md",
+      "chapter": "chapters/3-cloud/12-containers.md",
+      "summary": "Containerize your .NET app properly and push it to a registry \u2014 the unit cloud deploys.",
+      "prereqs": [
+        "c01"
+      ],
+      "topics": [
+        "c02-t1",
+        "c02-t2"
+      ]
+    },
+    {
+      "id": "c02-t1",
+      "kind": "topic",
+      "group": "c02",
+      "order": 1,
+      "label": "Dockerize .NET",
+      "summary": "Multi-stage Dockerfile, small images, non-root, healthchecks.",
+      "example": null
+    },
+    {
+      "id": "c02-t2",
+      "kind": "topic",
+      "group": "c02",
+      "order": 2,
+      "label": "Registries (ACR)",
+      "summary": "Azure Container Registry, tags, pull secrets.",
+      "example": null
+    },
+    {
+      "id": "c03",
+      "kind": "chapter",
+      "branch": "cloud",
+      "tier": 8,
+      "label": "Azure Compute",
+      "icon": "fa-solid fa-microchip",
+      "est": "5 days",
+      "doc": "plan/3-cloud/cloud-03-compute.md",
+      "chapter": "chapters/3-cloud/13-azure-compute.md",
+      "checkpoint": "cpc1",
+      "summary": "Run your app on Azure: App Service, Functions (serverless), and Container Apps. Pick the right host.",
+      "prereqs": [
+        "c02"
+      ],
+      "topics": [
+        "c03-t1",
+        "c03-t2",
+        "c03-t3"
+      ]
+    },
+    {
+      "id": "c03-t1",
+      "kind": "topic",
+      "group": "c03",
+      "order": 1,
+      "label": "App Service",
+      "summary": "Deploy a web API, slots, scaling, config.",
+      "example": null
+    },
+    {
+      "id": "c03-t2",
+      "kind": "topic",
+      "group": "c03",
+      "order": 2,
+      "label": "Azure Functions",
+      "summary": "Serverless triggers/bindings, isolated worker, when to use.",
+      "example": null
+    },
+    {
+      "id": "c03-t3",
+      "kind": "topic",
+      "group": "c03",
+      "order": 3,
+      "label": "Container Apps",
+      "summary": "Managed containers, ingress, revisions, scale-to-zero.",
+      "example": null
+    },
+    {
+      "id": "cpc1",
+      "kind": "checkpoint",
+      "group": "c03",
+      "branch": "cloud",
+      "label": "Cloud Checkpoint 1",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": null,
+      "summary": "Deploy a containerized API to Azure compute from scratch.",
+      "prereqs": [
+        "c03"
+      ]
+    },
+    {
+      "id": "c04",
+      "kind": "chapter",
+      "branch": "cloud",
+      "tier": 9,
+      "label": "Storage & Config",
+      "icon": "fa-solid fa-hard-drive",
+      "est": "5 days",
+      "doc": "plan/3-cloud/cloud-04-storage.md",
+      "chapter": "chapters/3-cloud/14-storage-config.md",
+      "summary": "Persist and configure at cloud scale: Blob, Cosmos DB, Key Vault, and messaging (Service Bus/Queues).",
+      "prereqs": [
+        "cpc1"
+      ],
+      "topics": [
+        "c04-t1",
+        "c04-t2",
+        "c04-t3"
+      ]
+    },
+    {
+      "id": "c04-t1",
+      "kind": "topic",
+      "group": "c04",
+      "order": 1,
+      "label": "Blob & Cosmos DB",
+      "summary": "Object storage, NoSQL modeling, SDK usage from C#.",
+      "example": null
+    },
+    {
+      "id": "c04-t2",
+      "kind": "topic",
+      "group": "c04",
+      "order": 2,
+      "label": "Key Vault & config",
+      "summary": "Secrets, managed identity, app configuration.",
+      "example": null
+    },
+    {
+      "id": "c04-t3",
+      "kind": "topic",
+      "group": "c04",
+      "order": 3,
+      "label": "Messaging",
+      "summary": "Service Bus / Storage Queues, async decoupling.",
+      "example": null
+    },
+    {
+      "id": "c05",
+      "kind": "chapter",
+      "branch": "cloud",
+      "tier": 10,
+      "label": "CI/CD & IaC",
+      "icon": "fa-solid fa-infinity",
+      "est": "5 days",
+      "doc": "plan/3-cloud/cloud-05-cicd.md",
+      "chapter": "chapters/3-cloud/15-cicd-iac.md",
+      "checkpoint": "cpc2",
+      "summary": "Automate everything: GitHub Actions pipelines, Bicep infrastructure-as-code, monitoring with App Insights.",
+      "prereqs": [
+        "c04"
+      ],
+      "topics": [
+        "c05-t1",
+        "c05-t2",
+        "c05-t3"
+      ]
+    },
+    {
+      "id": "c05-t1",
+      "kind": "topic",
+      "group": "c05",
+      "order": 1,
+      "label": "GitHub Actions to Azure",
+      "summary": "Build/test/deploy pipeline, OIDC auth, environments.",
+      "example": null
+    },
+    {
+      "id": "c05-t2",
+      "kind": "topic",
+      "group": "c05",
+      "order": 2,
+      "label": "Infrastructure as Code (Bicep)",
+      "summary": "Declarative infra, repeatable environments.",
+      "example": null
+    },
+    {
+      "id": "c05-t3",
+      "kind": "topic",
+      "group": "c05",
+      "order": 3,
+      "label": "Monitoring",
+      "summary": "Application Insights, logs, metrics, alerts.",
+      "example": null
+    },
+    {
+      "id": "cpc2",
+      "kind": "checkpoint",
+      "group": "c05",
+      "branch": "cloud",
+      "label": "Cloud Checkpoint 2",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": null,
+      "summary": "Stand up an environment via IaC + pipeline, cold.",
+      "prereqs": [
+        "c05"
+      ]
+    },
+    {
+      "id": "c06",
+      "kind": "chapter",
+      "branch": "cloud",
+      "tier": 11,
+      "label": "AI-Integrated Cloud",
+      "icon": "fa-solid fa-robot",
+      "est": "5 days",
+      "doc": "plan/3-cloud/cloud-06-ai.md",
+      "chapter": "chapters/3-cloud/16-ai-cloud.md",
+      "cert": "AI-200 (Azure AI Cloud Developer) \u2014 the AZ-204 successor",
+      "summary": "Where Azure dev is heading: call Azure OpenAI / AI services from C#, and build a simple RAG feature. Note: AZ-204 retires 2026-07-31; AI-200 is the successor (AI-focused; verify current language coverage).",
+      "prereqs": [
+        "cpc2"
+      ],
+      "topics": [
+        "c06-t1",
+        "c06-t2"
+      ]
+    },
+    {
+      "id": "c06-t1",
+      "kind": "topic",
+      "group": "c06",
+      "order": 1,
+      "label": "Azure OpenAI & AI services",
+      "summary": "Call models/services from .NET, prompts, safety.",
+      "example": null
+    },
+    {
+      "id": "c06-t2",
+      "kind": "topic",
+      "group": "c06",
+      "order": 2,
+      "label": "RAG basics",
+      "summary": "Embeddings, vector search, grounding an API in your data.",
+      "example": null
+    },
+    {
+      "id": "cloud-cert",
+      "kind": "project",
+      "branch": "cloud",
+      "label": "Cloud Cert Track",
+      "icon": "fa-solid fa-certificate",
+      "summary": "Cert guidance node: AZ-204 (retires 2026-07-31) \u2192 AI-200. Defense: hand your deployed cloud project to Claude Code and justify every service choice.",
+      "defense": true,
+      "prereqs": [
+        "c06"
+      ]
+    },
+    {
+      "_section": "GAME DEV (C#) BRANCH \u2014 shared core then Unity / Godot"
+    },
+    {
+      "id": "g00",
+      "kind": "chapter",
+      "branch": "game",
+      "tier": 6,
+      "label": "C# for Games",
+      "icon": "fa-solid fa-gamepad",
+      "est": "6 days",
+      "doc": "plan/4-game/game-00-core.md",
+      "chapter": "chapters/4-game/17-game-core.md",
+      "summary": "Engine-agnostic foundations: the game loop, delta time, 2D vectors & math, input handling, state machines, collision basics. Trace these in Facet's lenses.",
+      "prereqs": [
+        "cross"
+      ],
+      "topics": [
+        "g00-t1",
+        "g00-t2",
+        "g00-t3",
+        "g00-t4"
+      ]
+    },
+    {
+      "id": "g00-t1",
+      "kind": "topic",
+      "group": "g00",
+      "order": 1,
+      "label": "Game loop & delta time",
+      "summary": "Update/render loop, frame independence, fixed vs variable timestep.",
+      "example": null
+    },
+    {
+      "id": "g00-t2",
+      "kind": "topic",
+      "group": "g00",
+      "order": 2,
+      "label": "Vectors & 2D math",
+      "summary": "Position/velocity, normalize, dot product, lerp \u2014 the math every game needs.",
+      "example": "double Length(double x, double y) => System.Math.Sqrt(x * x + y * y);\n\n(double x, double y) Normalize(double x, double y)\n{\n    var l = Length(x, y);\n    return l == 0 ? (0, 0) : (x / l, y / l);\n}\n\ndouble px = 0, py = 0, vx = 3, vy = 4;\nfor (int frame = 0; frame < 5; frame++)\n{\n    var (nx, ny) = Normalize(vx, vy);\n    px += nx * 2;   // move 2 units/frame along the velocity\n    py += ny * 2;\n    System.Console.WriteLine($\"frame {frame}: pos=({px:F2},{py:F2})\");\n}"
+    },
+    {
+      "id": "g00-t3",
+      "kind": "topic",
+      "group": "g00",
+      "order": 3,
+      "label": "Input & state machines",
+      "summary": "Input polling, a simple FSM for game/entity state (idle/run/jump).",
+      "example": null
+    },
+    {
+      "id": "g00-t4",
+      "kind": "topic",
+      "group": "g00",
+      "order": 4,
+      "label": "Collision basics",
+      "summary": "AABB / circle overlap tests, spatial reasoning.",
+      "example": null
+    },
+    {
+      "id": "cross-game",
+      "kind": "crossroad",
+      "branch": "game",
+      "tier": 7,
+      "label": "PICK ENGINE",
+      "icon": "fa-solid fa-code-fork",
+      "summary": "Same C#, two engines. Unity = industry standard, biggest job market, paid tiers. Godot = free/OSS, great 2D, but C# can't export to web yet. Learn one deeply, or both.",
+      "prereqs": [
+        "g00"
+      ]
+    },
+    {
+      "id": "u01",
+      "kind": "chapter",
+      "branch": "game",
+      "tier": 8,
+      "label": "Unity Basics",
+      "icon": "fa-solid fa-cube",
+      "est": "5 days",
+      "doc": "plan/4-game/game-unity-01.md",
+      "chapter": "chapters/4-game/18-unity-basics.md",
+      "summary": "Unity 6 editor, GameObjects, components, MonoBehaviour lifecycle, the C# scripting model.",
+      "prereqs": [
+        "cross-game"
+      ],
+      "topics": [
+        "u01-t1",
+        "u01-t2",
+        "u01-t3"
+      ],
+      "laneOffset": -280,
+      "side": -1
+    },
+    {
+      "id": "u01-t1",
+      "kind": "topic",
+      "group": "u01",
+      "order": 1,
+      "label": "Editor & GameObjects",
+      "summary": "Scenes, hierarchy, inspector, prefabs.",
+      "example": null
+    },
+    {
+      "id": "u01-t2",
+      "kind": "topic",
+      "group": "u01",
+      "order": 2,
+      "label": "MonoBehaviour lifecycle",
+      "summary": "Awake/Start/Update/FixedUpdate, serialized fields.",
+      "example": null
+    },
+    {
+      "id": "u01-t3",
+      "kind": "topic",
+      "group": "u01",
+      "order": 3,
+      "label": "Physics & input",
+      "summary": "Rigidbody, colliders, the Input System.",
+      "example": null
+    },
+    {
+      "id": "u02",
+      "kind": "chapter",
+      "branch": "game",
+      "tier": 9,
+      "label": "Unity Gameplay",
+      "icon": "fa-solid fa-cubes",
+      "est": "6 days",
+      "doc": "plan/4-game/game-unity-02.md",
+      "chapter": "chapters/4-game/19-unity-gameplay.md",
+      "checkpoint": "cpg1",
+      "summary": "Build real gameplay: systems, UI, audio, scene flow \u2014 then ship a small game.",
+      "prereqs": [
+        "u01"
+      ],
+      "topics": [
+        "u02-t1",
+        "u02-t2",
+        "u02-t3"
+      ],
+      "laneOffset": -280,
+      "side": -1
+    },
+    {
+      "id": "u02-t1",
+      "kind": "topic",
+      "group": "u02",
+      "order": 1,
+      "label": "Gameplay systems",
+      "summary": "Spawning, scoring, game state, ScriptableObjects.",
+      "example": null
+    },
+    {
+      "id": "u02-t2",
+      "kind": "topic",
+      "group": "u02",
+      "order": 2,
+      "label": "UI & audio",
+      "summary": "uGUI/UI Toolkit, canvases, audio sources.",
+      "example": null
+    },
+    {
+      "id": "u02-t3",
+      "kind": "topic",
+      "group": "u02",
+      "order": 3,
+      "label": "Build & ship",
+      "summary": "Player settings, builds, itch.io release.",
+      "example": null
+    },
+    {
+      "id": "cpg1",
+      "kind": "checkpoint",
+      "group": "u02",
+      "branch": "game",
+      "label": "Unity Checkpoint",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": null,
+      "summary": "Build a small complete Unity game from a spec.",
+      "prereqs": [
+        "u02"
+      ],
+      "laneOffset": -280,
+      "side": -1
+    },
+    {
+      "id": "pg-unity",
+      "kind": "project",
+      "branch": "game",
+      "label": "Unity Game Defense",
+      "icon": "fa-solid fa-gamepad",
+      "summary": "Ship a small Unity game. Defense: explain your architecture and why to Claude Code.",
+      "defense": true,
+      "prereqs": [
+        "cpg1"
+      ],
+      "laneOffset": -280,
+      "side": -1
+    },
+    {
+      "id": "gd01",
+      "kind": "chapter",
+      "branch": "game",
+      "tier": 8,
+      "label": "Godot Basics",
+      "icon": "fa-solid fa-robot",
+      "est": "5 days",
+      "doc": "plan/4-game/game-godot-01.md",
+      "chapter": "chapters/4-game/20-godot-basics.md",
+      "summary": "Godot 4.6 editor, nodes & scenes, the C# (.NET) workflow. Free/OSS, excellent for 2D.",
+      "prereqs": [
+        "cross-game"
+      ],
+      "topics": [
+        "gd01-t1",
+        "gd01-t2",
+        "gd01-t3"
+      ],
+      "laneOffset": 280,
+      "side": 1
+    },
+    {
+      "id": "gd01-t1",
+      "kind": "topic",
+      "group": "gd01",
+      "order": 1,
+      "label": "Editor, nodes & scenes",
+      "summary": "Node tree, scenes, the composition model.",
+      "example": null
+    },
+    {
+      "id": "gd01-t2",
+      "kind": "topic",
+      "group": "gd01",
+      "order": 2,
+      "label": "C# in Godot & signals",
+      "summary": "C# workflow, _Process/_PhysicsProcess, signals.",
+      "example": null
+    },
+    {
+      "id": "gd01-t3",
+      "kind": "topic",
+      "group": "gd01",
+      "order": 3,
+      "label": "2D physics & input",
+      "summary": "CharacterBody2D, areas, input map.",
+      "example": null
+    },
+    {
+      "id": "gd02",
+      "kind": "chapter",
+      "branch": "game",
+      "tier": 9,
+      "label": "Godot Gameplay",
+      "icon": "fa-solid fa-ghost",
+      "est": "6 days",
+      "doc": "plan/4-game/game-godot-02.md",
+      "chapter": "chapters/4-game/21-godot-gameplay.md",
+      "checkpoint": "cpg2",
+      "summary": "Full 2D gameplay: systems, UI, audio, export \u2014 then ship a small game.",
+      "prereqs": [
+        "gd01"
+      ],
+      "topics": [
+        "gd02-t1",
+        "gd02-t2",
+        "gd02-t3"
+      ],
+      "laneOffset": 280,
+      "side": 1
+    },
+    {
+      "id": "gd02-t1",
+      "kind": "topic",
+      "group": "gd02",
+      "order": 1,
+      "label": "Gameplay & scene flow",
+      "summary": "Spawning, scoring, autoloads/singletons, state.",
+      "example": null
+    },
+    {
+      "id": "gd02-t2",
+      "kind": "topic",
+      "group": "gd02",
+      "order": 2,
+      "label": "UI & audio",
+      "summary": "Control nodes, themes, audio streams.",
+      "example": null
+    },
+    {
+      "id": "gd02-t3",
+      "kind": "topic",
+      "group": "gd02",
+      "order": 3,
+      "label": "Export & ship",
+      "summary": "Export templates, desktop builds (note: C# web export N/A).",
+      "example": null
+    },
+    {
+      "id": "cpg2",
+      "kind": "checkpoint",
+      "group": "gd02",
+      "branch": "game",
+      "label": "Godot Checkpoint",
+      "icon": "fa-solid fa-shield-halved",
+      "doc": null,
+      "summary": "Build a small complete Godot game from a spec.",
+      "prereqs": [
+        "gd02"
+      ],
+      "laneOffset": 280,
+      "side": 1
+    },
+    {
+      "id": "pg-godot",
+      "kind": "project",
+      "branch": "game",
+      "label": "Godot Game Defense",
+      "icon": "fa-solid fa-gamepad",
+      "summary": "Ship a small Godot game. Defense: explain your architecture and why to Claude Code.",
+      "defense": true,
+      "prereqs": [
+        "cpg2"
+      ],
+      "laneOffset": 280,
+      "side": 1
+    }
+  ]
+}

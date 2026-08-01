@@ -1,0 +1,93 @@
+/*
+ * The list overlays stretch to a fixed 62vh because a result list is expected to
+ * fill it. An answer is a block of content, not a list — a two-line reply in a
+ * half-screen box reads as something failing to load. So this panel hugs its
+ * content and only starts scrolling when it genuinely overflows.
+ */
+.panel {
+  align-self: flex-start;
+}
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ── empty state ────────────────────────────────────────────────────────── */
+
+.hint {
+  padding: var(--s-6);
+}
+
+/* The explanation is context, so it sits back. The questions below it are the
+   actual offer, so they come forward — the opposite of how a paragraph of body
+   text plus a list would normally rank. */
+.hintLead {
+  padding-bottom: var(--s-5);
+  font-size: var(--fs-ui-sm);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+/* Reads as something to press rather than something to read: full width, its
+   own border, and the accent picked up on hover. */
+.example {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  font-size: var(--fs-ui);
+  color: var(--text);
+  text-align: left;
+}
+
+.example:hover,
+.example:focus-visible {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+/* A quiet leading mark so the row reads as an action, not a bullet. */
+.exampleMark {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-sm);
+  color: var(--accent-text);
+}
+
+/* ── in flight ──────────────────────────────────────────────────────────── */
+
+/* Matches the finished answer's treatment so text does not reflow or resize
+   when the stream completes and the real card replaces this. */
+.streaming {
+  padding: var(--s-6) var(--s-6) var(--s-6) calc(var(--s-6) - 2px);
+  border-left: 2px solid var(--accent);
+  background: var(--bg-inset);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
+.status {
+  padding: var(--s-6);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+}
+
+/* The routing trace. Quiet by default — it is reassurance, not a control. */
+.trace {
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}

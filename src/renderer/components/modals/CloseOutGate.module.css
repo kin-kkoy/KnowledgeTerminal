@@ -1,0 +1,172 @@
+/* Body only — the dim, grip and drag live in DraggablePanel. */
+
+.title {
+  font-size: 18px;
+  font-weight: 640;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+.lede {
+  margin-top: var(--s-4);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.path {
+  margin: var(--s-5) 0;
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--text-muted);
+  word-break: break-all;
+}
+
+.path b {
+  font-weight: 500;
+  color: var(--accent-text);
+}
+
+.prompts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  margin: var(--s-5) 0 var(--s-2);
+  list-style: none;
+}
+
+.prompts li {
+  display: flex;
+  gap: var(--s-4);
+  align-items: baseline;
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+}
+
+.prompts li::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  transform: translateY(-3px);
+}
+
+/* Observed, not asserted. */
+.check {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  margin-top: var(--s-6);
+  padding: var(--s-3) var(--s-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}
+
+.found {
+  border-color: color-mix(in srgb, var(--green) 40%, transparent);
+  background: color-mix(in srgb, var(--green) 10%, transparent);
+  color: color-mix(in srgb, var(--green) 82%, var(--text));
+}
+
+.dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-faint);
+}
+
+.found .dot {
+  background: var(--green);
+}
+
+.reason {
+  width: 100%;
+  margin-top: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  font-size: var(--fs-ui);
+  color: var(--text);
+}
+
+.reason::placeholder {
+  color: var(--text-faint);
+}
+
+.reason:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.actions {
+  display: flex;
+  gap: var(--s-5);
+  align-items: center;
+  margin-top: var(--s-6);
+}
+
+.done {
+  padding: var(--s-4) var(--s-6);
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  color: var(--text-inverse);
+  transition: filter var(--t-fast);
+}
+
+.done:hover {
+  filter: brightness(1.12);
+}
+
+.skip {
+  margin-left: auto;
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}
+
+.skip:hover {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* The other half of closing out: the state you maintain by hand. */
+.entry {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  margin-bottom: var(--s-5);
+  padding: var(--s-4);
+  border: 1px solid var(--border-strong);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+}
+
+.entryText { flex: 1; font-size: var(--fs-ui-sm); line-height: 1.45; color: var(--text-muted); }
+.entryText b { color: var(--text); }
+
+.entryOpen {
+  flex: 0 0 auto;
+  padding: var(--s-2) var(--s-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+  transition: background var(--t-fast), color var(--t-fast);
+}
+
+.entryOpen:hover { background: var(--bg-hover); color: var(--text); }

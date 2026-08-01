@@ -1,0 +1,274 @@
+{
+  "version": 1,
+  "workspace": {
+    "name": "Dragon Merchant Guild",
+    "mission": "Module 01 \u2014 C# Fundamentals \u00b7 Day 1: types and the value/reference split",
+    "goal": "Close Milestone 0 \u2014 solution, repo, folder structure, README",
+    "quote": {
+      "text": "A task is done when its done-when criterion is met, not when time was spent on it.",
+      "source": "curriculum/README.md"
+    },
+    "entryDocument": "PROGRESS.md",
+    "startupPage": "home"
+  },
+  "files": {
+    "include": [
+      "**/*.md",
+      "**/*.markdown",
+      "**/*.json",
+      "**/*.png",
+      "**/*.jpg",
+      "**/*.jpeg",
+      "**/*.svg",
+      "**/*.pdf"
+    ],
+    "ignore": [
+      "**/.git/**",
+      "**/node_modules/**",
+      "**/.kt/**",
+      "**/.obsidian/**"
+    ],
+    "assetRoots": [
+      "assets"
+    ],
+    "maxRenderBytes": 2000000,
+    "treeFilter": [
+      "**/*.md",
+      "**/*.markdown"
+    ],
+    "icons": {
+      "curriculum/chapters": {
+        "icon": "library",
+        "colour": "sapphire"
+      },
+      "curriculum/plan": {
+        "icon": "target",
+        "colour": "green"
+      },
+      "curriculum/system": {
+        "icon": "wrench",
+        "colour": "lavender"
+      },
+      "documentation/ai-collaboration": {
+        "icon": "sparkles",
+        "colour": "mauve"
+      }
+    }
+  },
+  "appearance": {
+    "theme": "dark",
+    "accent": "mauve",
+    "fontSize": 16,
+    "proseFont": "sans",
+    "lineHeight": 1.7,
+    "measure": "78ch",
+    "density": "comfortable",
+    "revealMode": "side"
+  },
+  "layout": {
+    "explorer": {
+      "visible": true,
+      "width": 280
+    },
+    "contextPanel": {
+      "visible": true,
+      "width": 320
+    },
+    "explorerSections": [
+      "tree",
+      "curriculum",
+      "search",
+      "favorites",
+      "recents",
+      "bookmarks"
+    ],
+    "contextWidgets": [
+      {
+        "id": "core.currentMission",
+        "collapsed": false,
+        "options": {}
+      },
+      {
+        "id": "curriculum.currentModule",
+        "collapsed": false,
+        "options": {
+          "showEstimate": true
+        }
+      },
+      {
+        "id": "core.currentGoal",
+        "collapsed": false,
+        "options": {}
+      },
+      {
+        "id": "curriculum.progress",
+        "collapsed": false,
+        "options": {
+          "branches": [
+            "core",
+            "backend"
+          ]
+        }
+      },
+      {
+        "id": "core.quickActions",
+        "collapsed": false,
+        "options": {
+          "actions": [
+            {
+              "label": "Today's block",
+              "command": "curriculum.openToday"
+            },
+            {
+              "label": "Progress",
+              "command": "file.open",
+              "args": [
+                "PROGRESS.md"
+              ]
+            },
+            {
+              "label": "Roadmap",
+              "command": "file.open",
+              "args": [
+                "roadmap/08-implementation-roadmap.md"
+              ]
+            },
+            {
+              "label": "Daily protocol",
+              "command": "file.open",
+              "args": [
+                "curriculum/system/daily-protocol.md"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "favorites": [
+    {
+      "label": "Progress",
+      "path": "PROGRESS.md"
+    },
+    {
+      "label": "Curriculum roadmap",
+      "path": "curriculum/learning-roadmap.md"
+    },
+    {
+      "label": "Daily protocol",
+      "path": "curriculum/system/daily-protocol.md"
+    },
+    {
+      "label": "Project charter",
+      "path": "documentation/project-charter.md"
+    },
+    {
+      "label": "Dragon Codex",
+      "path": "documentation/dragon-codex.md"
+    },
+    {
+      "label": "Implementation roadmap",
+      "path": "roadmap/implementation-roadmap.md"
+    }
+  ],
+  "keybindings": [],
+  "markdown": {
+    "wikiLinks": true,
+    "callouts": true,
+    "mermaid": true,
+    "footnotes": true,
+    "tableOfContents": {
+      "enabled": true,
+      "minHeadings": 3,
+      "maxDepth": 3
+    }
+  },
+  "plugins": {
+    "curriculum": {
+      "enabled": true,
+      "source": "curriculum/curriculum.json",
+      "docBase": "curriculum",
+      "stateFile": ".kt/progress.json"
+    }
+  },
+  "notes": {
+    "root": "notes/daily",
+    "filename": "{{date}} - {{module}} (Day {{day}})",
+    "prompts": [
+      "What did you actually build?",
+      "Where did you get stuck, and for how long?",
+      "What's the first thing tomorrow?"
+    ]
+  },
+  "gate": {
+    "enabled": true,
+    "title": "Write today's log before you stop.",
+    "body": "Open your notes app and write it. This window stays until you say you're done \u2014 drag it aside if you need the screen."
+  },
+  "lobby": {
+    "map": [
+      {
+        "group": "The curriculum",
+        "entries": [
+          {
+            "path": "curriculum/chapters",
+            "label": "chapters/",
+            "note": "Read this to learn a topic",
+            "emphasis": true
+          },
+          {
+            "path": "curriculum/plan",
+            "label": "plan/",
+            "note": "What to do today",
+            "emphasis": true
+          },
+          {
+            "path": "curriculum/checkpoints",
+            "label": "checkpoints/",
+            "note": "The ten gates"
+          },
+          {
+            "path": "curriculum/system",
+            "label": "system/",
+            "note": "Daily & weekly protocols"
+          },
+          {
+            "path": "curriculum/curriculum-outline.md",
+            "label": "The outline",
+            "note": "Every chapter and topic in one map"
+          }
+        ]
+      },
+      {
+        "group": "The project",
+        "entries": [
+          {
+            "path": "documentation",
+            "label": "documentation/",
+            "note": "Charter, GDD, codex, bestiary"
+          },
+          {
+            "path": "roadmap",
+            "label": "roadmap/",
+            "note": "The milestone ladder"
+          },
+          {
+            "path": "journal",
+            "label": "journal/",
+            "note": "The running dev log"
+          },
+          {
+            "path": "meeting-minutes",
+            "label": "meeting-minutes/",
+            "note": "Why decisions were made"
+          },
+          {
+            "path": "notes",
+            "label": "notes/",
+            "note": "Scratch space; daily notes live under daily/"
+          }
+        ]
+      }
+    ]
+  }
+}

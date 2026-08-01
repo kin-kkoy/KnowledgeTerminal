@@ -1,0 +1,131 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding-top: 12vh;
+  /* A flat scrim, not a blur. Glass would be the one thing this design has
+     ruled out from the start. */
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: min(680px, 88vw);
+  max-height: 62vh;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--bg-raised);
+  box-shadow: var(--shadow-overlay);
+  animation: enter var(--t-panel);
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.input {
+  flex: 0 0 auto;
+  padding: var(--s-5) var(--s-6);
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+  color: var(--text);
+}
+
+.input::placeholder {
+  color: var(--text-faint);
+}
+
+.list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--s-2) 0;
+}
+
+.row {
+  display: flex;
+  gap: var(--s-4);
+  align-items: baseline;
+  padding: var(--s-3) var(--s-6);
+  cursor: default;
+}
+
+.rowActive {
+  background: var(--accent-quiet);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.empty {
+  padding: var(--s-7) var(--s-6);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}
+
+.footer {
+  flex: 0 0 auto;
+  padding: var(--s-3) var(--s-6);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+/* ── row internals, shared by the three overlays ───────────────────────── */
+
+.primary {
+  flex: 1 1 auto;
+  overflow: hidden;
+  font-size: var(--fs-ui);
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.secondary {
+  flex: 0 1 auto;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl; /* truncate long paths from the LEFT, keeping the filename */
+  text-align: left;
+}
+
+.badge {
+  flex: 0 0 auto;
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.kbd {
+  padding: 1px var(--s-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-muted);
+}
+
+.match {
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.snippet {
+  color: var(--text-faint);
+}
+
+.linkish {
+  font-size: inherit;
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

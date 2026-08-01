@@ -1,0 +1,69 @@
+.viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.spacer {
+  position: relative;
+}
+
+.row {
+  display: flex;
+  gap: var(--s-2);
+  align-items: center;
+  height: 24px;
+  padding-right: var(--s-4);
+  color: var(--text-muted);
+  cursor: default;
+  user-select: none;
+  transition: background var(--t-fast);
+}
+
+.row:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+/* Selection is a background step plus a 2px accent rule — not a pill, and
+   never a shadow. */
+.selected {
+  background: var(--accent-quiet);
+  color: var(--text);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.chevron {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  color: var(--text-faint);
+}
+
+.icon {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  color: var(--text-faint);
+}
+
+.selected .icon,
+.row:hover .icon {
+  color: var(--accent-text);
+}
+
+.name {
+  overflow: hidden;
+  font-size: var(--fs-ui-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty {
+  padding: var(--s-6) var(--panel-pad);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}

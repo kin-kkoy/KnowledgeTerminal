@@ -1,0 +1,140 @@
+.card {
+  display: flex;
+  flex-direction: column;
+}
+
+/*
+ * The answer itself, given deliberate visual weight.
+ *
+ * It should be the first thing the eye lands on — the same job Google's AI
+ * summary does above its blue links. Three quiet devices, no loud ones: a
+ * background step down from the panel, a 2px accent rule down the left edge,
+ * and prose set a couple of points larger than UI text.
+ *
+ * Notably NOT used: a gradient, a glow, a shadow, or a saturated fill. The
+ * emphasis has to survive being looked at for an hour without becoming the
+ * thing you are looking at.
+ */
+.headline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  padding: var(--s-6) var(--s-6) var(--s-6) calc(var(--s-6) - 2px);
+  border-left: 2px solid var(--accent);
+  background: var(--bg-inset);
+}
+
+/* ── header ─────────────────────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+}
+
+/* Names which layer answered, so the routing is never a mystery. Quiet: it is
+   provenance, not a heading. */
+.badge {
+  padding: 1px var(--s-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-xs);
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.ungrounded {
+  border-color: var(--peach);
+  color: var(--peach);
+}
+
+/* ── body ───────────────────────────────────────────────────────────────── */
+
+/* 15px sits between UI (13px) and prose (16px) on purpose: heavier than the
+   chrome around it, lighter than the document it is talking about. */
+.text {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
+.actions {
+  display: flex;
+  gap: var(--s-4);
+}
+
+.action {
+  padding: var(--s-3) var(--s-5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg-raised);
+  font-size: var(--fs-ui-sm);
+  color: var(--text);
+}
+
+.action:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+}
+
+/* ── evidence ───────────────────────────────────────────────────────────── */
+
+/* Sources drop back to UI scale. They are checkable, not readable. */
+.evidence {
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-5) var(--s-6);
+}
+
+.evidenceLabel {
+  padding-bottom: var(--s-3);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-muted);
+}
+
+.row {
+  display: flex;
+  gap: var(--s-4);
+  align-items: baseline;
+  width: 100%;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-sm);
+  text-align: left;
+}
+
+.row:hover,
+.row:focus-visible {
+  background: var(--bg-hover);
+}
+
+.rowTitle {
+  flex: 0 1 auto;
+  overflow: hidden;
+  font-size: var(--fs-ui);
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowReason {
+  flex: 1 1 auto;
+  overflow: hidden;
+  font-size: var(--fs-ui-xs);
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowPath {
+  flex: 0 1 auto;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl; /* keep the filename, truncate the leading directories */
+  text-align: left;
+}

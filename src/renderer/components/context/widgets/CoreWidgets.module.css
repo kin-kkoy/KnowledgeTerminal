@@ -1,0 +1,142 @@
+.statement {
+  font-size: var(--fs-ui-sm);
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.unset {
+  font-size: var(--fs-ui-xs);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.row {
+  display: flex;
+  gap: var(--s-3);
+  align-items: baseline;
+  width: 100%;
+  padding: var(--s-2) var(--s-3);
+  margin-left: calc(var(--s-3) * -1);
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.row:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.rowActive {
+  color: var(--text);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.rowLabel {
+  flex: 1 1 auto;
+  overflow: hidden;
+  font-size: var(--fs-ui-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowMeta {
+  flex: 0 0 auto;
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.action {
+  display: flex;
+  gap: var(--s-3);
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+  transition:
+    background var(--t-fast),
+    border-color var(--t-fast),
+    color var(--t-fast);
+}
+
+.action:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.actionMeta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+/* Icon row: collapsed to the glyph, expanding to reveal the label on hover. */
+.qaRow {
+  display: flex;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+
+.qa {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  flex: 0 0 auto;
+  height: 32px;
+  max-width: 34px;
+  padding: 0 var(--s-4);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  transition:
+    max-width 180ms cubic-bezier(0.22, 0.68, 0.28, 1),
+    gap 180ms cubic-bezier(0.22, 0.68, 0.28, 1),
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.qa:hover,
+.qa:focus-visible {
+  max-width: 220px;
+  gap: var(--s-4);
+  border-color: var(--border-strong);
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.qaIcon {
+  flex: 0 0 auto;
+  color: var(--accent-text);
+}
+
+.qaLabel {
+  font-size: var(--fs-ui-sm);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+.qa:hover .qaLabel,
+.qa:focus-visible .qaLabel {
+  opacity: 1;
+}

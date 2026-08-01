@@ -1,0 +1,38 @@
+.crumbs {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  font-size: var(--fs-ui-xs);
+  white-space: nowrap;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.sep {
+  padding: 0 var(--s-2);
+  color: var(--text-faint);
+}
+
+.crumb {
+  overflow: hidden;
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--r-sm);
+  color: var(--text-faint);
+  text-overflow: ellipsis;
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.crumb:hover {
+  background: var(--bg-hover);
+  color: var(--text-muted);
+}
+
+.current {
+  color: var(--text-muted);
+}

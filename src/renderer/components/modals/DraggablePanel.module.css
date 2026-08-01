@@ -1,0 +1,88 @@
+.dim {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: var(--scrim);
+  opacity: 1;
+  transition: opacity 450ms ease;
+}
+
+.lifted {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.panel {
+  position: fixed;
+  z-index: 111;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-lg);
+  background: var(--bg-raised);
+}
+
+/* The whole bar is the handle, and it says so: grip dots, a grab cursor, and a
+   hint that retires once you have done it. */
+.grip {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  padding: var(--s-4) var(--s-5);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-inset);
+  cursor: grab;
+  user-select: none;
+}
+
+.grip:active {
+  cursor: grabbing;
+}
+
+.dots {
+  flex: 0 0 auto;
+  color: var(--text-faint);
+}
+
+.title {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.hint {
+  display: flex;
+  gap: var(--s-2);
+  align-items: center;
+  margin-left: auto;
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.body {
+  padding: var(--s-6) var(--s-6) var(--s-6);
+}
+
+
+.close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  margin-left: var(--s-3);
+  border-radius: var(--r-sm);
+  color: var(--text-faint);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.close:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}

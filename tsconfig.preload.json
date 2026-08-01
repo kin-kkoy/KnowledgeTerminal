@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    /* The preload runs in a renderer context (it has `document`) but with Node
+       globals available, so it needs both libs. Keeping it out of
+       tsconfig.node.json is what stops main-process code from reaching for the
+       DOM by accident. */
+    "lib": ["ES2023", "DOM"],
+    "types": ["node"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+    "outDir": "node_modules/.tmp/tspreload",
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["src/shared/*"]
+    }
+  },
+  "include": ["src/preload/**/*.ts", "src/shared/**/*.ts"]
+}

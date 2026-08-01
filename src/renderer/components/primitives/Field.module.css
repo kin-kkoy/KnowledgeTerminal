@@ -1,0 +1,98 @@
+/* One setting row. Structure is a 1px rule and a background step — nothing else. */
+
+.group {
+  margin-bottom: var(--s-8);
+}
+
+.groupTitle {
+  margin: 0 0 var(--s-2);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.row {
+  padding: var(--s-5) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.head {
+  display: flex;
+  gap: var(--s-6);
+  align-items: center;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: 13.5px;
+  color: var(--text);
+}
+
+.hint {
+  margin-top: 2px;
+  font-size: var(--fs-ui-sm);
+  line-height: 1.45;
+  color: var(--text-faint);
+}
+
+/*
+ * Stacked rows put the control under the label, for lists and wide editors.
+ * The body is a flex column so a lone input still fills the width — inputs
+ * carry `flex: 1`, which does nothing in a plain block parent.
+ */
+.stacked .body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  margin-top: var(--s-4);
+}
+
+.stacked .body > input,
+.stacked .body > textarea {
+  width: 100%;
+}
+
+.value {
+  flex: 0 0 auto;
+  min-width: 52px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-sm);
+  color: var(--accent-text);
+  text-align: right;
+}
+
+.reset {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-sm);
+  color: var(--text-faint);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--t-fast),
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.reset:hover {
+  background: var(--bg-hover);
+  color: var(--accent-text);
+}

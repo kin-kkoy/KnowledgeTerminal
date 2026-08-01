@@ -1,0 +1,295 @@
+/*
+ * The reading surface.
+ *
+ * Global rather than a CSS module because rehype-react emits plain elements —
+ * there is no class to hook onto for a <p> inside a document. Everything is
+ * scoped under .kt-prose so it cannot leak into the app chrome.
+ *
+ * The three decisions that matter most for a six-hour session:
+ *   1. a fixed measure (78ch by default) — line length beats every other
+ *      typographic choice for sustained reading;
+ *   2. Inter at 16/1.7, matching the rest of the app. A serif separated the
+ *      document from the chrome, but read as Times at length;
+ *   3. vertical rhythm driven by margin-top only, so headings bind to the text
+ *      BELOW them rather than floating between sections.
+ */
+
+.kt-prose {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: var(--s-9) var(--s-7) 40vh;
+  font-family: var(--font-reading);
+  font-size: var(--fs-prose);
+  line-height: var(--lh-prose);
+  color: var(--text);
+  /* The trailing padding lets the last paragraph scroll up to eye level rather
+     than sticking to the bottom edge of the window. */
+}
+
+/* ── headings ──────────────────────────────────────────────────────────── */
+
+.kt-prose h1,
+.kt-prose h2,
+.kt-prose h3,
+.kt-prose h4,
+.kt-prose h5,
+.kt-prose h6 {
+  position: relative;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+  scroll-margin-top: var(--s-7);
+}
+
+.kt-prose h1 {
+  margin: 0 0 var(--s-7);
+  padding-bottom: var(--s-5);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-h1);
+  letter-spacing: -0.011em;
+}
+
+.kt-prose h2 {
+  margin: var(--s-9) 0 var(--s-5);
+  font-size: var(--fs-h2);
+  letter-spacing: -0.011em;
+}
+
+.kt-prose h3 {
+  margin: var(--s-8) 0 var(--s-4);
+  font-size: var(--fs-h3);
+}
+
+.kt-prose h4 {
+  margin: var(--s-7) 0 var(--s-3);
+  font-size: var(--fs-h4);
+}
+
+.kt-prose h5,
+.kt-prose h6 {
+  margin: var(--s-6) 0 var(--s-3);
+  font-size: var(--fs-h5);
+  color: var(--text-muted);
+}
+
+.kt-prose h6 {
+  font-size: var(--fs-h6);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* The anchor link sits in the left gutter and only appears on hover, so it
+   never competes with the heading itself. */
+.kt-prose .heading-anchor {
+  position: absolute;
+  left: -1.1em;
+  color: var(--text-faint);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}
+
+.kt-prose h1:hover .heading-anchor,
+.kt-prose h2:hover .heading-anchor,
+.kt-prose h3:hover .heading-anchor,
+.kt-prose h4:hover .heading-anchor,
+.kt-prose .heading-anchor:focus-visible {
+  opacity: 1;
+}
+
+/* ── body ──────────────────────────────────────────────────────────────── */
+
+.kt-prose p {
+  margin: var(--s-5) 0;
+}
+
+.kt-prose strong {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.kt-prose em {
+  font-style: italic;
+}
+
+.kt-prose hr {
+  height: 0;
+  margin: var(--s-8) 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.kt-prose blockquote {
+  margin: var(--s-6) 0;
+  padding: var(--s-1) 0 var(--s-1) var(--s-6);
+  border-left: 2px solid var(--border-strong);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.kt-prose blockquote p:first-child {
+  margin-top: 0;
+}
+
+.kt-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── lists ─────────────────────────────────────────────────────────────── */
+
+.kt-prose ul,
+.kt-prose ol {
+  margin: var(--s-5) 0;
+  padding-left: var(--s-7);
+  list-style: revert;
+}
+
+.kt-prose li {
+  margin: var(--s-3) 0;
+}
+
+.kt-prose li::marker {
+  color: var(--text-faint);
+}
+
+.kt-prose li > ul,
+.kt-prose li > ol {
+  margin: var(--s-3) 0;
+}
+
+/* GFM task lists. The checkbox IS interactive — clicking it rewrites the
+   source file — so the row gets a hover affordance to say so. */
+.kt-prose li:has(> button[role='checkbox']) {
+  list-style: none;
+  margin-left: calc(var(--s-7) * -1);
+  padding: 2px var(--s-3) 2px var(--s-7);
+  border-radius: var(--r-sm);
+  transition: background var(--t-fast);
+}
+
+.kt-prose li:has(> button[role='checkbox']):hover {
+  background: var(--bg-hover);
+}
+
+/* A finished task recedes. Dimmed rather than struck through: at four levels of
+   nested detail per day block, strikethrough turns the page into noise, while a
+   colour step still reads as "done" at a glance. */
+.kt-prose li:has(> button[aria-checked='true']) {
+  color: var(--text-faint);
+}
+
+.kt-prose li:has(> button[aria-checked='true']) strong,
+.kt-prose li:has(> button[aria-checked='true']) code,
+.kt-prose li:has(> button[aria-checked='true']) a {
+  color: var(--text-faint);
+}
+
+.kt-prose li:has(> button[aria-checked='true']) code {
+  border-color: transparent;
+  background: transparent;
+}
+
+/* ── inline code ───────────────────────────────────────────────────────── */
+
+.kt-prose :not(pre) > code {
+  padding: 0.12em 0.35em;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  font-size: 0.88em;
+  color: var(--text);
+}
+
+/* ── tables ────────────────────────────────────────────────────────────── */
+
+/* Tables scroll inside their own container so a wide one never makes the whole
+   document scroll sideways. */
+.kt-prose table {
+  display: block;
+  width: 100%;
+  margin: var(--s-6) 0;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+}
+
+.kt-prose th,
+.kt-prose td {
+  padding: var(--s-3) var(--s-5);
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.kt-prose th {
+  background: var(--bg-raised);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.kt-prose tbody tr:hover {
+  background: var(--bg-raised);
+}
+
+.kt-prose td code {
+  white-space: nowrap;
+}
+
+/* ── footnotes ─────────────────────────────────────────────────────────── */
+
+.kt-prose .footnotes {
+  margin-top: var(--s-9);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--border);
+  font-size: calc(var(--fs-prose) * 0.9);
+  color: var(--text-muted);
+}
+
+.kt-prose .footnotes h2 {
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-h6);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.kt-prose .data-footnote-backref {
+  margin-left: var(--s-2);
+  text-decoration: none;
+}
+
+.kt-prose sup a {
+  padding: 0 0.15em;
+  font-size: 0.8em;
+  text-decoration: none;
+}
+
+/* ── frontmatter ───────────────────────────────────────────────────────── */
+
+/* remark-frontmatter parses the block; nothing renders it, so it is simply
+   absent. Nothing to style — noted here so the absence is not mistaken for a
+   bug later. */
+
+/* ── shiki ─────────────────────────────────────────────────────────────── */
+
+/*
+ * Shiki emits both themes as CSS variables (`defaultColor: false`), so a theme
+ * switch changes which variable is read and causes ZERO relayout — no
+ * re-highlighting, no re-render, no reflow under the reader.
+ */
+.shiki,
+.shiki span {
+  color: var(--shiki-dark);
+  background-color: transparent;
+}
+
+:root[data-theme='light'] .shiki,
+:root[data-theme='light'] .shiki span {
+  color: var(--shiki-light);
+}
+
+.shiki {
+  background: transparent !important;
+}

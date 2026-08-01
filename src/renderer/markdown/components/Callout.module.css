@@ -1,0 +1,87 @@
+/*
+ * One rule, one icon, one background step. The type's colour is bound to a
+ * variable per type so adding a type is a two-line change here.
+ */
+
+.callout {
+  --callout-color: var(--accent);
+  margin: var(--s-6) 0;
+  border-left: 2px solid var(--callout-color);
+  background: var(--bg-raised);
+}
+
+.callout[data-kt-callout='note'],
+.callout[data-kt-callout='info'],
+.callout[data-kt-callout='abstract'] {
+  --callout-color: var(--accent);
+}
+
+.callout[data-kt-callout='tip'],
+.callout[data-kt-callout='success'] {
+  --callout-color: var(--green);
+}
+
+.callout[data-kt-callout='important'],
+.callout[data-kt-callout='question'],
+.callout[data-kt-callout='todo'] {
+  --callout-color: var(--cyan);
+}
+
+.callout[data-kt-callout='warning'],
+.callout[data-kt-callout='example'] {
+  --callout-color: var(--yellow);
+}
+
+.callout[data-kt-callout='caution'],
+.callout[data-kt-callout='danger'],
+.callout[data-kt-callout='failure'],
+.callout[data-kt-callout='bug'] {
+  --callout-color: var(--red);
+}
+
+.callout[data-kt-callout='quote'] {
+  --callout-color: var(--purple);
+}
+
+.header {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  width: 100%;
+  padding: var(--s-4) var(--s-5) 0;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-sm);
+  color: var(--callout-color);
+}
+
+.title {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.chevron,
+.chevronOpen {
+  transition: transform var(--t-fast);
+}
+
+.chevronOpen {
+  transform: rotate(90deg);
+}
+
+.body {
+  padding: var(--s-3) var(--s-5) var(--s-4);
+}
+
+/* Tighten the prose rhythm inside a callout: it is an aside, not a section. */
+.body > :first-child {
+  margin-top: 0;
+}
+
+.body > :last-child {
+  margin-bottom: 0;
+}
+
+.body p {
+  margin: var(--s-3) 0;
+  font-size: calc(var(--fs-prose) * 0.94);
+}

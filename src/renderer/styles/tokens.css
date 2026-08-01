@@ -1,0 +1,88 @@
+/*
+ * Design tokens.
+ *
+ * The whole visual language is ~40 custom properties. That is why there is no
+ * CSS framework here: accent colour and theme come from JSON at runtime, and a
+ * build-time utility system fights that for no benefit at this size.
+ *
+ * BANNED, deliberately and permanently:
+ *   - gradients of any kind
+ *   - backdrop-filter / glassmorphism
+ *   - box-shadow outside --shadow-overlay
+ *   - dimming text with opacity (use the text scale instead)
+ *   - font sizes below 11px
+ *
+ * Structure is expressed with 1px borders and background steps. Nothing else.
+ */
+
+:root {
+  /* ── spacing: 4px base ──────────────────────────────────────────────── */
+  --s-1: 2px;
+  --s-2: 4px;
+  --s-3: 6px;
+  --s-4: 8px;
+  --s-5: 12px;
+  --s-6: 16px;
+  --s-7: 24px;
+  --s-8: 32px;
+  --s-9: 48px;
+
+  /* ── radius ─────────────────────────────────────────────────────────── */
+  --r-sm: 5px;
+  --r-md: 8px;
+  --r-lg: 12px;
+
+  /* ── typography ─────────────────────────────────────────────────────── */
+  /*
+   * Inter for everything, Obsidian-style — including the reading surface. A
+   * serif set the document apart from the app, but it read as Times at length
+   * and the contrast was not worth it.
+   */
+  --font-ui: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-prose: var(--font-ui);
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --fs-ui: 13px;
+  --fs-ui-sm: 12px;
+  --fs-ui-xs: 11px;
+  --lh-ui: 1.45;
+
+  /* Overridden at runtime from settings.appearance. */
+  --fs-prose: 16px;
+  --lh-prose: 1.7;
+  --measure: 78ch;
+  --font-reading: var(--font-ui);
+  --panel-w: 252px;
+
+  /* ── prose scale ────────────────────────────────────────────────────── */
+  --fs-h1: 1.72em;
+  --fs-h2: 1.3em;
+  --fs-h3: 1.08em;
+  --fs-h4: 1em;
+  --fs-h5: 0.94em;
+  --fs-h6: 0.86em;
+  --fs-code: 13.5px;
+
+  /* ── density ────────────────────────────────────────────────────────── */
+  --row-h: 24px;
+  --panel-pad: var(--s-5);
+
+  /* ── motion ─────────────────────────────────────────────────────────── */
+  --t-fast: 90ms ease-out;
+  --t-panel: 130ms cubic-bezier(0.2, 0, 0, 1);
+
+  /* ── chrome ─────────────────────────────────────────────────────────── */
+  --titlebar-h: 38px;
+  --statusbar-h: 22px;
+  /* Matches the explorer's icon row (28px button + 2×5px padding) so the two
+     rows align and the restore button never appears to jump between them. */
+  --tabstrip-h: 38px;
+  --icon-row-h: 38px;
+}
+
+:root[data-density='compact'] {
+  --row-h: 22px;
+  --panel-pad: var(--s-4);
+}
+
+

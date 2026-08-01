@@ -1,0 +1,79 @@
+.accents {
+  display: flex;
+  gap: var(--s-3);
+  flex: 0 0 auto;
+}
+
+.acc {
+  width: 24px;
+  height: 24px;
+  border: 2px solid transparent;
+  border-radius: 7px;
+  transition: border-color var(--t-fast);
+}
+
+.acc.accOn {
+  border-color: var(--text);
+}
+
+.range {
+  flex: 0 0 auto;
+  width: 190px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border-strong);
+  appearance: none;
+  outline: none;
+}
+
+.range::-webkit-slider-thumb {
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--bg-raised);
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+/* The specimen reads from the reading pane's own custom properties. */
+.specimenNote {
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-ui-sm);
+  line-height: 1.45;
+  color: var(--text-faint);
+}
+
+.specimen {
+  padding: var(--s-6);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  font-family: var(--font-reading);
+  font-size: var(--fs-prose);
+  line-height: var(--lh-prose);
+  color: var(--text);
+}
+
+.specimen h4 {
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+}
+
+.specimen p {
+  max-width: var(--measure);
+  margin: 0 0 var(--s-4);
+}
+
+.specimen p:last-child {
+  margin-bottom: 0;
+}
+
+.specimen code {
+  padding: 1px 4px;
+  border-radius: var(--r-sm);
+  background: var(--bg-hover);
+  font-family: var(--font-mono);
+  font-size: var(--fs-code);
+}

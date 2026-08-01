@@ -1,0 +1,53 @@
+.statusbar {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--s-5);
+  align-items: center;
+  height: var(--statusbar-h);
+  padding: 0 var(--s-5);
+  border-top: 1px solid var(--border);
+  background: var(--bg-raised);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-muted);
+}
+
+.path {
+  overflow: hidden;
+  font-family: var(--font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.index {
+  font-variant-numeric: tabular-nums;
+}
+
+.notice {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  padding: 0 var(--s-3);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-xs);
+  transition: background var(--t-fast);
+}
+
+.notice:hover {
+  background: var(--bg-hover);
+}
+
+.info {
+  color: var(--text-muted);
+}
+
+.warn {
+  color: var(--yellow);
+}
+
+.error {
+  color: var(--red);
+}

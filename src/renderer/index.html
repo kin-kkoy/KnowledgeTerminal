@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Knowledge Terminal</title>
+    <!--
+      The preload sets data-theme on <html> before this document's first script
+      runs, so the attribute above is only the fallback for a cold profile.
+      The CSP is also injected by main via onHeadersReceived; this meta tag
+      keeps packaged and dev builds behaving identically.
+    -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./main.tsx"></script>
+  </body>
+</html>

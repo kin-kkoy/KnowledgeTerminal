@@ -1,0 +1,222 @@
+/* Sandbox controls. Borders and background steps only — see tokens.css. */
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui);
+  transition: border-color var(--t-fast);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.input:disabled {
+  color: var(--text-faint);
+  cursor: not-allowed;
+}
+
+.input::placeholder {
+  color: var(--text-faint);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-sm);
+}
+
+.area {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.number {
+  flex: 0 0 auto;
+  width: 92px;
+  text-align: right;
+}
+
+/* ── toggle ─────────────────────────────────────────────────────────────── */
+
+.toggle {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 19px;
+  padding: 2px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--bg-inset);
+  transition:
+    background var(--t-fast),
+    border-color var(--t-fast);
+}
+
+.toggle .knob {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  transition:
+    transform var(--t-fast),
+    background var(--t-fast);
+}
+
+.toggle.on {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.toggle.on .knob {
+  background: var(--text-inverse);
+  transform: translateX(15px);
+}
+
+.toggle:disabled {
+  cursor: not-allowed;
+}
+
+/* ── segmented ──────────────────────────────────────────────────────────── */
+
+.seg {
+  display: flex;
+  gap: var(--s-2);
+  flex: 0 0 auto;
+}
+
+.segb {
+  padding: var(--s-3) var(--s-5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.segb:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.segb.segOn {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--text-inverse);
+  font-weight: 600;
+}
+
+/* ── string list ────────────────────────────────────────────────────────── */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.listRow {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+}
+
+/* The add row is an action, not another entry — dashed, and visually quieter. */
+.addRow {
+  margin-top: var(--s-2);
+}
+
+.addInput {
+  border-style: dashed;
+  background: transparent;
+}
+
+.iconBtn {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  color: var(--text-faint);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.iconBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+/* ── icon picker ────────────────────────────────────────────────────────── */
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+  gap: var(--s-2);
+  max-height: 200px;
+  overflow-y: auto;
+  padding: var(--s-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+}
+
+.iconCell {
+  display: grid;
+  place-items: center;
+  height: 30px;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  transition:
+    background var(--t-fast),
+    border-color var(--t-fast);
+}
+
+.iconCell:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.iconCell.cellOn {
+  border-color: var(--accent);
+  background: var(--bg-hover);
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+
+.swatch {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  color: var(--text-inverse);
+  transition: border-color var(--t-fast);
+}
+
+.swatch.swatchOn {
+  border-color: var(--text);
+}

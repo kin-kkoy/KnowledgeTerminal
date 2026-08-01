@@ -1,0 +1,25 @@
+.box {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin-right: var(--s-3);
+  margin-left: calc(var(--s-6) * -1);
+  border: 1.5px solid var(--text-faint);
+  border-radius: 4px;
+  color: transparent;
+  vertical-align: -3px;
+  transition:
+    background var(--t-fast),
+    border-color var(--t-fast);
+}
+
+.box:hover {
+  border-color: var(--accent);
+}
+
+.done {
+  border-color: var(--green);
+  background: var(--green);
+  color: var(--text-inverse);
+}

@@ -1,0 +1,87 @@
+.module {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.title {
+  font-size: var(--fs-ui);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text);
+  text-align: left;
+}
+
+.title:hover:not(:disabled) {
+  color: var(--accent-text);
+}
+
+.title:disabled {
+  cursor: default;
+}
+
+.meta {
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.meta code {
+  font-size: var(--fs-ui-xs);
+  color: var(--text-muted);
+}
+
+.next {
+  font-size: var(--fs-ui-sm);
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.nextLabel {
+  font-size: var(--fs-ui-xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.unset {
+  font-size: var(--fs-ui-xs);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.barHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--s-2);
+}
+
+.barLabel {
+  font-size: var(--fs-ui-xs);
+  color: var(--text-muted);
+}
+
+.barCount {
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  height: 3px;
+  background: var(--bg-inset);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  transition: width var(--t-panel);
+}

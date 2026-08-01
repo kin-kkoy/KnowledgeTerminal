@@ -1,0 +1,35 @@
+.group {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.divider {
+  position: relative;
+  flex: 0 0 auto;
+  width: 1px;
+  background: var(--border);
+  cursor: col-resize;
+  transition: background var(--t-fast);
+}
+
+.divider::after {
+  content: '';
+  position: absolute;
+  inset: 0 -3px;
+}
+
+.divider:hover,
+.divider:focus-visible {
+  background: var(--accent);
+  outline: none;
+}

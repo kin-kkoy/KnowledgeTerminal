@@ -1,0 +1,84 @@
+.note {
+  margin: 0 0 var(--s-5);
+  font-size: var(--fs-ui-sm);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+.note code {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.card {
+  margin-bottom: var(--s-4);
+  padding: var(--s-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+}
+
+.head {
+  display: flex;
+  gap: var(--s-5);
+  align-items: flex-start;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.meta {
+  margin: var(--s-2) 0 0;
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.warn {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  margin: var(--s-3) 0 0;
+  font-size: var(--fs-ui-sm);
+  line-height: 1.4;
+  color: var(--peach);
+}
+
+.options {
+  margin-top: var(--s-4);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--border);
+}
+
+.optionsLabel {
+  margin: 0 0 var(--s-3);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.json {
+  margin: 0;
+  padding: var(--s-4);
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.empty {
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}

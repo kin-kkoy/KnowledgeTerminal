@@ -1,0 +1,133 @@
+/*
+ * Themes — Catppuccin.
+ *
+ * Mocha (dark) and Latte (light), using the published palettes verbatim rather
+ * than approximations, so the app matches every other Catppuccin surface the
+ * user already has. The semantic names (--bg, --text, --border…) are what the
+ * rest of the stylesheet consumes; the raw palette names are exposed as well,
+ * because curriculum branches, callouts and file icons pick specific hues.
+ *
+ * --text-faint is DECORATION ONLY and must never carry body copy.
+ */
+
+:root[data-theme='dark'] {
+  /* ── Catppuccin Mocha ─────────────────────────────────────────────── */
+  --rosewater: #f5e0dc;
+  --flamingo: #f2cdcd;
+  --pink: #f5c2e7;
+  --mauve: #cba6f7;
+  --red: #f38ba8;
+  --maroon: #eba0ac;
+  --peach: #fab387;
+  --yellow: #f9e2af;
+  --green: #a6e3a1;
+  --teal: #94e2d5;
+  --sky: #89dceb;
+  --sapphire: #74c7ec;
+  --blue: #89b4fa;
+  --lavender: #b4befe;
+  --purple: var(--mauve);
+  --cyan: var(--sky);
+
+  --bg: #1e1e2e; /* base */
+  --bg-raised: #181825; /* mantle */
+  --bg-inset: #11111b; /* crust */
+  --bg-hover: #313244; /* surface0 */
+  --bg-active: #45475a; /* surface1 */
+  --bg-selection: #45475a;
+
+  --border: #313244;
+  --border-strong: #45475a;
+
+  --text: #cdd6f4; /* 11.6:1 on base */
+  --text-muted: #bac2de; /* 9.2:1 */
+  --text-faint: #7f849c; /* 4.1:1 — decoration only */
+  --text-inverse: #11111b;
+
+  --shadow-overlay: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --scrim: rgba(17, 17, 27, 0.72);
+
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  /* ── Catppuccin Latte ─────────────────────────────────────────────── */
+  --rosewater: #dc8a78;
+  --flamingo: #dd7878;
+  --pink: #ea76cb;
+  --mauve: #8839ef;
+  --red: #d20f39;
+  --maroon: #e64553;
+  --peach: #fe640b;
+  --yellow: #df8e1d;
+  --green: #40a02b;
+  --teal: #179299;
+  --sky: #04a5e5;
+  --sapphire: #209fb5;
+  --blue: #1e66f5;
+  --lavender: #7287fd;
+  --purple: var(--mauve);
+  --cyan: var(--sky);
+
+  --bg: #eff1f5; /* base */
+  --bg-raised: #e6e9ef; /* mantle */
+  --bg-inset: #dce0e8; /* crust */
+  --bg-hover: #ccd0da; /* surface0 */
+  --bg-active: #bcc0cc; /* surface1 */
+  --bg-selection: #bcc0cc;
+
+  --border: #ccd0da;
+  --border-strong: #acb0be;
+
+  --text: #4c4f69; /* 9.4:1 on base */
+  --text-muted: #5c5f77; /* 7.6:1 */
+  --text-faint: #8c8fa1; /* 3.6:1 — decoration only */
+  --text-inverse: #eff1f5;
+
+  --shadow-overlay: 0 16px 48px rgba(76, 79, 105, 0.18);
+  --scrim: rgba(76, 79, 105, 0.42);
+
+  color-scheme: light;
+}
+
+/*
+ * The accent is chosen by NAME ("mauve", "blue"…), not by hex, and resolved
+ * per flavour here. That matters: Mocha's mauve is a pastel and Latte's is a
+ * saturated violet — a single hex would be wrong in one of the two.
+ */
+:root {
+  --accent: var(--mauve);
+  --accent-text: var(--mauve);
+  --accent-quiet: color-mix(in srgb, var(--mauve) 14%, transparent);
+}
+:root[data-accent='mauve'] {
+  --accent: var(--mauve);
+  --accent-text: var(--mauve);
+}
+:root[data-accent='blue'] {
+  --accent: var(--blue);
+  --accent-text: var(--blue);
+}
+:root[data-accent='teal'] {
+  --accent: var(--teal);
+  --accent-text: var(--teal);
+}
+:root[data-accent='green'] {
+  --accent: var(--green);
+  --accent-text: var(--green);
+}
+:root[data-accent='peach'] {
+  --accent: var(--peach);
+  --accent-text: var(--peach);
+}
+:root[data-accent='pink'] {
+  --accent: var(--pink);
+  --accent-text: var(--pink);
+}
+:root[data-accent='lavender'] {
+  --accent: var(--lavender);
+  --accent-text: var(--lavender);
+}
+:root[data-accent] {
+  --accent-quiet: color-mix(in srgb, var(--accent) 14%, transparent);
+}

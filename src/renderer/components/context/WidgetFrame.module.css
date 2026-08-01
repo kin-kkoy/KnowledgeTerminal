@@ -1,0 +1,37 @@
+.widget {
+  border-bottom: 1px solid var(--border);
+}
+
+.headRow {
+  display: flex;
+  align-items: center;
+  padding-right: var(--s-4);
+}
+
+.headRow .header {
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  gap: var(--s-2);
+  align-items: center;
+  width: 100%;
+  padding: var(--s-4) var(--panel-pad);
+  color: var(--text-faint);
+  transition: color var(--t-fast);
+}
+
+.header:hover {
+  color: var(--text-muted);
+}
+
+.title {
+  font-size: var(--fs-ui-xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.body {
+  padding: 0 var(--panel-pad) var(--s-5);
+}

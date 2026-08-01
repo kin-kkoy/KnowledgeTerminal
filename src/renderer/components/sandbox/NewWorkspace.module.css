@@ -1,0 +1,172 @@
+.screen {
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.inner {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--s-9) var(--s-7);
+}
+
+.back {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  margin-bottom: var(--s-7);
+  padding: var(--s-2) var(--s-4) var(--s-2) var(--s-2);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.back:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.lede {
+  margin: var(--s-4) 0 var(--s-8);
+  font-size: var(--fs-ui);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/*
+ * A flex column, not a plain block: the shared inputs size themselves with
+ * `flex: 1`, which does nothing inside a block parent and leaves them at their
+ * intrinsic width.
+ */
+.block {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--s-7);
+}
+
+.block > input,
+.block > textarea {
+  width: 100%;
+}
+
+.label {
+  margin: 0 0 var(--s-4);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.hint {
+  margin: var(--s-3) 0 0;
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}
+
+.picker {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  width: 100%;
+  padding: var(--s-4) var(--s-5);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+  text-align: left;
+  transition:
+    border-color var(--t-fast),
+    color var(--t-fast);
+}
+
+.picker:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.warn {
+  margin: var(--s-4) 0 0;
+  padding: var(--s-4);
+  border: 1px solid var(--border-strong);
+  border-left: 2px solid var(--peach);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-sm);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.check {
+  display: flex;
+  gap: var(--s-4);
+  align-items: flex-start;
+  padding: var(--s-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  cursor: pointer;
+}
+
+.check input {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+}
+
+.check strong {
+  display: block;
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.checkHint {
+  display: block;
+  margin-top: var(--s-2);
+  font-size: var(--fs-ui-sm);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+.create {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--s-5);
+  border: 1px solid var(--accent);
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  color: var(--text-inverse);
+  transition: background var(--t-fast);
+}
+
+.create:hover:not(:disabled) {
+  background: var(--accent-quiet);
+}
+
+.create:disabled {
+  border-color: var(--border-strong);
+  background: transparent;
+  color: var(--text-faint);
+  cursor: not-allowed;
+}

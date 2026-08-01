@@ -1,0 +1,90 @@
+.list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--s-2) 0;
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+  transition: background var(--t-fast);
+}
+
+.row:hover {
+  background: var(--bg-hover);
+}
+
+.active {
+  background: var(--accent-quiet);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.open {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--s-2) var(--s-4);
+}
+
+.icon {
+  display: flex;
+  flex: 0 0 auto;
+  color: var(--text-faint);
+}
+
+.row:hover .icon,
+.active .icon {
+  color: var(--accent-text);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.label {
+  overflow: hidden;
+  font-size: var(--fs-ui-sm);
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  overflow: hidden;
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.remove {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: 0 var(--s-4);
+  color: var(--text-faint);
+  opacity: 0;
+  transition: color var(--t-fast);
+}
+
+.row:hover .remove,
+.remove:focus-visible {
+  opacity: 1;
+}
+
+.remove:hover {
+  color: var(--red);
+}
+
+.empty {
+  padding: var(--s-6) var(--panel-pad);
+  font-size: var(--fs-ui-sm);
+  line-height: 1.5;
+  color: var(--text-faint);
+}

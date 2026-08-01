@@ -1,0 +1,10 @@
+.preview {
+  margin: var(--s-3) 0 0;
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}
+
+.preview code {
+  font-family: var(--font-mono);
+  color: var(--accent-text);
+}

@@ -1,0 +1,249 @@
+.note {
+  margin: 0 0 var(--s-5);
+  font-size: var(--fs-ui-sm);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+.pair {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+/* ── ordered lists of widgets / sections ────────────────────────────────── */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  margin: 0 0 var(--s-5);
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  padding: var(--s-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+}
+
+.itemHead {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+}
+
+.itemIcon {
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+
+.itemText {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.itemTitle {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  font-size: var(--fs-ui);
+  color: var(--text);
+}
+
+.missing {
+  font-size: var(--fs-ui-sm);
+  font-style: italic;
+  color: var(--text-faint);
+}
+
+.owner {
+  padding: 0 var(--s-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.itemId {
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.itemActions {
+  display: flex;
+  gap: var(--s-2);
+  flex: 0 0 auto;
+}
+
+.mini {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  color: var(--text-faint);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.mini:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.mini:disabled {
+  color: var(--border-strong);
+  cursor: default;
+}
+
+.collapsed {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  margin-top: var(--s-4);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.collapsed input {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--accent);
+}
+
+/* ── per-widget options ─────────────────────────────────────────────────── */
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  margin-top: var(--s-4);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--border);
+}
+
+.opt {
+  display: flex;
+  gap: var(--s-5);
+  align-items: center;
+}
+
+.optStacked {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.optText {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.optName {
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+}
+
+.optHint {
+  font-size: var(--fs-ui-xs);
+  line-height: 1.4;
+  color: var(--text-faint);
+}
+
+/* ── add chips ──────────────────────────────────────────────────────────── */
+
+.add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  align-items: center;
+  margin-bottom: var(--s-5);
+}
+
+.addLabel {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.chip {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  padding: var(--s-2) var(--s-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.chip:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.resetAll {
+  padding: var(--s-2) var(--s-4);
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.resetAll:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+/* ── quick actions editor ───────────────────────────────────────────────── */
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  align-items: flex-start;
+}
+
+.action {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  width: 100%;
+}
+
+.actionSelect {
+  flex: 1;
+  min-width: 0;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  color: var(--text);
+  font-size: var(--fs-ui-sm);
+}
+
+.actionSelect:focus {
+  outline: none;
+  border-color: var(--accent);
+}

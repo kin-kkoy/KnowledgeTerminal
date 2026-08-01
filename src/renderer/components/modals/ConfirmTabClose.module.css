@@ -1,0 +1,31 @@
+.lede {
+  margin: 0 0 var(--s-7);
+  font-size: var(--fs-ui);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.lede b { color: var(--text); }
+
+.actions { display: flex; gap: var(--s-4); }
+
+.confirm,
+.unpin,
+.cancel {
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+  transition: background var(--t-fast), color var(--t-fast);
+}
+
+.confirm {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--text-inverse);
+  font-weight: 600;
+}
+
+.confirm:hover { background: var(--accent-quiet); }
+.unpin:hover, .cancel:hover { background: var(--bg-hover); color: var(--text); }

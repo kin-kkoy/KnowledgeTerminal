@@ -1,0 +1,188 @@
+.sandbox {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ── top bar ────────────────────────────────────────────────────────────── */
+
+.bar {
+  display: flex;
+  gap: var(--s-6);
+  align-items: center;
+  flex: 0 0 auto;
+  height: var(--titlebar-h);
+  padding: 0 var(--s-6);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-raised);
+  -webkit-app-region: drag;
+}
+
+.bar button {
+  -webkit-app-region: no-drag;
+}
+
+.back,
+.newBtn {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  flex: 0 0 auto;
+  padding: var(--s-2) var(--s-4);
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  font-size: var(--fs-ui-sm);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.back:hover,
+.newBtn:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.newBtn {
+  border-color: var(--border-strong);
+}
+
+.identity {
+  display: flex;
+  gap: var(--s-4);
+  align-items: baseline;
+  flex: 1;
+  min-width: 0;
+  justify-content: center;
+}
+
+.title {
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.root {
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── body ───────────────────────────────────────────────────────────────── */
+
+/*
+ * The rail and the pane are centred TOGETHER as one block, rather than pinning
+ * the rail left and centring the content in whatever is left over — which on a
+ * wide window leaves the navigation stranded a long way from the thing it
+ * navigates.
+ */
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 1060px;
+  margin: 0 auto;
+  border-right: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 0 0 auto;
+  width: 232px;
+  padding: var(--s-5);
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+  background: var(--bg-raised);
+}
+
+.tab {
+  display: flex;
+  gap: var(--s-4);
+  align-items: flex-start;
+  padding: var(--s-4);
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  text-align: left;
+  transition:
+    background var(--t-fast),
+    border-color var(--t-fast);
+}
+
+.tab:hover {
+  background: var(--bg-hover);
+}
+
+.tab.tabOn {
+  border-color: var(--border-strong);
+  background: var(--bg-active);
+}
+
+.tabIcon {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: var(--text-faint);
+}
+
+.tabOn .tabIcon {
+  color: var(--accent-text);
+}
+
+.tabText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.tabTitle {
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+}
+
+.tabOn .tabTitle {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.tabHint {
+  margin-top: 1px;
+  font-size: var(--fs-ui-xs);
+  line-height: 1.35;
+  color: var(--text-faint);
+}
+
+.pane {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.paneInner {
+  padding: var(--s-8) var(--s-7) var(--s-9);
+}
+
+/* ── footer ─────────────────────────────────────────────────────────────── */
+
+.foot {
+  flex: 0 0 auto;
+  padding: var(--s-3) var(--s-6);
+  border-top: 1px solid var(--border);
+  background: var(--bg-raised);
+  font-size: var(--fs-ui-xs);
+  line-height: 1.4;
+  color: var(--text-faint);
+}
+
+.foot code {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}

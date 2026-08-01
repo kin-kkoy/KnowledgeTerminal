@@ -1,0 +1,26 @@
+# Dependencies — reinstall with `npm ci`
+node_modules/
+
+# Build output — regenerate with `npm run build` / `npm run package`
+out/
+dist/
+release/
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Logs
+npm-debug.log*
+*.log
+
+# The app's own per-workspace state.
+#
+# `.kt/settings.json` IS committed deliberately — settings live inside the
+# workspace so that copying the folder brings its layout, favorites and widgets
+# with it. Progress and backups are not: one is personal, the other is churn.
+workspace/*/.kt/progress.json
+workspace/*/.kt/*.bak

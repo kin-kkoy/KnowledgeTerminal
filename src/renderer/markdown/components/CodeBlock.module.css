@@ -1,0 +1,57 @@
+.wrapper {
+  position: relative;
+  margin: var(--s-6) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+}
+
+.chrome {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  justify-content: flex-end;
+  height: 24px;
+  padding: 0 var(--s-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.language {
+  margin-right: auto;
+  padding-left: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+.copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 18px;
+  border-radius: var(--r-sm);
+  color: var(--text-faint);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.copy:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.pre {
+  overflow-x: auto;
+  padding: var(--s-5);
+  font-size: var(--fs-code);
+  line-height: 1.6;
+  tab-size: 4;
+}
+
+.pre code {
+  display: block;
+  font-size: inherit;
+}

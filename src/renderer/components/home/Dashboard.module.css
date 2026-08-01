@@ -1,0 +1,417 @@
+.screen {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--bg);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 600px;
+  padding: var(--s-8) var(--s-9);
+  position: relative;
+}
+
+/* In "below" mode the reveal drops into reserved space. Reserving it always
+   means opening it moves nothing — the sentence you are reading holds still. */
+:root[data-reveal='below'] .wrap {
+  padding-bottom: 210px;
+}
+
+.head {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  margin-bottom: var(--s-8);
+}
+
+.mark {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.ws {
+  font-size: 12.5px;
+  color: var(--text-faint);
+  letter-spacing: 0.03em;
+}
+
+.tools {
+  display: flex;
+  gap: var(--s-1);
+  margin-left: auto;
+}
+
+.tool {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 24px;
+  border-radius: var(--r-sm);
+  color: var(--text-faint);
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.tool:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.title {
+  margin: var(--s-4) 0 var(--s-4);
+  font-size: 30px;
+  font-weight: 660;
+  letter-spacing: -0.025em;
+  line-height: 1.14;
+  color: var(--text);
+}
+
+.desc {
+  max-width: 52ch;
+  font-size: 15.5px;
+  line-height: 1.62;
+  color: var(--text-muted);
+}
+
+.actions {
+  display: flex;
+  gap: var(--s-5);
+  align-items: center;
+  margin-top: var(--s-7);
+}
+
+.primary,
+.ghost {
+  display: inline-flex;
+  gap: var(--s-4);
+  align-items: center;
+  padding: var(--s-4) var(--s-6);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.primary {
+  background: var(--accent);
+  color: var(--text-inverse);
+}
+
+.primary:hover {
+  filter: brightness(1.12);
+}
+
+.ghost {
+  border: 1px solid var(--border-strong);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.ghost:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.kbd {
+  padding: 1px var(--s-3);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--bg-inset);
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-muted);
+}
+
+.primary .kbd {
+  border-color: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.18);
+  color: inherit;
+}
+
+/* ── stats row ─────────────────────────────────────────────────────────── */
+
+.stats {
+  display: flex;
+  gap: var(--s-5);
+  align-items: stretch;
+  margin-top: var(--s-7);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--border);
+}
+
+.stat {
+  flex: 1;
+}
+
+.statK {
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.statV {
+  margin-top: var(--s-2);
+  font-size: 15px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* The streak is the one number worth a second look, so it gets a tinted plate
+   and its own colour instead of sitting in the same grey row as the rest. */
+.streak {
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--s-4);
+  align-items: center;
+  padding: var(--s-4) var(--s-6) var(--s-4) var(--s-5);
+  margin: calc(var(--s-4) * -1) 0;
+  border: 1px solid color-mix(in srgb, var(--green) 35%, transparent);
+  background: color-mix(in srgb, var(--green) 11%, transparent);
+  border-radius: var(--r-md);
+}
+
+.flame {
+  color: var(--green);
+  flex: 0 0 auto;
+}
+
+.streakN {
+  font-size: 23px;
+  font-weight: 680;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--green);
+}
+
+.streakK {
+  margin-top: 3px;
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--green) 78%, var(--text));
+}
+
+/* ── the reveal ────────────────────────────────────────────────────────── */
+
+.reveal {
+  margin-top: var(--s-6);
+}
+
+.revealHead {
+  display: flex;
+  gap: var(--s-4);
+  align-items: center;
+  font-size: 12.5px;
+  color: var(--text-faint);
+}
+
+.reveal:hover .revealHead {
+  color: var(--text-muted);
+}
+
+.pin {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  color: var(--text-faint);
+  transition:
+    color var(--t-fast),
+    border-color var(--t-fast),
+    background var(--t-fast);
+}
+
+.pin:hover {
+  background: var(--bg-hover);
+  color: var(--text-muted);
+}
+
+/* Tilted while it is only peeking, upright once pinned — the auto-hide dock
+   convention, which reads without needing a label. */
+.pin svg {
+  transform: rotate(45deg);
+  transition: transform 260ms cubic-bezier(0.22, 0.68, 0.28, 1);
+}
+
+.pinned .pin {
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.pinned .pin svg {
+  transform: none;
+}
+
+.pinHint {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.pinned .pinHint {
+  color: var(--accent-text);
+}
+
+/* Default: a column in the right margin. Nothing in the reading column moves
+   at all — the extra detail simply appears beside it. */
+.panel {
+  position: absolute;
+  top: 0;
+  left: calc(100% - var(--s-9));
+  width: 290px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-6px);
+  transition:
+    opacity 300ms ease,
+    transform 300ms cubic-bezier(0.22, 0.68, 0.28, 1);
+}
+
+.reveal:hover .panel,
+.pinned .panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+/* Alternative: drawn into the space reserved beneath. */
+:root[data-reveal='below'] .panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: var(--s-6);
+  transform: none;
+}
+
+:root[data-reveal='below'] .reveal {
+  position: relative;
+}
+
+.card {
+  padding: var(--s-5) var(--s-6);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-raised);
+}
+
+.cardTitle {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin-top: var(--s-4);
+}
+
+.task,
+.taskDone {
+  display: flex;
+  gap: var(--s-4);
+  align-items: flex-start;
+  font-size: var(--fs-ui);
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.taskDone {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.box {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin-top: 1px;
+  border: 1.5px solid var(--text-faint);
+  border-radius: 4px;
+  font-size: 10px;
+  line-height: 1;
+  color: transparent;
+}
+
+.taskDone .box {
+  border-color: var(--green);
+  background: var(--green);
+  color: var(--text-inverse);
+}
+
+.recents {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--s-3);
+}
+
+.recent {
+  width: 100%;
+  padding: var(--s-2) var(--s-3);
+  margin-left: calc(var(--s-3) * -1);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui);
+  color: var(--text-muted);
+  text-align: left;
+  transition:
+    background var(--t-fast),
+    color var(--t-fast);
+}
+
+.recent::before {
+  content: '• ';
+  color: var(--text-faint);
+}
+
+.recent:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.quote {
+  margin-top: var(--s-8);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--border);
+  font-size: 14.5px;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.cite {
+  display: block;
+  margin-top: var(--s-3);
+  font-size: var(--fs-ui-xs);
+  font-style: normal;
+  color: var(--text-faint);
+}

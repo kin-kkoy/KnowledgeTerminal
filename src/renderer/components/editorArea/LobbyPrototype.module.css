@@ -1,0 +1,447 @@
+/* PROTOTYPE — throwaway. Delete with LobbyPrototype.tsx. */
+
+.host {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+/* ── tabs: the switchable half under the permanent desk ─────────────────── */
+
+.tabs {
+  display: flex;
+  gap: var(--s-2);
+  justify-content: center;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 var(--s-7);
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: var(--s-4) var(--s-6);
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+  transition: color var(--t-fast), border-color var(--t-fast);
+}
+
+.tab:hover { color: var(--text); }
+.tab.tabOn { border-bottom-color: var(--accent); color: var(--text); font-weight: 600; }
+
+.panel { padding-top: var(--s-7); }
+
+.panelHint {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  max-width: 780px;
+  margin: 0 auto var(--s-6);
+  padding: 0 var(--s-7);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}
+
+/* ── prototype footer (chrome only) ─────────────────────────────────────── */
+
+.protoBar {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  flex: 0 0 auto;
+  padding: var(--s-3) var(--s-5);
+  border-top: 1px solid var(--border-strong);
+  background: var(--bg-raised);
+}
+
+.protoLabel {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--peach);
+}
+
+.protoNote {
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+
+
+/* ── 1. the desk ────────────────────────────────────────────────────────── */
+
+.desk {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: var(--s-8) var(--s-7);
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 var(--s-3);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.deskTitle {
+  margin: 0 0 var(--s-7);
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.primary {
+  display: inline-flex;
+  gap: var(--s-3);
+  align-items: center;
+  padding: var(--s-4) var(--s-7);
+  border: 1px solid var(--accent);
+  border-radius: var(--r-sm);
+  background: var(--accent);
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  color: var(--text-inverse);
+  transition: background var(--t-fast);
+}
+
+.primary:hover { background: var(--accent-quiet); }
+
+.deskNote {
+  margin: var(--s-4) 0 var(--s-9);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}
+
+.deskRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-4);
+  /* `start`, so expanding one card's reveal does not stretch its neighbours. */
+  align-items: start;
+}
+
+.deskCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  align-items: flex-start;
+  padding: var(--s-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  text-align: left;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+.deskCard:hover { border-color: var(--border-strong); background: var(--bg-hover); }
+.deskCardIcon { margin-bottom: var(--s-2); }
+.deskCardTitle { font-size: var(--fs-ui); font-weight: 600; color: var(--text); }
+.deskCardNote { font-size: var(--fs-ui-xs); line-height: 1.45; color: var(--text-faint); }
+
+/* ── 2. the map ─────────────────────────────────────────────────────────── */
+
+.map { max-width: 780px; margin: 0 auto; padding: var(--s-8) var(--s-7) var(--s-9); }
+
+.mapHero {
+  display: flex;
+  gap: var(--s-5);
+  align-items: center;
+  width: 100%;
+  margin-bottom: var(--s-8);
+  padding: var(--s-5) var(--s-6);
+  border: 1px solid var(--accent);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  color: var(--accent-text);
+  text-align: left;
+  transition: background var(--t-fast);
+}
+
+.mapHero:hover { background: var(--bg-hover); }
+.mapHero span { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.mapHero strong { font-size: var(--fs-ui); color: var(--text); }
+.mapHero em { font-style: normal; font-size: var(--fs-ui-sm); color: var(--text-faint); }
+
+.region { margin-bottom: var(--s-8); }
+
+.regionTitle {
+  margin: 0 0 var(--s-4);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.regionGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s-4); }
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  align-items: flex-start;
+  padding: var(--s-5);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+  text-align: left;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+.tile:hover { border-color: var(--border-strong); background: var(--bg-hover); }
+.tileBig { border-color: var(--border-strong); }
+.tileName { font-family: var(--font-mono); font-size: var(--fs-ui-sm); color: var(--text); }
+.tileBig .tileName { font-size: var(--fs-ui); font-weight: 600; }
+.tileNote { font-size: var(--fs-ui-xs); line-height: 1.45; color: var(--text-faint); }
+
+/* ── 3. the day loop ────────────────────────────────────────────────────── */
+
+.loop { max-width: 660px; margin: 0 auto; padding: var(--s-8) var(--s-7) var(--s-9); }
+
+.loopTitle {
+  margin: 0 0 var(--s-3);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.loopLede { margin: 0 0 var(--s-8); font-size: var(--fs-ui); line-height: 1.6; color: var(--text-muted); }
+
+.steps { display: flex; flex-direction: column; gap: var(--s-3); margin: 0; padding: 0; list-style: none; }
+
+.step { display: flex; gap: var(--s-5); align-items: flex-start; }
+
+.stepN {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}
+
+.stepDone .stepN { border-color: var(--green); color: var(--green); }
+.stepNow .stepN { border-color: var(--accent); background: var(--accent); color: var(--text-inverse); font-weight: 700; }
+
+.stepBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  text-align: left;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+
+.stepBody:hover { background: var(--bg-hover); border-color: var(--border); }
+.stepNow .stepBody { border-color: var(--border-strong); background: var(--bg-inset); }
+
+.stepTitle { display: flex; gap: var(--s-4); align-items: center; font-size: var(--fs-ui); color: var(--text); }
+.stepDone .stepTitle { color: var(--text-faint); }
+.stepNote { font-size: var(--fs-ui-sm); line-height: 1.45; color: var(--text-faint); }
+
+.nowTag {
+  padding: 0 var(--s-3);
+  border: 1px solid var(--accent);
+  border-radius: var(--r-sm);
+  font-style: normal;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.loopFoot { margin: var(--s-8) 0 0; font-size: var(--fs-ui-sm); color: var(--text-faint); }
+
+.inlineLink { color: var(--accent-text); text-decoration: underline; text-underline-offset: 2px; }
+
+/* ── 4. the reading room ────────────────────────────────────────────────── */
+
+.room { max-width: 760px; margin: 0 auto; padding: var(--s-8) var(--s-7) var(--s-9); }
+
+.prose {
+  font-family: var(--font-reading);
+  font-size: var(--fs-prose);
+  line-height: var(--lh-prose);
+  color: var(--text);
+}
+
+.prose h1 { margin: 0 0 var(--s-4); font-size: var(--fs-h1); font-weight: 600; letter-spacing: -0.01em; }
+.prose h2 { margin: var(--s-8) 0 var(--s-4); font-size: var(--fs-h2); font-weight: 600; }
+.prose p { max-width: var(--measure); margin: 0 0 var(--s-5); }
+.prose ol { max-width: var(--measure); margin: 0; padding-left: var(--s-7); }
+.prose li { margin-bottom: var(--s-3); }
+
+.lede { color: var(--text-muted); }
+
+.docLink {
+  color: var(--accent-text);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+.docLink:hover { text-decoration-thickness: 2px; }
+
+.roomOpen {
+  display: inline-flex;
+  gap: var(--s-3);
+  align-items: center;
+  margin-top: var(--s-8);
+  padding: var(--s-3) var(--s-5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+  transition: background var(--t-fast), color var(--t-fast);
+}
+
+.roomOpen:hover { background: var(--bg-hover); color: var(--text); }
+
+/* disabled targets: say so rather than looking clickable */
+.deskCard:disabled,
+.tile:disabled,
+.stepBody:disabled,
+.inlineLink:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.deskCard:disabled:hover,
+.tile:disabled:hover,
+.stepBody:disabled:hover { background: var(--bg-inset); border-color: var(--border); }
+
+.map, .loop { max-width: 780px; margin: 0 auto; padding: 0 var(--s-7) var(--s-9); }
+
+
+/* ── day-loop step: the documents it uses ───────────────────────────────── */
+
+
+.uses {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: var(--s-3) 0 0;
+  padding: 0 0 0 var(--s-5);
+  list-style: none;
+}
+
+.use {
+  display: flex;
+  gap: var(--s-4);
+  align-items: baseline;
+  width: 100%;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  text-align: left;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+
+.use:hover:not(:disabled) { background: var(--bg-hover); border-color: var(--border); }
+.use:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.useIcon { flex: 0 0 auto; color: var(--text-faint); }
+
+.useLabel {
+  flex: 0 0 auto;
+  max-width: 44%;
+  overflow: hidden;
+  font-size: var(--fs-ui-sm);
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.useWhy {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+/* ── desk card target line (replaces the hover reveal) ──────────────────── */
+
+.deskCardTarget {
+  margin-top: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border);
+  width: 100%;
+  overflow: hidden;
+  font-size: var(--fs-ui-sm);
+  font-weight: 600;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.deskCardEmpty { opacity: 0.5; cursor: default; }
+
+/* ── day loop: steps left, detail right ─────────────────────────────────── */
+
+.loopCols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s-6);
+  align-items: start;
+}
+
+.stepPicked { border-color: var(--accent); background: var(--bg-hover); }
+
+/*
+ * The detail panel reads as a BOX the information lands in: crust, the darkest
+ * step in the palette, against the base the pane sits on. Deliberately darker
+ * than the step buttons beside it so the two columns do not read as one field.
+ */
+.detail {
+  position: sticky;
+  top: 0;
+  min-height: 220px;
+  padding: var(--s-6);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+}
+
+/* Remounted per step, so the fade replays on every change. */
+.detailInner { animation: lobbyFade 150ms ease-out; }
+
+@keyframes lobbyFade {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.detailTitle {
+  margin: 0;
+  font-size: var(--fs-ui);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.detailNote {
+  margin: var(--s-2) 0 var(--s-5);
+  font-size: var(--fs-ui-sm);
+  line-height: 1.45;
+  color: var(--text-faint);
+}

@@ -1,0 +1,46 @@
+appId: dev.knowledgeterminal.app
+productName: Knowledge Terminal
+copyright: Knowledge Terminal
+
+directories:
+  output: release
+  buildResources: build
+
+# Only the built output and production dependencies. The workspace folder is
+# deliberately NOT bundled: workspaces are the user's own folders, opened at
+# runtime, and shipping one inside the binary would undo the whole point.
+files:
+  - out/**/*
+  - package.json
+
+asar: true
+
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Office
+  synopsis: A local-first learning workspace
+  description: >-
+    Knowledge Terminal is a reusable learning workspace for long-term study.
+    It reads a folder of Markdown and a settings.json, and knows nothing about
+    any particular subject.
+  desktop:
+    entry:
+      Name: Knowledge Terminal
+      Comment: A local-first learning workspace
+      Categories: Office;Education;
+
+deb:
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - xdg-utils
+    - libatspi2.0-0
+    - libsecret-1-0
+
+appImage:
+  artifactName: ${productName}-${version}.${ext}

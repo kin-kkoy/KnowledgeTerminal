@@ -1,0 +1,41 @@
+.figure {
+  margin: var(--s-7) 0;
+}
+
+.image,
+.zoomed {
+  max-width: 100%;
+  /* Paired with the intrinsic width/height attributes: the browser reserves the
+     right box immediately, then scales it down to the column. */
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  cursor: zoom-in;
+}
+
+/* "Zoom" means break out of the reading measure, not a lightbox overlay —
+   no backdrop, no blur, no modal to dismiss. */
+.zoomed {
+  width: min(92vw, 1400px);
+  max-width: none;
+  margin-left: calc(50% - min(46vw, 700px));
+  cursor: zoom-out;
+}
+
+.caption {
+  margin-top: var(--s-3);
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-xs);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+.missing {
+  display: inline-block;
+  padding: var(--s-2) var(--s-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}

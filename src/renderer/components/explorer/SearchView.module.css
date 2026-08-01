@@ -1,0 +1,125 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.searchbox {
+  display: flex;
+  gap: var(--s-3);
+  align-items: center;
+  flex: 0 0 auto;
+  margin: var(--s-4);
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  color: var(--text-faint);
+}
+
+.searchbox:focus-within {
+  border-color: var(--accent);
+  color: var(--accent-text);
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-ui-sm);
+  color: var(--text);
+}
+
+.input::placeholder {
+  color: var(--text-faint);
+}
+
+.input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.summary {
+  flex: 0 0 auto;
+  padding: 0 var(--s-4) var(--s-3);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.results {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.hit {
+  border-top: 1px solid var(--border);
+}
+
+.hitHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+  padding: var(--s-3) var(--s-4);
+  transition: background var(--t-fast);
+}
+
+.hitHeader:hover {
+  background: var(--bg-hover);
+}
+
+.hitTitle {
+  overflow: hidden;
+  font-size: var(--fs-ui-sm);
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hitDir {
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.match {
+  display: flex;
+  gap: var(--s-4);
+  width: 100%;
+  padding: var(--s-1) var(--s-4) var(--s-1) var(--s-5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-muted);
+  transition: background var(--t-fast);
+}
+
+.match:hover {
+  background: var(--bg-hover);
+}
+
+.lineNo {
+  flex: 0 0 auto;
+  width: 3ch;
+  text-align: right;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.lineText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Flat tint, no glow. */
+.mark {
+  background: var(--accent-quiet);
+  color: var(--text);
+  border-radius: 2px;
+}
+
+.empty {
+  padding: var(--s-6) var(--panel-pad);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+}

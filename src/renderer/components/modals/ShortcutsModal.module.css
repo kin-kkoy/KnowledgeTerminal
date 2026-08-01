@@ -1,0 +1,71 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-4) var(--s-8);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  break-inside: avoid;
+}
+
+.groupTitle {
+  padding-bottom: var(--s-3);
+  margin-bottom: var(--s-2);
+  border-bottom: 1px solid var(--border);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.row {
+  display: flex;
+  gap: var(--s-5);
+  align-items: center;
+  padding: var(--s-2) 0;
+  font-size: var(--fs-ui);
+}
+
+.label {
+  color: var(--text-muted);
+}
+
+.keys {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+.kbd {
+  padding: 2px var(--s-3);
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--bg-inset);
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-muted);
+}
+
+.then {
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+.footnote {
+  margin-top: var(--s-7);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-ui-xs);
+  line-height: 1.6;
+  color: var(--text-faint);
+}
+
+.footnote code {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}

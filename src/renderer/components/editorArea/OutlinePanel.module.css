@@ -1,0 +1,43 @@
+.outline {
+  flex: 0 0 auto;
+  width: 200px;
+  padding: var(--s-8) var(--s-4) var(--s-6) 0;
+  overflow-y: auto;
+  border-left: 1px solid var(--border);
+}
+
+.heading {
+  padding: 0 var(--s-4) var(--s-4) var(--s-4);
+  font-size: var(--fs-ui-xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  display: block;
+  padding: var(--s-2) var(--s-4);
+  border-left: 2px solid transparent;
+  font-size: var(--fs-ui-xs);
+  line-height: 1.4;
+  color: var(--text-faint);
+  transition:
+    color var(--t-fast),
+    border-color var(--t-fast);
+}
+
+.link:hover {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+/* Current section = a 2px accent rule in the gutter. No fill, no pill. */
+.active {
+  border-left-color: var(--accent);
+  color: var(--text);
+}

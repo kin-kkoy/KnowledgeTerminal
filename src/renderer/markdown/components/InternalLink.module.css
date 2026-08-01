@@ -1,0 +1,30 @@
+.internal,
+.external,
+.anchor {
+  color: var(--accent-text);
+  text-decoration-color: color-mix(in srgb, var(--accent-text) 40%, transparent);
+  text-underline-offset: 2px;
+}
+
+.internal:hover,
+.external:hover,
+.anchor:hover {
+  text-decoration: underline;
+}
+
+/* External links get a small trailing mark so a click that leaves the app is
+   never a surprise. */
+.external::after {
+  content: ' ↗';
+  font-size: 0.85em;
+  color: var(--text-faint);
+}
+
+/* Broken links are visible, in the VSCode style: dotted, faint, not a colour
+   that reads as "clickable". */
+.unresolved {
+  color: var(--text-faint);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+}

@@ -1,0 +1,24 @@
+/*
+ * The handle is 1px of visible border sitting inside a wider invisible hit
+ * area — thin enough to read as a hairline, wide enough to actually grab.
+ */
+.resizer {
+  position: relative;
+  flex: 0 0 auto;
+  width: 1px;
+  background: var(--border);
+  cursor: col-resize;
+  transition: background var(--t-fast);
+}
+
+.resizer::after {
+  content: '';
+  position: absolute;
+  inset: 0 -3px;
+}
+
+.resizer:hover,
+.resizer:focus-visible {
+  background: var(--accent);
+  outline: none;
+}
