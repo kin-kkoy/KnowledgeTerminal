@@ -8,7 +8,7 @@
 import { CORE_COMMANDS } from '@shared/commands'
 import { stem } from '@shared/paths'
 import type { RelPath } from '@shared/types'
-import { LOBBY_PATH } from '../components/editorArea/LobbyPrototype'
+import { LOBBY_PATH } from '../components/editorArea/Lobby'
 import { platform } from '../platform'
 import { guarded } from '../roughEdges'
 import { store } from '../store'

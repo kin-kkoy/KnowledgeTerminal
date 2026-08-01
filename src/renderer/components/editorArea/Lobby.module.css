@@ -1,4 +1,4 @@
-/* PROTOTYPE — throwaway. Delete with LobbyPrototype.tsx. */
+/* The Lobby. Structure is 1px borders and background steps — see tokens.css. */
 
 .host {
   display: flex;
@@ -49,32 +49,6 @@
   font-size: var(--fs-ui-sm);
   color: var(--text-faint);
 }
-
-/* ── prototype footer (chrome only) ─────────────────────────────────────── */
-
-.protoBar {
-  display: flex;
-  gap: var(--s-3);
-  align-items: center;
-  flex: 0 0 auto;
-  padding: var(--s-3) var(--s-5);
-  border-top: 1px solid var(--border-strong);
-  background: var(--bg-raised);
-}
-
-.protoLabel {
-  font-family: var(--font-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.12em;
-  color: var(--peach);
-}
-
-.protoNote {
-  font-size: var(--fs-ui-xs);
-  color: var(--text-faint);
-}
-
-
 
 /* ── 1. the desk ────────────────────────────────────────────────────────── */
 
@@ -238,8 +212,6 @@
   color: var(--text-faint);
 }
 
-.stepDone .stepN { border-color: var(--green); color: var(--green); }
-.stepNow .stepN { border-color: var(--accent); background: var(--accent); color: var(--text-inverse); font-weight: 700; }
 
 .stepBody {
   display: flex;
@@ -254,22 +226,10 @@
 }
 
 .stepBody:hover { background: var(--bg-hover); border-color: var(--border); }
-.stepNow .stepBody { border-color: var(--border-strong); background: var(--bg-inset); }
 
 .stepTitle { display: flex; gap: var(--s-4); align-items: center; font-size: var(--fs-ui); color: var(--text); }
-.stepDone .stepTitle { color: var(--text-faint); }
 .stepNote { font-size: var(--fs-ui-sm); line-height: 1.45; color: var(--text-faint); }
 
-.nowTag {
-  padding: 0 var(--s-3);
-  border: 1px solid var(--accent);
-  border-radius: var(--r-sm);
-  font-style: normal;
-  font-size: 9.5px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent-text);
-}
 
 .loopFoot { margin: var(--s-8) 0 0; font-size: var(--fs-ui-sm); color: var(--text-faint); }
 

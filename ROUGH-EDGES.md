@@ -9,31 +9,30 @@ that id is what the warning suppresses for the session.
 
 ---
 
-## `lobby` — the Lobby
+## `lobby` — the day loop's contents
 
-**Still a prototype, and says so.** The component is literally
-`LobbyPrototype.tsx` and there is a `PROTOTYPE` strip along the bottom of it.
-It is wired into the real app and does real work, but it has not been renamed or
-promoted.
+The Lobby itself is a real feature now — `Lobby.tsx`, no prototype strip, and
+it has replaced the old empty-pane card entirely.
 
-What is genuinely live: the title and eyebrow, and the *Read a topic* /
-*Today's tasks* targets. Those come from the curriculum plugin through
+Live and correct: the title and eyebrow, and the *Read a topic* / *Today's
+tasks* targets. They come from the curriculum plugin through
 `registerDashboardSource`, recompute when your progress moves, and cannot go
-stale.
+stale. The map is driven by `settings.lobby.map`.
 
-What is not:
+One thing is not finished:
 
-- **"You are on step two" is hardcoded.** The day loop does not know which step
-  you are on. Working it out means tracking which documents you opened this
-  session against the day block's tasks — new state and new heuristics, and it
-  would be wrong sometimes. Deliberately not attempted.
-- **The day loop's document list is hardcoded in core.** Each step names things
-  like `stuck-protocol` and `weekly-protocol` as string literals inside
-  `LobbyPrototype.tsx`. That is workspace-specific knowledge sitting in core —
-  the same mistake the map had before it moved to config. It should become a
-  `lobby.steps` block alongside `lobby.map`.
-- **Only the map is config-driven.** `settings.lobby.map` works properly and
-  falls back to deriving top-level folders when unset. The rest does not.
+- **The day loop's steps are hardcoded in core.** The five steps, and the
+  documents each one names — `stuck-protocol`, `weekly-protocol`,
+  `checkpoint-protocol` — are string literals inside `Lobby.tsx`. That is
+  workspace-specific knowledge sitting in core, the same mistake the map had
+  before it moved to config. It wants a `lobby.steps` block alongside
+  `lobby.map`.
+
+The loop no longer claims to know **which** step you are on. It used to mark
+step one done and step two current; that was invented, and it has been removed
+rather than left to mislead. Knowing for real would mean tracking which
+documents you opened this session against the day block's tasks — deliberately
+not attempted.
 
 ## `lobby-map-editing` — editing the Lobby's map
 

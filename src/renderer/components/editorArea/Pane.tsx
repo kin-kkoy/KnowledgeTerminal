@@ -4,21 +4,10 @@
 import { useStore } from '../../store'
 import { ErrorBoundary } from '../primitives/ErrorBoundary'
 import { DocumentView } from './DocumentView'
-import { EmptyPane } from './EmptyPane'
-import { LOBBY_PATH, LobbyPrototype } from './LobbyPrototype'
+import { LOBBY_PATH, Lobby } from './Lobby'
 import { OutlinePanel } from './OutlinePanel'
 import { TabStrip } from './TabStrip'
 import styles from './Pane.module.css'
-
-/**
- * PROTOTYPE SWITCH — throwaway. ON by default while the Lobby design is being
- * decided, so `npm run dev` shows it with no URL fiddling. It only appears when
- * a pane has NO tab open, which is the whole premise: the Lobby is the room, a
- * document is what you pick up in it.
- *
- * Set to `false` (or delete this and its import) to get the old EmptyPane back.
- */
-const LOBBY_PROTOTYPE = true
 
 interface Props {
   paneId: string
@@ -55,7 +44,7 @@ export function Pane({ paneId, showRestore = false }: Props): React.JSX.Element 
 
       <div className={styles.body}>
         {activeTab?.path === LOBBY_PATH ? (
-          <LobbyPrototype />
+          <Lobby />
         ) : activeTab ? (
           <>
             <ErrorBoundary label="Document" key={activeTab.id}>
@@ -63,10 +52,12 @@ export function Pane({ paneId, showRestore = false }: Props): React.JSX.Element 
             </ErrorBoundary>
             {showOutline && <OutlinePanel tabId={activeTab.id} />}
           </>
-        ) : LOBBY_PROTOTYPE ? (
-          <LobbyPrototype /> /* PROTOTYPE — remove with LobbyPrototype.tsx */
         ) : (
-          <EmptyPane />
+          /*
+           * Nothing open. The Lobby is what the room looks like empty — the
+           * keyboard-hint card it replaced only ever told you how to leave.
+           */
+          <Lobby />
         )}
       </div>
     </section>

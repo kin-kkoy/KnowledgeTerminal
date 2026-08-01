@@ -10,7 +10,7 @@
  */
 import { useEffect } from 'react'
 import { stem } from '@shared/paths'
-import { LOBBY_PATH } from '../editorArea/LobbyPrototype'
+import { LOBBY_PATH } from '../editorArea/Lobby'
 import { useStore } from '../../store'
 import { Modal } from './Modal'
 import styles from './ConfirmTabClose.module.css'

@@ -1,20 +1,26 @@
 /**
- * ═══════════════════════════════════════════════════════════════════════════
- *  PROTOTYPE — THROWAWAY. NOT PRODUCTION CODE. DELETE AFTER THE DESIGN CALL.
- * ═══════════════════════════════════════════════════════════════════════════
+ * The Lobby — orientation, in the pane where you read.
  *
- * Shape, as decided: THE DESK is permanent at the top. Beneath it, a tab picks
- * between THE MAP (where things live) and THE DAY LOOP (what a session looks
- * like). No live strip — the context panel already owns Today / Module / Gate
- * / Progress, and repeating it here was pure duplication.
+ * Not the dashboard and not a rail: it is the room, and a document is what you
+ * pick up in it. It opens as a tab, and is also what an empty pane shows.
  *
- * Run: `npm run dev`, then Ctrl+W until no document is open. The Lobby is what
- * an empty pane shows.
+ * THE DESK is permanent — where you are, and the documents that matter now.
+ * Beneath it a tab picks between WHERE THINGS LIVE (the workspace by purpose)
+ * and WHAT A SESSION LOOKS LIKE (the loop, and the documents each step uses).
  *
- * PATHS ARE RESOLVED BY FILENAME, never hardcoded. The first version of this
- * hardcoded `curriculum/plan/module-01-...` and broke the moment those files
- * were grouped into `plan/1-core/`. Looking the name up in the document index
- * means the buttons survive the folders moving again.
+ * There is no live strip: the context panel already owns Today / Module / Gate
+ * / Progress, and repeating them here was pure duplication.
+ *
+ * NOTHING SUBJECT-SPECIFIC LIVES HERE. The desk's title and its document
+ * targets arrive through `registerDashboardSource` — the same seam the
+ * dashboard uses — so a contributor nominates them and core renders what it was
+ * handed. The map comes from `settings.lobby.map`, falling back to the
+ * workspace's top-level folders when that is unset.
+ *
+ * PATHS RESOLVE BY FILENAME, never hardcoded. An earlier version hardcoded
+ * `curriculum/plan/module-01-...` and broke the moment those files were
+ * grouped into `plan/1-core/`; looking the name up in the document index means
+ * the buttons survive the folders moving again.
  */
 import { useMemo, useState } from 'react'
 import {
@@ -29,10 +35,14 @@ import { resolveIcon, type IconOverrides } from '../../icons/registry'
 import { useShallow, useStore } from '../../store'
 import type { HomeSnapshot } from '@shared/types'
 
+import styles from './Lobby.module.css'
+
 /** Stable identities, so the shallow selectors do not fire every render. */
-const EMPTY_MAP: Array<{ group: string; entries: Array<{ path: string; label?: string; note?: string; emphasis: boolean }> }> = []
+const EMPTY_MAP: Array<{
+  group: string
+  entries: Array<{ path: string; label?: string; note?: string; emphasis: boolean }>
+}> = []
 const EMPTY_ICONS: IconOverrides = {}
-import styles from './LobbyPrototype.module.css'
 
 /**
  * The Lobby's tab identity.
@@ -43,7 +53,7 @@ import styles from './LobbyPrototype.module.css'
  */
 export const LOBBY_PATH = 'kt://lobby'
 
-export function LobbyPrototype(): React.JSX.Element {
+export function Lobby(): React.JSX.Element {
   const [tab, setTab] = useState<'map' | 'loop'>('map')
 
   const docs = useStore(useShallow((s) => s.docs))
@@ -233,12 +243,6 @@ export function LobbyPrototype(): React.JSX.Element {
         </div>
       </div>
 
-      <nav className={styles.protoBar}>
-        <span className={styles.protoLabel}>PROTOTYPE</span>
-        <span className={styles.protoNote}>
-          Desk is permanent · tab switches the half below · contributions v{version}
-        </span>
-      </nav>
     </div>
   )
 }
@@ -394,16 +398,23 @@ function MapView({
  * today's plan); plain stems are fixed documents. Listing them is the point —
  * the step tells you WHERE the work happens, not just that it happens.
  */
+/**
+ * The loop is a SHAPE, not a position.
+ *
+ * An earlier version marked step one done and step two current. It was invented
+ * — nothing here knows which step you are on, and working it out would mean
+ * tracking which documents you opened this session against the day block's
+ * tasks. A confident wrong answer is worse than none, so the steps are simply
+ * numbered and you pick the one you want.
+ */
 const STEPS: Array<{
   n: number
   title: string
   note: string
-  done?: boolean
-  current?: boolean
   uses: Array<{ role?: string; stem?: string; why: string }>
 }> = [
   {
-    n: 1, title: 'Check the pointer', done: true,
+    n: 1, title: 'Check the pointer',
     note: 'What today is, and what gates it.',
     uses: [
       { stem: 'PROGRESS', why: 'The honest state, as you last left it' },
@@ -411,7 +422,7 @@ const STEPS: Array<{
     ],
   },
   {
-    n: 2, title: 'Read the topic', current: true,
+    n: 2, title: 'Read the topic',
     note: '20 minutes, no more. Then close it.',
     uses: [
       { role: 'read', why: 'Today’s chapter — the teaching material' },
@@ -471,7 +482,7 @@ function DayLoop({
     <div className={styles.loop}>
       <p className={styles.panelHint}>
         <CornerDownRight size={12} strokeWidth={2} />
-        Five steps. You are on step two. Pick one to see what it uses.
+        The shape of a session. Pick a step to see the documents it uses.
       </p>
 
       <div className={styles.loopCols}>
@@ -479,15 +490,9 @@ function DayLoop({
           {STEPS.map((s) => (
             <li
               key={s.n}
-              className={
-                s.current
-                  ? `${styles.step} ${styles.stepNow}`
-                  : s.done
-                    ? `${styles.step} ${styles.stepDone}`
-                    : styles.step
-              }
+              className={styles.step}
             >
-              <span className={styles.stepN}>{s.done ? '\u2713' : s.n}</span>
+              <span className={styles.stepN}>{s.n}</span>
               <button
                 type="button"
                 aria-pressed={selected === s.n}
@@ -496,10 +501,7 @@ function DayLoop({
                 }
                 onClick={() => setSelected(s.n)}
               >
-                <span className={styles.stepTitle}>
-                  {s.title}
-                  {s.current && <em className={styles.nowTag}>you are here</em>}
-                </span>
+                <span className={styles.stepTitle}>{s.title}</span>
                 <span className={styles.stepNote}>{s.note}</span>
               </button>
             </li>

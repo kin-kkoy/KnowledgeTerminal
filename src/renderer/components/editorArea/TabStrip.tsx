@@ -6,7 +6,7 @@
 import { useCallback, useRef, useState } from 'react'
 import { Columns2, ListTree, PanelLeft, PanelRight, Pin, X } from 'lucide-react'
 import { stem } from '@shared/paths'
-import { LOBBY_PATH } from './LobbyPrototype'
+import { LOBBY_PATH } from './Lobby'
 
 /** The Lobby is not a file, so `stem()` would render its URI. */
 const labelOf = (path: string): string => (path === LOBBY_PATH ? 'Lobby' : stem(path))

@@ -24,9 +24,9 @@ export interface RoughEdge {
 export const ROUGH_EDGES: Record<string, RoughEdge> = {
   lobby: {
     id: 'lobby',
-    title: 'The Lobby is still a prototype',
+    title: "The Lobby's day loop is not configurable yet",
     summary:
-      'The title and the two document cards are live and cannot go stale. "You are on step two" is hardcoded, and the day loop\'s document list is written into the source rather than your settings.',
+      'The desk and the map are done — the title and document cards are live, and the map comes from your settings. The five session steps and the documents they name are still written into the source rather than your settings.',
   },
   'new-workspace': {
     id: 'new-workspace',
