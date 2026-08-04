@@ -96,5 +96,7 @@ These were verified in the running app and are not on the list:
   fails to parse is never overwritten, and the Sandbox refuses to save until you
   repair it.
 - The icon system: overrides win, heuristics fall back, both directions checked.
-- The workspace tidy: 128 wiki-links resolve, 0 broken.
+- The workspace tidy: 148 wiki-links, 147 resolve. The one that doesn't is
+  deliberate — `notes/markdown-reference.md` demonstrates what an unresolved
+  link looks like.
 - Tab pinning, the close confirmation, and the Lobby as a tab.

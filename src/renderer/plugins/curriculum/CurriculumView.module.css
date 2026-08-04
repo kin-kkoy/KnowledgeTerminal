@@ -119,6 +119,31 @@
   color: var(--text-faint);
 }
 
+/* The chapter's other documents. The row itself opens the day plan; these are
+   the teaching text and the worked solution, offered only when the workspace
+   actually has them. */
+.docs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  padding: 0 var(--panel-pad) var(--s-3) 0;
+}
+
+.docLink {
+  padding: 2px var(--s-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  font-size: var(--fs-ui-xs);
+  cursor: pointer;
+}
+
+.docLink:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
 .empty {
   padding: var(--s-6) var(--panel-pad);
   font-size: var(--fs-ui-sm);

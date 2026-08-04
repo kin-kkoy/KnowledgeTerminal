@@ -2,17 +2,31 @@
 
 LINQ (Language-Integrated Query) is a family of methods — `Where`, `Select`, `OrderBy`, `GroupBy`,
 `Join` — that let you filter, transform, sort and summarise **any** sequence of data by chaining
-small operations into a pipeline. After this chapter you can take a pile of records — orders, log
-lines, CSV rows — and turn "total sales per customer, top three, names attached" into five readable
-lines instead of thirty lines of nested loops. To get there we first build the machinery LINQ runs
-on: lambdas and delegates, which C# also uses for events, callbacks and async.
+small operations into a pipeline. After this chapter you can take a pile of records — deliveries,
+contracts, log lines, CSV rows — and turn "total gold per dragon, top three, names attached" into
+five readable lines instead of thirty lines of nested loops. To get there we first build the
+machinery LINQ runs on: lambdas and delegates, which C# also uses for events, callbacks and async.
+
+> **Worked solution:** [[04-linq-worked]] — the roster queries and the day report as finished
+> source.
+> Section numbers match this page, so the two read side by side in a split pane.
 
 ---
 
 ## 1. The core five + pipelines
 
-**The idea.** In C# you can treat *a piece of code* as a value: store it in a variable, pass it to a
-method, call it later. That value is written as a **lambda expression**:
+**The idea**
+
+The guild's contract board holds forty contracts. You want the three highest-paying ones that a
+mining dragon could take, sorted by deadline, with the dragon's name attached.
+
+Written as loops that's thirty lines: an accumulator list, a nested loop to match dragons, a
+manual sort, an index to stop at three, and four temporary variables you'll have to name. Written
+as a pipeline it's five lines that read like the sentence above.
+
+Getting there needs one idea first, and it's the one that makes everything else in this chapter
+work: **in C# you can treat a piece of code as a value.** Store it in a variable, pass it to a
+method, have that method call it later. That value is written as a **lambda expression**:
 
 ```csharp
 x => x * 2
@@ -60,8 +74,12 @@ you rarely need to.
 
 Why does this matter? Because it lets a method accept **behaviour** as an argument. `Where` doesn't
 know what "keep this element" means for your data — you hand it a `Func<T, bool>` that decides.
-That's the entire trick behind LINQ: generic loop skeletons (filter, transform, sort) into which
-you plug tiny functions.
+
+That's the entire trick behind LINQ, and it's worth saying plainly: **someone else already wrote
+the loops.** Filtering, transforming and sorting are the same loop skeletons every time; the only
+part that differs between your program and everyone else's is the small decision made per element.
+LINQ is those skeletons, written once and well, with a hole in each for you to drop your decision
+into.
 
 > **C corner:** this is `qsort`'s comparator argument, grown up. A C function pointer
 > `int (*cmp)(const void*, const void*)` becomes a `Func<T, T, int>` — but type-safe, no `void*`
@@ -80,7 +98,7 @@ with `.` (Atlas: **Extension Methods** — for now, just chain and enjoy). The c
 | `First(p)` / `FirstOrDefault(p)` / `Single(p)` | one element out | `T → bool` |
 | `Sum` / `Count` / `Aggregate` | collapse to one value | varies |
 
-**In practice.**
+**In practice**
 
 ```csharp
 int[] nums = { 5, 2, 8, 1, 9, 3, 7 };
@@ -142,15 +160,15 @@ Multi-key sorting uses `ThenBy`, not a second `OrderBy` (a second `OrderBy` *re-
 scratch*, discarding the first ordering):
 
 ```csharp
-var people = new[] { ("Rossi", "Anna"), ("Klein", "Otto"), ("Rossi", "Aldo") };
-foreach (var p in people.OrderBy(p => p.Item1).ThenBy(p => p.Item2))
-    Console.WriteLine($"{p.Item1}, {p.Item2}");
+var roster = new[] { ("Mining", "Ironjaw"), ("Forest", "Mossback"), ("Mining", "Burrow") };
+foreach (var d in roster.OrderBy(d => d.Item1).ThenBy(d => d.Item2))
+    Console.WriteLine($"{d.Item1}, {d.Item2}");
 ```
 
 ```text
-Klein, Otto
-Rossi, Aldo
-Rossi, Anna
+Forest, Mossback
+Mining, Burrow
+Mining, Ironjaw
 ```
 
 One more thing you'll meet in other people's code: C# also has a SQL-flavoured **query syntax** —
@@ -187,14 +205,18 @@ and the coldest kept one using `Min()`.
 
 ## 2. Deferred execution
 
-**The idea.** Here is the fact that decides whether LINQ ever surprises you: **building a query
+**The idea**
+
+Here is the fact that decides whether LINQ ever surprises you: **building a query
 runs no code.** A LINQ chain is a *recipe*, not a result. The recipe executes only when something
 actually **enumerates** it — a `foreach`, `ToList()`, `Count()`, `First()`, `Sum()`… And it
 executes **again, from scratch, every time** it's enumerated. This is called **deferred
 execution**, and it is *the* LINQ interview topic because it silently produces wrong counts, double
 work, and stale-vs-fresh confusion in real codebases.
 
-**In practice.** Watch it with a lambda that prints when it runs:
+**In practice**
+
+Watch it with a lambda that prints when it runs:
 
 ```csharp
 int[] nums = { 5, 2, 8, 1, 9 };
@@ -343,7 +365,9 @@ before running.
 
 ## 3. GroupBy, Join, SelectMany
 
-**The idea.** The core five reshape a flat sequence. Real reporting needs three more moves:
+**The idea**
+
+The core five reshape a flat sequence. Real reporting needs three more moves:
 **bucket** rows by a key (`GroupBy`), **match** rows across two sequences (`Join`), and **flatten**
 nested sequences into one (`SelectMany`). With those, "orders in, report out" is a single pipeline.
 
@@ -354,80 +378,90 @@ elements that share it — so you can run any LINQ you like inside each group (`
 
 `Join(inner, outerKey, innerKey, resultSelector)` pairs up elements from two sequences whose keys
 match — the same operation as a SQL inner join, if you've met that; if not: for every order, find
-the customer whose `Id` equals the order's `CustomerId`, and combine the pair into one result row.
+the dragon whose `Id` equals the delivery's `DragonId`, and combine the pair into one result row.
 Elements with no match on the other side are simply dropped.
 
 `SelectMany(f)` is `Select` where `f` returns a *sequence* per element — and instead of giving you
-a sequence of sequences, it concatenates them into one flat sequence. Customers→orders,
+a sequence of sequences, it concatenates them into one flat sequence. Dragons→deliveries,
 lines→words, folders→files: any one-to-many hop flattens with `SelectMany`.
 
-**In practice.** A small sales report, end to end. (`record` — the one-line data class from the
+**In practice**
+
+A small sales report, end to end. (`record` — the one-line data class from the
 *OOP* chapter. In a Study/top-level file, `record` declarations go at the bottom, after the
 statements. Anonymous types `new { ... }` appear here for the first time: compiler-generated
 read-only bundles of named values, ideal for query results that never leave the method.)
 
 ```csharp
-var customers = new List<Customer>
+var dragons = new List<Dragon>
 {
-    new(1, "Ada"), new(2, "Grace"), new(3, "Linus"),
+    new(1, "Ironjaw"), new(2, "Mossback"), new(3, "Longtail"),
 };
-var orders = new List<Order>
+var deliveries = new List<Delivery>
 {
-    new(1, "keyboard", 120m), new(2, "mouse", 25m), new(1, "monitor", 300m),
-    new(2, "desk", 210m),     new(1, "cable", 9m),
+    new(1, "Stone", 120m),  new(2, "Herbs", 25m), new(1, "Iron Ore", 300m),
+    new(2, "Timber", 210m), new(1, "Coal", 9m),
 };
 
-// 1) GroupBy: total and count per customer id.
-var perCustomer = orders
-    .GroupBy(o => o.CustomerId)                 // buckets: key 1 → 3 orders, key 2 → 2 orders
-    .Select(g => new                            // anonymous type: named result columns
+// 1) GroupBy: how much did each dragon bring in?
+var perDragon = deliveries
+    .GroupBy(d => d.DragonId)              // buckets: key 1 → 3 deliveries, key 2 → 2
+    .Select(g => new                       // anonymous type: named result columns
     {
-        CustomerId = g.Key,
+        DragonId = g.Key,
         Count = g.Count(),
-        Total = g.Sum(o => o.Amount),
+        Total = g.Sum(d => d.Gold),
     })
     .OrderByDescending(r => r.Total);
 
 // 2) Join: attach names to those ids.
-var report = perCustomer
-    .Join(customers,
-          r => r.CustomerId,                    // key from the left sequence
-          c => c.Id,                            // key from the right sequence
-          (r, c) => new { c.Name, r.Count, r.Total });   // combine each matched pair
+var report = perDragon
+    .Join(dragons,
+          r => r.DragonId,                 // key from the left sequence
+          d => d.Id,                       // key from the right sequence
+          (r, d) => new { d.Name, r.Count, r.Total });   // combine each matched pair
 
 foreach (var row in report)
-    Console.WriteLine($"{row.Name}: {row.Count} orders, {row.Total:C}");
+    Console.WriteLine($"{row.Name}: {row.Count} deliveries, {row.Total:F2} gold");
 
-// 3) SelectMany: flatten "each customer's order items" into one list of strings.
-var allItems = customers
-    .SelectMany(c => orders.Where(o => o.CustomerId == c.Id)
-                           .Select(o => $"{c.Name}:{o.Item}"));
-Console.WriteLine(string.Join(", ", allItems));
+// 3) SelectMany: flatten "each dragon's hauled resources" into one flat list.
+var allHauled = dragons
+    .SelectMany(dragon => deliveries.Where(d => d.DragonId == dragon.Id)
+                                    .Select(d => $"{dragon.Name}:{d.Resource}"));
+Console.WriteLine(string.Join(", ", allHauled));
 
-record Customer(int Id, string Name);
-record Order(int CustomerId, string Item, decimal Amount);
+record Dragon(int Id, string Name);
+record Delivery(int DragonId, string Resource, decimal Gold);
 ```
 
 ```text
-Ada: 3 orders, $429.00
-Grace: 2 orders, $235.00
-Ada:keyboard, Ada:monitor, Ada:cable, Grace:mouse, Grace:desk
+Ironjaw: 3 deliveries, 429.00 gold
+Mossback: 2 deliveries, 235.00 gold
+Ironjaw:Stone, Ironjaw:Iron Ore, Ironjaw:Coal, Mossback:Herbs, Mossback:Timber
 ```
 
-(`{row.Total:C}` is currency formatting from string interpolation — *Fundamentals*. Your machine's
-culture decides the symbol; the shape is what matters.)
+(`{row.Total:F2}` is fixed-point formatting from string interpolation — *Fundamentals*. `:C` would
+give you a currency symbol, but which one depends on the machine's culture settings, which is
+rarely what you want in a report you control.)
 
-Read the report result carefully: **Linus is missing**. He has no orders, so `GroupBy` never made a
-bucket for him, and `Join` drops unmatched rows. If a report must show zero-rows, start the
-pipeline **from the side that must be complete** — group *customers'* orders, not orders:
+Now read that report against the roster, because there's a bug in it and it is the most common
+bug in this entire chapter. **Longtail is missing.**
+
+Longtail is a transport dragon; it hauls between facilities and delivers nothing to the ledger.
+So it has no deliveries, `GroupBy` never made a bucket for it, and `Join` silently drops rows with
+no match. The report doesn't say "Longtail: 0" — it says nothing at all, and a manager reading it
+would conclude the guild has two dragons.
+
+The fix is a rule worth writing on the wall: **start the pipeline from the side that must be
+complete.** Don't group the deliveries; walk the dragons.
 
 ```csharp
-var everyone = customers.Select(c => new
+var everyDragon = dragons.Select(dragon => new
 {
-    c.Name,
-    Total = orders.Where(o => o.CustomerId == c.Id).Sum(o => o.Amount),
+    dragon.Name,
+    Total = deliveries.Where(d => d.DragonId == dragon.Id).Sum(d => d.Gold),
 });
-// Ada 429, Grace 235, Linus 0  — Sum of an empty sequence is 0
+// Ironjaw 429, Mossback 235, Longtail 0  — Sum of an empty sequence is 0, not an error
 ```
 
 For in-memory data that nested-`Where` shape is often clearer than `Join`; `Join` earns its keep on
@@ -443,10 +477,10 @@ and count the distinct letters used.
 **Traps**
 
 - **Inner-join drop-outs:** `Join` and `GroupBy` silently omit keyless/unmatched rows — the
-  missing-Linus bug. If completeness matters, drive the query from the complete side.
+  missing-Longtail bug. If completeness matters, drive the query from the complete side.
 - **Aggregating the group instead of the elements:** inside `Select(g => ...)`, `g.Key` is the key
   and `g` is the sequence — `g.Sum(o => o.Amount)`, not `g.Amount` (a group has no `.Amount`).
-- **`Select` when you meant `SelectMany`:** `customers.Select(c => c.Orders)` is a sequence *of
+- **`Select` when you meant `SelectMany`:** `dragons.Select(d => d.Deliveries)` is a sequence *of
   lists*; iterate it and you get lists, not orders. If your `foreach` variable is a collection you
   didn't want, switch to `SelectMany`.
 - **Grouping by reference-type keys without proper equality:** keys are compared with `Equals`.
@@ -457,7 +491,9 @@ and count the distinct letters used.
 
 ## 4. Delegates & events
 
-**The idea.** Time to name the machinery properly, because it carries far more than LINQ: every
+**The idea**
+
+Time to name the machinery properly, because it carries far more than LINQ: every
 callback, event handler and async continuation in C# rides on it.
 
 A **delegate type** is a type whose instances are callable methods — a declaration of *shape*
@@ -489,7 +525,7 @@ who listens — zero, one, or ten subscribers, added at runtime. UI frameworks (
 timers, file watchers, and domain logic ("stock hit zero → email purchasing, update dashboard") all
 speak this pattern.
 
-**In practice.**
+**In practice**
 
 ```csharp
 // Multicast on a plain delegate:
@@ -497,30 +533,30 @@ Action<string> log = s => Console.WriteLine($"[console] {s}");
 log += s => Console.WriteLine($"[audit]   {s}");
 log("first event");     // invokes BOTH, in subscription order
 
-// Publish/subscribe with an event:
-var account = new BankAccount();
+// Publish/subscribe with an event: the warehouse announces, it doesn't decide who cares.
+var store = new Warehouse();
 
-account.Overdrawn += amount =>
-    Console.WriteLine($"ALERT: overdrawn by {amount:C}");
-account.Overdrawn += amount =>
-    Console.WriteLine($"(sms) balance below zero");
+store.Overflowed += crates =>
+    Console.WriteLine($"ALERT: {crates:F0} crates would not fit");
+store.Overflowed += crates =>
+    Console.WriteLine("(runner) sent to the Merchant Council");
 
-account.Withdraw(50m);   // fine — no event
-account.Withdraw(80m);   // fires Overdrawn → both subscribers run
+store.Deliver(50);   // fits — no event
+store.Deliver(80);   // overflows → both subscribers run
 
-class BankAccount
+class Warehouse
 {
-    private decimal _balance = 100m;
+    private int _space = 100;
 
-    // The event: subscribers receive the overdraft amount.
-    // "?" marks it nullable (nullable chapter of Fundamentals): with no subscribers it is null.
-    public event Action<decimal>? Overdrawn;
+    // The event: subscribers receive how many crates were turned away.
+    // "?" marks it nullable (Fundamentals, *Nullability*): with no subscribers it is null.
+    public event Action<int>? Overflowed;
 
-    public void Withdraw(decimal amount)
+    public void Deliver(int crates)
     {
-        _balance -= amount;
-        if (_balance < 0)
-            Overdrawn?.Invoke(-_balance);   // ?. — only fire if someone subscribed
+        _space -= crates;
+        if (_space < 0)
+            Overflowed?.Invoke(-_space);   // ?. — only fire if someone subscribed
     }
 }
 ```
@@ -528,16 +564,21 @@ class BankAccount
 ```text
 [console] first event
 [audit]   first event
-ALERT: overdrawn by $30.00
-(sms) balance below zero
+ALERT: 30 crates would not fit
+(runner) sent to the Merchant Council
 ```
+
+Note the formatting choice: `{crates:F0}`, not `{crates:C}`. Currency formatting looks tempting
+for a number of gold, but `:C` picks its symbol from the machine's culture settings — the same
+program prints `$30.00` on one machine and `₱30.00` on another. When you control the output
+format, say what you mean.
 
 Two idioms in that snippet are *the* standard event idioms — memorise them as a pair:
 
-- `public event Action<decimal>? Overdrawn;` — nullable, because an event with no subscribers is
+- `public event Action<int>? Overflowed;` — nullable, because an event with no subscribers is
   `null`, and
-- `Overdrawn?.Invoke(...)` — the null-conditional invoke (Atlas: **Null-conditional operators**),
-  which fires only if the subscriber list is non-empty. Calling `Overdrawn(...)` bare on a
+- `Overflowed?.Invoke(...)` — the null-conditional invoke (Atlas: **Null-conditional operators**),
+  which fires only if the subscriber list is non-empty. Calling `Overflowed(...)` bare on a
   subscriber-less event is a `NullReferenceException`.
 
 (The .NET class library's own events conventionally use a delegate called
@@ -587,7 +628,7 @@ One honest question per topic — answer without looking, then tick:
    `ToList()` changes about that, and what a query does with a captured variable that changed
    after the query was built? If yes, tick *Deferred execution* above.
 3. In a `GroupBy(...).Select(g => ...)`, can you say what `g.Key` is, what `g` itself is, and why
-   a customer with zero orders vanished from the joined report? If yes, tick *GroupBy, Join,
+   a dragon with zero deliveries vanished from the joined report? If yes, tick *GroupBy, Join,
    SelectMany* above.
 4. Can you declare an event on a class, fire it safely with no subscribers, and explain why
    `-=` with a freshly written lambda fails to unsubscribe? If yes, tick *Delegates & events*

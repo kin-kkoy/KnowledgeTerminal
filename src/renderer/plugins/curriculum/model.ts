@@ -35,6 +35,12 @@ export interface CurriculumNode {
    * workspace that only has one of them simply omits the other.
    */
   chapter?: RelPath
+  /**
+   * The worked solution for this chapter: the same material shown as finished
+   * source rather than as teaching prose. Read-only, authored in the workspace,
+   * and a third answer to the same read/do pair above — show me the code.
+   */
+  worked?: RelPath
   checkpoint?: string
   prereqs: string[]
   topics: CurriculumNode[]
@@ -60,6 +66,7 @@ interface RawNode {
   cert?: string
   doc?: string
   chapter?: string
+  worked?: string
   checkpoint?: string
   prereqs?: string[]
   topics?: RawNode[]
@@ -79,6 +86,7 @@ function toNode(raw: RawNode, docBase: string, parentBranch: string): Curriculum
     ...(raw.cert ? { cert: raw.cert } : {}),
     ...(raw.doc ? { doc: joinRel(docBase, raw.doc) } : {}),
     ...(raw.chapter ? { chapter: joinRel(docBase, raw.chapter) } : {}),
+    ...(raw.worked ? { worked: joinRel(docBase, raw.worked) } : {}),
     ...(raw.checkpoint ? { checkpoint: raw.checkpoint } : {}),
     label: raw.label,
     prereqs: raw.prereqs ?? [],

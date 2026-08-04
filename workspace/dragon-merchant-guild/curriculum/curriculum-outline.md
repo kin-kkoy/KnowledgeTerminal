@@ -24,6 +24,66 @@ exact constructs introduced, the day it lands on, and what the learner can build
 
 ---
 
+### m00 — Programs, Classes & Files *(2 days)*
+
+Read [[00-program-structure]] · Do [[module-00-program-structure]]
+
+The things every later chapter assumes and none of them teaches. What a class and an object
+actually are, how a `.cs` file is laid out top to bottom, who can see what, `static`, and which
+file a thing belongs in. Ends with Milestone 0: the solution, the `Engine` library and the
+`GuildConsole` executable, with the dependency pointing one way.
+No checkpoint — this is orientation, not a gate.
+
+#### m00-t1 — Classes and objects *(Day 1)*
+Find the classes by writing down what the program does and underlining the nouns. A class is the
+blank character sheet; an object is the filled-in one. Two objects from one class hold their own
+data — and a second variable is not a second object.
+
+- **Constructs introduced:** `class`, `new`, instantiation, fields, object identity vs equality
+  (informally — the Fundamentals chapter makes it precise).
+- **Mechanic hook:** the guild's noun list *is* the game's type list — Guild, Dragon, Contract,
+  Resource, Worker, Storage, Facility.
+
+#### m00-t2 — Reading a C# file *(Day 1)*
+The seven parts of a `.cs` file in the order they always appear: `using`s, namespace, class,
+fields, constructor, properties, methods. What `using` does and does not do (it is not
+`#include`). Why the book's examples have no namespace and real files do.
+
+- **Constructs introduced:** `using` directives, `namespace`, constructors, auto-properties,
+  expression-bodied members, top-level statements vs `static void Main`.
+- **Mechanic hook:** `Engine/Models/Dragon.cs` — the first real file of the game.
+
+#### m00-t3 — Who can see what *(Day 1)*
+`public`, `private`, `protected`, `internal` — each with the reason rather than the definition.
+The defaults (members are `private`, types are `internal`) and what they tell you. Why narrow
+visibility bounds a bug hunt to one file.
+
+- **Constructs introduced:** the four access modifiers, member and type defaults, base-class
+  visibility rules.
+- **Mechanic hook:** a dragon's rest is nobody else's business; its fitness to work is everyone's.
+
+#### m00-t4 — Static — the one shared copy *(Day 2)*
+One copy for the whole program, no object required. Static fields, static methods, static classes
+and the static constructor that runs lazily on first use. Then the counter-case: the two-guilds
+test for when a shared copy is the wrong answer.
+
+- **Constructs introduced:** `static`, `static readonly`, `const`, static constructors, the three
+  compiler rules about static members.
+- **Mechanic hook:** `GuildCatalogue` — resource and species definitions, loaded once, read
+  everywhere. Gold and rest deliberately *not* static.
+
+#### m00-t5 — How many classes, how many files *(Day 2)*
+One public class per file, named after it. The three signals that a class should split. Turning
+commented steps into named members. And the split that matters most: game logic in `Engine`,
+screens in the front-end, dependency pointing one way only.
+
+- **Constructs introduced:** class libraries vs executables, project references, solution layout,
+  extract-method, wrapping conditions behind named properties.
+- **Mechanic hook:** Milestone 0 — the repository every later module builds in, and the reason a
+  Terminal.Gui or Avalonia front-end can arrive later without touching the game.
+
+---
+
 ### m01 — C# Fundamentals *(5 days)*
 
 Read [[01-fundamentals]] · Do [[module-01-csharp-fundamentals]]
@@ -599,7 +659,13 @@ when it lands, so anything above a given row can be assumed known at that point.
 
 | Construct | First taught | Chapter · day |
 | --- | --- | --- |
-| `class`, `struct`, value vs reference, stack/heap, boxing | m01-t1 | m01 · D1 |
+| `class`, objects, `new`, fields, deriving classes from nouns | m00-t1 | m00 · D1 |
+| `using` directives, `namespace` (file-scoped and braced), file layout | m00-t2 | m00 · D1 |
+| Constructors, auto-properties, expression-bodied members, top-level statements | m00-t2 | m00 · D1 |
+| Access modifiers (`public`/`private`/`protected`/`internal`) and their defaults | m00-t3 | m00 · D1 |
+| **`static`** — fields, methods, classes, static constructors, `const`, `readonly` | m00-t4 | m00 · D2 |
+| One class per file, extract-method, class libraries vs executables, project references | m00-t5 | m00 · D2 |
+| `struct`, value vs reference, stack/heap, boxing | m01-t1 | m01 · D1 |
 | `var`, built-in types, string interpolation | m01-t1 | m01 · D1 |
 | `record` (first sighting, value equality) | m01-t1 | m01 · D1 |
 | Nullable reference types, `?.`, `??`, `!` | m01-t2 | m01 · D2 |
@@ -614,7 +680,7 @@ when it lands, so anything above a given row can be assumed known at that point.
 | Custom exception types | m01-t4 | m01 · D4 |
 | File IO, CLI args, exit codes | m01-t4 | m01 · D4 |
 | xUnit — `[Fact]`, `Assert.*`, `Assert.Throws` | m01-t4 | m01 · D4 |
-| Access modifiers, auto-properties, `{ get; private set; }` | m02-t1 | m02 · D1 |
+| Encapsulation & invariants, `{ get; private set; }` *(modifiers: m00-t3)* | m02-t1 | m02 · D1 |
 | `init`-only setters, computed properties, invariants | m02-t1 | m02 · D1 |
 | `with`-expressions, static factory methods | m02-t1 | m02 · D1 |
 | `abstract`, `virtual`, `override`, `base`, `sealed` | m02-t2 | m02 · D2 |

@@ -6,15 +6,37 @@ After this chapter you can build things like a word-frequency counter, a task qu
 or a cache — choosing the right structure on purpose, writing your own reusable generic code, and
 even authoring your own lazily-produced sequences.
 
+> **Worked solution:** [[03-collections-generics-worked]] — the roster, the warehouse and the
+> contract board as finished source.
+> Section numbers match this page, so the two read side by side in a split pane.
+
 ---
 
 ## 1. The core collections
 
-**The idea.** An array in C# (`int[]`, `string[]`) is what you expect: a fixed-length block of
-elements, indexed from 0, length known up front. It's the right tool when the size truly is fixed.
-But most data *grows* — you read lines until a file ends, you accumulate results until a loop
-stops. Hand-rolling growth (allocate bigger, copy over, free old) is exactly the kind of
-error-prone plumbing the standard library exists to kill.
+**The idea**
+
+The guild starts with two dragons. By the end of the month it has nine, and one of them is on
+loan. You don't know how many contracts will be on the board tomorrow. You don't know how many
+resource types the warehouse will end up holding.
+
+An array in C# (`int[]`, `string[]`) is what you expect: a fixed-length block of elements, indexed
+from 0, length known up front. It's exactly right when the size genuinely is fixed — and useless
+for a roster. Hand-rolling growth (allocate bigger, copy across, drop the old one) is precisely
+the error-prone plumbing the standard library exists to kill.
+
+So the real question is never "which container do I know?" It's **what am I going to ask this data
+to do?** The guild asks different questions of different data, and each question has a container
+that answers it cheaply:
+
+- *"What did we produce each day, in order?"* — a growable list.
+- *"How many crates of Stone are in the warehouse?"* — a lookup by name.
+- *"Is Ironjaw already on shift?"* — a membership test, no value attached.
+- *"Which contract came in first?"* — a queue.
+- *"What was the last thing I did?"* — a stack.
+
+Pick the container that makes your commonest question cheap, and the rest of the code writes
+itself. Pick the wrong one and you'll be writing loops inside loops to compensate.
 
 C#'s collections live in `System.Collections.Generic` (already imported for you — implicit
 `using`s are on). The five you'll actually use, with the mental model and the costs:
@@ -40,86 +62,95 @@ key" fast? `Dictionary<TKey,TValue>`. Only need "is it present?" — no value at
 Processing items in arrival order? `Queue<T>`. Most-recent-first (undo, matching brackets,
 depth-first traversal)? `Stack<T>`. Fixed, known size that never changes? A plain array.
 
-**In practice.** A complete program touching all five — paste it into the Study tab and run it:
+**In practice**
+
+A complete program touching all five, one guild question each — paste it into the Study tab and
+run it:
 
 ```csharp
 // --- List<T>: ordered, growable, indexable ---
-var scores = new List<int> { 90, 72 };   // collection initializer: create + fill in one go
-scores.Add(85);                          // grows automatically
-scores[0] = 95;                          // indexer: read/write by position, O(1)
-Console.WriteLine($"count={scores.Count}, first={scores[0]}");
+// "What did we produce each day, in order?"
+var dayOutput = new List<int> { 90, 72 };   // collection initializer: create + fill in one go
+dayOutput.Add(85);                          // grows automatically
+dayOutput[0] = 95;                          // indexer: read/write by position, O(1)
+Console.WriteLine($"days={dayOutput.Count}, first={dayOutput[0]}");
 
 // Collection expression — newer, shorter syntax for the same thing:
-List<int> more = [1, 2, 3];              // [...] builds the collection on the left
-List<int> merged = [.. scores, .. more]; // ".." (spread) splices an existing sequence in
-Console.WriteLine(string.Join(", ", merged));   // string.Join glues items with a separator
+List<int> lastWeek = [1, 2, 3];                  // [...] builds the collection on the left
+List<int> everything = [.. dayOutput, .. lastWeek];  // ".." (spread) splices a sequence in
+Console.WriteLine(string.Join(", ", everything));    // string.Join glues items with a separator
 
 // --- Dictionary<TKey,TValue>: key -> value ---
-var age = new Dictionary<string, int>
+// "How many crates of Stone are in the warehouse?"
+var inStore = new Dictionary<string, int>
 {
-    ["ada"] = 36,        // indexer with a key, not a position
-    ["linus"] = 55,
+    ["Stone"] = 36,        // indexer with a key, not a position
+    ["Timber"] = 55,
 };
-age["ada"] = 37;                          // assign: adds the key or overwrites it
-Console.WriteLine(age["linus"]);          // read: throws KeyNotFoundException if absent!
+inStore["Stone"] = 37;                     // assign: adds the key or overwrites it
+Console.WriteLine(inStore["Timber"]);      // read: throws KeyNotFoundException if absent!
 
 // TryGetValue: the safe read. Returns bool; the value comes back via `out`,
 // which declares the variable right in the call and lets the method fill it.
-if (age.TryGetValue("grace", out int found))
-    Console.WriteLine($"grace is {found}");
+if (inStore.TryGetValue("Silk", out int crates))
+    Console.WriteLine($"Silk: {crates}");
 else
-    Console.WriteLine("grace not present");
+    Console.WriteLine("no Silk in store");
 
 // --- HashSet<T>: membership, no duplicates ---
-var seen = new HashSet<string>();
-Console.WriteLine(seen.Add("ada"));       // True  — newly added
-Console.WriteLine(seen.Add("ada"));       // False — already there (no error, just refused)
-Console.WriteLine(seen.Contains("ada"));  // True
+// "Is Ironjaw already on shift?"
+var onShift = new HashSet<string>();
+Console.WriteLine(onShift.Add("Ironjaw"));       // True  — newly added
+Console.WriteLine(onShift.Add("Ironjaw"));       // False — already there; refused, not an error
+Console.WriteLine(onShift.Contains("Ironjaw"));  // True
 
 // --- Queue<T> and Stack<T> ---
-var jobs = new Queue<string>();
-jobs.Enqueue("compile"); jobs.Enqueue("test");
-Console.WriteLine(jobs.Dequeue());        // compile — first in, first out
+// "Which contract came in first?" and "what was the last thing I did?"
+var board = new Queue<string>();
+board.Enqueue("Stone x40"); board.Enqueue("Timber x12");
+Console.WriteLine(board.Dequeue());        // Stone x40 — first in, first out
 
 var undo = new Stack<string>();
-undo.Push("typed A"); undo.Push("typed B");
-Console.WriteLine(undo.Pop());            // typed B — last in, first out
+undo.Push("assigned Ironjaw"); undo.Push("assigned Mossback");
+Console.WriteLine(undo.Pop());             // assigned Mossback — last in, first out
 ```
 
 ```text
-count=3, first=95
+days=3, first=95
 95, 72, 85, 1, 2, 3
 55
-grace not present
+no Silk in store
 True
 False
 True
-compile
-typed B
+Stone x40
+assigned Mossback
 ```
 
 Two patterns worth memorising because you'll write them weekly:
 
 ```csharp
-// Counting occurrences — the canonical Dictionary idiom:
-var counts = new Dictionary<string, int>();
-foreach (var word in new[] { "a", "b", "a", "c", "a" })      // new[] {...}: inline array
-    counts[word] = counts.TryGetValue(word, out var n) ? n + 1 : 1;
-foreach (var (word, count) in counts)                        // deconstruct each key/value pair
-    Console.Write($"{word}:{count} ");
+// Tallying — the canonical Dictionary idiom. Here: today's deliveries by resource.
+var tally = new Dictionary<string, int>();
+foreach (var resource in new[] { "Stone", "Timber", "Stone", "Coal", "Stone" })  // inline array
+    tally[resource] = tally.TryGetValue(resource, out var n) ? n + 1 : 1;
+foreach (var (resource, count) in tally)                     // deconstruct each key/value pair
+    Console.Write($"{resource}:{count} ");
 Console.WriteLine();
-// prints: a:3 b:1 c:1
+// prints: Stone:3 Timber:1 Coal:1
 
-// Dedup — one line, O(n):
+// Dedup — one line, O(n). Which resources did we touch at all today?
 List<int> withDupes = [3, 1, 3, 2, 1];
 List<int> unique = [.. new HashSet<int>(withDupes)];         // set eats the duplicates
 Console.WriteLine(unique.Count);
 // prints: 3
 ```
 
-(`var` — from Fundamentals — just means "compiler, infer the type"; `counts` is still a
-plain `Dictionary<string,int>`. The `foreach (var (word, count) in counts)` form deconstructs each
-entry into two locals; a dictionary enumerates as key/value pairs.)
+(`var` — from Fundamentals — just means "compiler, infer the type"; `tally` is still a plain
+`Dictionary<string,int>`. The `foreach (var (resource, count) in tally)` form deconstructs each
+entry into two locals; a dictionary enumerates as key/value pairs. Note this one is shown with
+`// prints` rather than a checked output block, because dictionary enumeration order is an
+implementation detail you should never write code that depends on.)
 
 **Arrays vs `List<T>`:** an array is leaner (one fixed allocation, no growth bookkeeping) and
 signals "this size is final." `List<T>` costs a little more but grows for you. Default to
@@ -156,10 +187,24 @@ and print both timings. Feel the O(n²) vs O(n) difference in real milliseconds.
 
 ## 2. Generics & constraints
 
-**The idea.** You've now *used* `List<T>`; time to understand the machinery, because you'll want
-to write your own. A **generic** type or method is parameterised by a type the caller fills in
-later. Instead of writing `MaxInt`, `MaxDouble`, `MaxString`… you write `Max<T>` once, and the
-compiler stamps out a correct, fully typed version for each `T` it's used with.
+**The idea**
+
+The guild needs a "keep the best one" helper. Best-paying contract, so you write `MaxDecimal`.
+Then the most productive dragon, so you write `MaxInt`. Then the alphabetically first resource
+name, so you write `MaxString`. Three methods, one idea, and a fourth one waiting the moment
+someone adds a new kind of thing to compare.
+
+You've now *used* `List<T>` all through section 1 without ever writing a `ListOfInt` and a
+`ListOfString`. That's the machinery you want, and this section is how to get at it.
+
+A **generic** type or method is parameterised by a type the caller fills in later. Instead of
+`MaxInt`, `MaxDouble`, `MaxString`, you write `Max<T>` once and the compiler stamps out a correct,
+fully typed version for each `T` it's used with.
+
+The mental model: a generic is a **blueprint for blueprints**. A class is a blueprint for
+warehouses; `List<T>` is a blueprint for *warehouse blueprints*, and filling in `T` is what hands
+you a real one — a warehouse for crates, a warehouse for ledgers. The stamping-out is done by the
+compiler, once per `T`, and every stamped copy is fully type-checked.
 
 Why does this beat the obvious alternative — writing the code once against the universal base
 type `object` (every C# type derives from `object`; see the OOP chapter)? Three reasons:
@@ -173,7 +218,9 @@ type `object` (every C# type derives from `object`; see the OOP chapter)? Three 
    allocation ("boxing") and unwraps it on the way out. `List<int>` genuinely stores raw `int`s —
    C# generics are real at runtime, not compile-time sugar.
 
-**In practice.** A generic method — `<T>` after the name declares the type parameter:
+**In practice**
+
+A generic method — `<T>` after the name declares the type parameter:
 
 ```csharp
 // Swap works for ANY type; `ref` (from Fundamentals) passes by reference.
@@ -198,14 +245,14 @@ sometimes must, when there's no argument to infer from (e.g. `Empty<string>()` b
 A generic **type** — the whole type is parameterised, `T` usable in every member:
 
 ```csharp
-var intStack = new MiniStack<int>(4);
-intStack.Push(10);
-intStack.Push(20);
-Console.WriteLine(intStack.Pop());        // prints: 20
+var crateStack = new MiniStack<int>(4);
+crateStack.Push(10);
+crateStack.Push(20);
+Console.WriteLine(crateStack.Pop());       // prints: 20
 
-var nameStack = new MiniStack<string>(4); // same class, different T — zero casts anywhere
-nameStack.Push("ada");
-Console.WriteLine(nameStack.Pop());       // prints: ada
+var dragonStack = new MiniStack<string>(4); // same class, different T — zero casts anywhere
+dragonStack.Push("Ironjaw");
+Console.WriteLine(dragonStack.Pop());       // prints: Ironjaw
 
 // A tiny growable stack — List<T>'s trick, hand-rolled so you see it.
 class MiniStack<T>(int capacity)          // primary constructor (OOP chapter)
@@ -239,12 +286,15 @@ telling the compiler what any `T` is guaranteed to be able to do — which unloc
 inside the method:
 
 ```csharp
-Console.WriteLine(Max(3, 7));          // prints: 7
-Console.WriteLine(Max("ab", "az"));    // prints: az
+Console.WriteLine(Max(12, 9));              // prints: 12    — the more productive dragon
+Console.WriteLine(Max("Stone", "Timber"));  // prints: Timber — later in the alphabet
 
 T Max<T>(T a, T b) where T : IComparable<T>   // T must know how to compare itself to a T
     => a.CompareTo(b) >= 0 ? a : b;           // ...so CompareTo is now legal to call
 ```
+
+That one method now covers all three cases from the top of the section, and the fourth one you
+haven't thought of yet — as long as the type can compare itself.
 
 `IComparable<T>` is an interface (OOP chapter) with one method, `CompareTo`, returning negative /
 zero / positive for less / equal / greater. `int`, `double`, `string` and most built-ins implement
@@ -254,7 +304,7 @@ The constraint forms you'll actually meet:
 
 ```csharp
 where T : IComparable<T>  // T implements that interface (any interface works here)
-where T : Animal          // T is Animal or derived from it
+where T : Dragon          // T is Dragon or derived from it
 where T : class           // T is a reference type (classes, interfaces, strings)
 where T : struct          // T is a value type (int, bool, your structs)
 where T : new()           // T has a public parameterless constructor -> you may write new T()
@@ -314,15 +364,27 @@ and test it on a `List<int>` and a `List<string>`. Bonus: make `MinOf` throw
 
 ## 3. Iterators & equality
 
-**The idea.** Two pieces of machinery make the collections world go round: the contract that lets
-`foreach` walk *anything* sequence-shaped, and the equality/hashing contract that lets
-`Dictionary` and `HashSet` find things. You've been using both implicitly all chapter; here's
-what's actually happening, and how to plug your own types in.
+**The idea**
 
-**Part A — how `foreach` really works.** Anything you can `foreach` implements
-`IEnumerable<T>` — an interface with a single job: hand out an **enumerator**
-(`IEnumerator<T>`), a cursor object with `MoveNext()` (advance; returns `false` when done) and
-`Current` (the item under the cursor). `foreach (var x in seq)` is compiler shorthand for:
+Two questions you can't answer yet, both of which have already bitten you in this chapter.
+
+*Why did modifying a list inside a `foreach` throw?* And *why, if you put a `Point` in a
+`HashSet` and then ask whether it contains an identical `Point`, does it sometimes say no?*
+
+Both answers are the same shape: there is a contract underneath, you've been relying on it all
+chapter without seeing it, and the moment you write your own type you become responsible for
+upholding it. Here's what's actually happening.
+
+**Part A — how `foreach` really works.** The mental model is a **cursor**: not the collection
+itself, but a finger pointing at one item, with a "move to the next one" button that eventually
+says there are no more. Anything that can hand out such a finger can be `foreach`ed — which is
+why the same loop syntax works on an array, a dictionary, and a sequence of numbers that doesn't
+exist yet.
+
+Concretely: anything you can `foreach` implements `IEnumerable<T>` — an interface with a single
+job, handing out an **enumerator** (`IEnumerator<T>`). That's the cursor: `MoveNext()` advances it
+and returns `false` when there's nothing left, and `Current` is the item it's pointing at.
+`foreach (var x in seq)` is compiler shorthand for:
 
 ```csharp
 // what the compiler generates for: foreach (var x in seq) { ...use x... }
@@ -335,15 +397,18 @@ while (e.MoveNext())
 ```
 
 Arrays, `List<T>`, `Dictionary<K,V>`, `HashSet<T>` — all implement `IEnumerable<T>`, which is why
-`foreach` works uniformly on them. It also explains the mutation trap from section 1: the cursor
-walks internal structure, and if you mutate the collection mid-walk the cursor's view goes stale,
-so `MoveNext` throws rather than hand you garbage.
+`foreach` works uniformly on them.
+
+**And there's the answer to the first question.** The cursor walks the collection's internal
+structure. Mutate the collection mid-walk and the cursor's view of that structure goes stale — it
+is a finger pointing into a book while someone tears pages out. `MoveNext` throws rather than hand
+you garbage, which is the kindest thing it could do.
 
 Writing an enumerator class by hand is tedious — so C# writes it for you. A method containing
 **`yield return`** becomes an **iterator**: the compiler transforms it into a state machine that
 produces values *on demand*, one per `MoveNext()`, pausing between them:
 
-**In practice.**
+**In practice**
 
 ```csharp
 foreach (var n in Evens(10))
@@ -392,12 +457,25 @@ also the foundation the next chapter (LINQ) stands on: every LINQ operator consu
 `IEnumerable<T>` exactly like this. (`yield break` inside an iterator ends the sequence early,
 like a `return` for iterators.)
 
-**Part B — the equality contract.** How does `HashSet<T>.Contains` manage O(1)? It asks the item
-for its **hash code** — `GetHashCode()`, a method every type has, returning an `int` digest of
-the value — jumps straight to the bucket for that code, and then uses `Equals` to compare against
-the few items there. `Dictionary` locates keys the same way. Which means the whole scheme rests on
-one contract: **if two values are `Equals`-equal, they MUST return the same hash code.** Break
-that and hashing looks in the wrong bucket — items vanish while "definitely in there."
+**Part B — the equality contract.** Now the second question. How does `HashSet<T>.Contains` manage
+O(1) — how does it avoid looking at every item?
+
+Picture the guild's mail room: a wall of pigeonholes, each labelled. To file something you compute
+which pigeonhole it belongs in from the item itself, walk straight to that one hole, and look only
+at the two or three things already in it. You never search the wall.
+
+That computation is the **hash code** — `GetHashCode()`, a method every type has, returning an
+`int` digest of the value. `HashSet` and `Dictionary` both work exactly this way: hash to find the
+pigeonhole, then use `Equals` to pick from the few items inside it.
+
+Which means the whole scheme rests on one contract:
+
+> **If two values are `Equals`-equal, they MUST return the same hash code.**
+
+Break it and you get the symptom from the top of the section. Two identical `Point`s that report
+different hash codes get filed in *different pigeonholes*; `Contains` walks to one hole, doesn't
+find it, and reports `false` about an item the set is definitely holding. Nothing crashes. The
+data is just quietly wrong, which is worse.
 
 Where the defaults leave you:
 

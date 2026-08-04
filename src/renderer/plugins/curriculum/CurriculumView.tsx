@@ -82,6 +82,33 @@ function NodeRow({
               {node.summary}
             </p>
           )}
+          {(node.chapter || node.worked) && (
+            <div className={styles.docs} style={{ paddingLeft: 30 + depth * 12 }}>
+              {node.chapter && (
+                <button
+                  type="button"
+                  className={styles.docLink}
+                  onClick={() => openDocument(node.chapter!)}
+                  title={node.chapter}
+                >
+                  Read chapter
+                </button>
+              )}
+              {node.worked && (
+                <button
+                  type="button"
+                  className={styles.docLink}
+                  /* Opened beside the chapter, because the two are meant to be
+                     read together — same section numbers, teaching on the left,
+                     finished source on the right. */
+                  onClick={() => openDocument(node.worked!, { pane: 'right' })}
+                  title={node.worked}
+                >
+                  Worked solution
+                </button>
+              )}
+            </div>
+          )}
           {hasChildren && (
             <ul>
               {node.topics.map((topic) => (

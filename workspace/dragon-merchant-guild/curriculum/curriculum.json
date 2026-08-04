@@ -56,6 +56,106 @@
       "_section": "CORE SPINE (tiers 0-4)"
     },
     {
+      "id": "m00",
+      "kind": "chapter",
+      "branch": "core",
+      "tier": -1,
+      "label": "Programs, Classes & Files",
+      "icon": "fa-solid fa-cube",
+      "est": "2 days",
+      "doc": "plan/1-core/module-00-program-structure.md",
+      "chapter": "chapters/1-core/00-program-structure.md",
+      "worked": "worked/1-core/00-program-structure-worked.md",
+      "summary": "The things every later chapter assumes: what a class and an object are, how a C# file is laid out, who can see what, static, and which file a thing belongs in. No checkpoint — orientation, not a gate.",
+      "prereqs": [
+        "start"
+      ],
+      "topics": [
+        "m00-t1",
+        "m00-t2",
+        "m00-t3",
+        "m00-t4",
+        "m00-t5"
+      ],
+      "atlas": [
+        "01-introduction",
+        "02-program-structure",
+        "09-scope",
+        "10-namespaces",
+        "13-classes",
+        "14-objects",
+        "15-constructors",
+        "46-projects-csproj",
+        "47-solutions-sln"
+      ]
+    },
+    {
+      "id": "m00-t1",
+      "kind": "topic",
+      "group": "m00",
+      "order": 1,
+      "label": "Classes and objects",
+      "summary": "Find the classes by underlining the nouns; a class is the blank form, an object is the filled-in one.",
+      "example": "var mossback = new Dragon();\nmossback.Name = \"Mossback\";\nmossback.Rest = 100;\n\nvar onShift = mossback;   // NOT a second dragon — a second name for the same one\nonShift.Rest = 40;\n\nSystem.Console.WriteLine($\"{mossback.Name} rest: {mossback.Rest}\");   // 40\n\nclass Dragon\n{\n    public string Name = \"\";\n    public int Rest;\n}",
+      "atlas": [
+        "13-classes",
+        "14-objects"
+      ]
+    },
+    {
+      "id": "m00-t2",
+      "kind": "topic",
+      "group": "m00",
+      "order": 2,
+      "label": "Reading a C# file",
+      "summary": "usings, namespace, class, fields, constructor, properties, methods — in that order. Top-level statements vs the full ceremony.",
+      "example": "// The full ceremony the compiler writes for you:\n//   namespace X { class Program { static void Main(string[] a) { ... } } }\n// With top-level statements, a whole program is just this:\nSystem.Console.WriteLine(\"The guild opens for business.\");",
+      "atlas": [
+        "02-program-structure",
+        "10-namespaces",
+        "15-constructors"
+      ]
+    },
+    {
+      "id": "m00-t3",
+      "kind": "topic",
+      "group": "m00",
+      "order": 3,
+      "label": "Who can see what",
+      "summary": "public / private / protected / internal, the defaults, and why narrow visibility bounds a bug hunt.",
+      "example": "var d = new Dragon(\"Mossback\");\nd.WorkShift(10);\nSystem.Console.WriteLine(d.Condition);\n// d.Rest = 500;   // compile error: 'Rest' is inaccessible (protected)\n\npublic class Dragon\n{\n    private int _rest = 100;                       // default for a member is private\n    public string Name { get; }\n    protected int Rest { get => _rest; set => _rest = System.Math.Clamp(value, 0, 100); }\n    public string Condition => $\"{Name}: rest {_rest}\";\n    public Dragon(string name) => Name = name;\n    public void WorkShift(int hours) => Rest -= hours * 5;\n}",
+      "atlas": [
+        "09-scope",
+        "17-encapsulation"
+      ]
+    },
+    {
+      "id": "m00-t4",
+      "kind": "topic",
+      "group": "m00",
+      "order": 4,
+      "label": "Static — the one shared copy",
+      "summary": "One copy for the whole program, no instance needed. Static constructors, and the two-guilds test for when NOT to use it.",
+      "example": "System.Console.WriteLine(\"program start\");\nSystem.Console.WriteLine(Catalogue.Names.Count + \" resources\");\n\npublic static class Catalogue\n{\n    public static readonly System.Collections.Generic.List<string> Names = new();\n\n    static Catalogue()   // runs once, on FIRST USE — not at program start\n    {\n        System.Console.WriteLine(\"catalogue loading\");\n        Names.Add(\"Iron Ore\");\n        Names.Add(\"Timber\");\n    }\n}",
+      "atlas": [
+        "13-classes",
+        "17-encapsulation"
+      ]
+    },
+    {
+      "id": "m00-t5",
+      "kind": "topic",
+      "group": "m00",
+      "order": 5,
+      "label": "How many classes, how many files",
+      "summary": "One class per file. Split a class when you can't name it without \"and\"; split a project where the audience changes.",
+      "example": "// Every comment here is the name of a member you haven't extracted yet.\n//   if (d.Rest < 30 || d.Health < 50)      ->  if (!d.IsFitToWork)\n//   if (d.Role != c.RequiredRole)          ->  if (!d.CanTake(c))\n// On Dragon, next to the data they read:\n//   public bool IsFitToWork => Rest >= 30 && Health >= 50;\n//   public bool CanTake(Contract c) => Role == c.RequiredRole;\nSystem.Console.WriteLine(\"Engine/ holds the rules; GuildConsole/ holds the screen.\");",
+      "atlas": [
+        "46-projects-csproj",
+        "47-solutions-sln"
+      ]
+    },
+    {
       "id": "m01",
       "kind": "chapter",
       "branch": "core",
@@ -65,10 +165,11 @@
       "est": "5 days",
       "doc": "plan/1-core/module-01-csharp-fundamentals.md",
       "chapter": "chapters/1-core/01-fundamentals.md",
+      "worked": "worked/1-core/01-fundamentals-worked.md",
       "cert": "Foundational C# (free, Microsoft \u00d7 freeCodeCamp)",
       "summary": "Where C# differs from C/Java: value vs reference types, nullability, patterns, the Try-pattern. Interviewers screen on this in the first 10 minutes.",
       "prereqs": [
-        "start"
+        "m00"
       ],
       "checkpoint": "cp1",
       "topics": [
@@ -177,6 +278,7 @@
       "est": "5 days",
       "doc": "plan/1-core/module-02-oop.md",
       "chapter": "chapters/1-core/02-oop.md",
+      "worked": "worked/1-core/02-oop-worked.md",
       "checkpoint": "cp2",
       "summary": "Encapsulation, inheritance vs composition, interfaces, polymorphism, records. Model behavior, not just data.",
       "prereqs": [
@@ -277,6 +379,7 @@
       "est": "4 days",
       "doc": "plan/1-core/module-03-collections-generics.md",
       "chapter": "chapters/1-core/03-collections-generics.md",
+      "worked": "worked/1-core/03-collections-generics-worked.md",
       "checkpoint": "cp3",
       "summary": "List/Dictionary/HashSet and when each; generics; iterators; equality & comparers. The data structures you use every day.",
       "prereqs": [
@@ -365,6 +468,7 @@
       "est": "5 days",
       "doc": "plan/1-core/module-04-linq.md",
       "chapter": "chapters/1-core/04-linq.md",
+      "worked": "worked/1-core/04-linq-worked.md",
       "checkpoint": "cp4",
       "summary": "The query language inside C#: pipelines, deferred execution, GroupBy/Join/SelectMany. Unlocks project p1.",
       "prereqs": [
@@ -469,6 +573,7 @@
       "est": "4 days",
       "doc": "plan/1-core/module-05-async.md",
       "chapter": "chapters/1-core/05-async.md",
+      "worked": "worked/1-core/05-async-worked.md",
       "checkpoint": "cp5",
       "summary": "Task, async/await, cancellation, parallelism and the classic gotchas (deadlocks, async void). Concurrency without the pain.",
       "prereqs": [

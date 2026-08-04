@@ -6,6 +6,10 @@ three web requests, a timer and a download, a hundred file reads — without fre
 you managing threads by hand. After it, phrases like "fire off both requests and await them
 together" will be things you can actually type.
 
+> **Worked solution:** [[05-async-worked]] — the day runner, bounded and cancellable, as
+> finished source.
+> Section numbers match this page, so the two read side by side in a split pane.
+
 ---
 
 ## 1. Tasks & await
@@ -133,21 +137,22 @@ Read that output slowly — it *is* the mental model. `start coffee` prints befo
 incomplete `await`; then it returns the `Task` and *we* keep going; then ~500 ms later the
 continuation fires and `done coffee` prints.
 
-And the real thing, with `HttpClient` (needs network; if the Study sandbox is offline, the
-`Task.Delay` version above teaches the same mechanics):
+And the real thing, with `HttpClient`:
 
 ```csharp
 using var client = new HttpClient();
 string body = await client.GetStringAsync("https://example.com");
 Console.WriteLine($"got {body.Length} chars");
+// prints: got 1256 chars — or whatever that page is today
 ```
 
-```text
-got 1256 chars
-```
+This is the one snippet in the book with no checked output block, and for two honest reasons.
+It needs network, so it will not run in the Study tab at all — the `Task.Delay` version above
+teaches identical mechanics offline. And its output depends on a page on someone else's server,
+so any number printed here would be a promise the book can't keep. When you run it in a real
+project, expect roughly 1200–1300 characters and don't write a test that asserts the figure.
 
-(`using var` disposes the client at end of scope — see *Types & Memory*; exact char count
-varies.)
+(`using var` disposes the client at the end of the scope — *Fundamentals*, *Errors & IO*.)
 
 > **C corner:** if you've seen `select()`/`poll()` or nonblocking sockets in C, `await` is
 > that pattern with the bookkeeping inverted: instead of one hand-written event loop that
@@ -181,14 +186,24 @@ output order before running — you should see `A`, `B`, then the number, and un
 
 **The idea**
 
-Two upgrades to the basic model: *stopping* work you no longer want, and *overlapping* many
-pieces of work deliberately.
+Your program is fetching ten pages. Halfway through, the user presses Ctrl+C — or one of the ten
+has already given you the answer you needed, and the other nine are now pointless work you're
+still paying for.
+
+Meanwhile the opposite problem: you wrote the ten fetches as ten `await`s in a loop, each taking
+a second, and the whole thing takes ten seconds when it should have taken one.
+
+Two upgrades to the basic model, then: *stopping* work you no longer want, and *overlapping* work
+deliberately instead of by accident.
 
 **Cancellation** in .NET is **cooperative** — there is deliberately no "kill this task" button.
-(A forcibly killed operation could die halfway through writing a file or holding a lock; the OS
-can kill *processes* safely because it reclaims everything, but inside one process, only the
-code itself knows where it's safe to stop.) So instead, the *requester* signals, and the *work*
-checks. Two types, always used as a pair:
+Think of it as tapping a colleague on the shoulder rather than pulling their chair away: you
+signal, and they stop at a point where stopping is safe. A forcibly killed operation could die
+halfway through writing a file or while holding a lock. The OS can kill *processes* safely,
+because it reclaims everything they touched; but inside one process, only the code itself knows
+where it is safe to stop.
+
+So the *requester* signals, and the *work* checks. Two types, always used as a pair:
 
 - **`CancellationTokenSource`** (the requester's end): create one, call `.Cancel()` on it —
   or construct it with a timeout, `new CancellationTokenSource(TimeSpan.FromSeconds(2))`, to
