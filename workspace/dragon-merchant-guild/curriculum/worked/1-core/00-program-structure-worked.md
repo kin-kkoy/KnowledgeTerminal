@@ -30,7 +30,7 @@ The layout that produces, and that the rest of this book fills in:
 
 ```
 DragonMerchantGuild/
-├── DragonMerchantGuild.sln
+├── DragonMerchantGuild.slnx      the solution file — on .NET 10 this is .slnx, not .sln
 ├── Engine/                      class library — the game. No screens, no Console.
 │   ├── Engine.csproj
 │   ├── Models/

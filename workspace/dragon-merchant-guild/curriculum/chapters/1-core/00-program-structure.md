@@ -760,7 +760,7 @@ front-end you find the game can't be separated from the text it prints.
 So:
 
 ```
-DragonMerchantGuild.sln
+DragonMerchantGuild.slnx
 ├── Engine/                    a class library — the game. Knows nothing about screens.
 │   ├── Models/                Dragon.cs, Contract.cs, Resource.cs, Guild.cs
 │   ├── Factories/             GuildCatalogue.cs, ContractFactory.cs
