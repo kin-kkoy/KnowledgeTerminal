@@ -53,15 +53,17 @@ The goal is to finish many small systems that gradually become more sophisticate
 
 **Tasks**
 
-- Create solution
-- Create Git repository
-- Configure folder structure
-- Create README
-- Create project journal
-- Create assets folder
-- Create documentation folder
+- [ ] Create solution
+- [ ] Create Git repository
+- [ ] Configure folder structure
+- [ ] Create README
+- [ ] Create project journal
+- [ ] Create assets folder
+- [ ] Create documentation folder
 
-**Deliverable** — A clean, organized project ready for development.
+**Deliverable**
+
+- [ ] A clean, organized project ready for development.
 
 ## Milestone 1 — Console Prototype
 
@@ -77,14 +79,14 @@ Focus entirely on programming fundamentals.
 
 **Features**
 
-- Main menu
-- Exit
-- Create guild
-- Display guild information
-- Display dragons
-- Display workers
-- Pass one day
-- Basic logging
+- [ ] Main menu
+- [ ] Exit
+- [ ] Create guild
+- [ ] Display guild information
+- [ ] Display dragons
+- [ ] Display workers
+- [ ] Pass one day
+- [ ] Basic logging
 
 **Dragons** — Initially only:
 
@@ -114,7 +116,9 @@ Reward:
 - Stone
 - Food
 
-**Deliverable** — A playable console loop.
+**Deliverable**
+
+- [ ] A playable console loop.
 
 ## Milestone 2 — OOP Expansion
 
@@ -141,7 +145,9 @@ Reward:
 - Building construction
 - Worker assignments
 
-**Deliverable** — Every major game object is represented by an appropriate class.
+**Deliverable**
+
+- [ ] Every major game object is represented by an appropriate class.
 
 ## Milestone 3 — Collections
 
@@ -164,7 +170,9 @@ Reward:
 - Multiple active contracts
 - Resource storage
 
-**Deliverable** — The guild can grow beyond predetermined limits.
+**Deliverable**
+
+- [ ] The guild can grow beyond predetermined limits.
 
 ## Milestone 4 — LINQ
 
@@ -187,7 +195,9 @@ Sort:
 - Gold value
 - Worker experience
 
-**Deliverable** — Cleaner, more expressive gameplay logic.
+**Deliverable**
+
+- [ ] Cleaner, more expressive gameplay logic.
 
 ## Milestone 5 — Persistence
 
@@ -197,12 +207,14 @@ Sort:
 
 **Features**
 
-- Save
-- Load
-- Autosave
-- Multiple guilds
+- [ ] Save
+- [ ] Load
+- [ ] Autosave
+- [ ] Multiple guilds
 
-**Deliverable** — Persistent gameplay.
+**Deliverable**
+
+- [ ] Persistent gameplay.
 
 ## Milestone 6 — Events
 
@@ -217,7 +229,9 @@ Sort:
 - Dragon illness
 - Random discoveries
 
-**Deliverable** — Every day feels different.
+**Deliverable**
+
+- [ ] Every day feels different.
 
 ## Milestone 7 — Async
 
@@ -234,7 +248,9 @@ Examples:
 
 The player can continue playing while long-running activities progress.
 
-**Deliverable** — A living guild.
+**Deliverable**
+
+- [ ] A living guild.
 
 ## Milestone 8 — User Interface
 
@@ -249,6 +265,10 @@ Possible future targets:
 
 The underlying game logic should require minimal changes.
 
+**Deliverable**
+
+- [ ] The game runs outside the console with its logic essentially unchanged.
+
 ## Milestone 9 — Polish
 
 Examples:
@@ -259,6 +279,10 @@ Examples:
 - Save optimization
 - Better AI
 - Expanded economy
+
+**Deliverable**
+
+- [ ] A game worth showing to someone else.
 
 **Things Intentionally Delayed** — The following systems should not be implemented until later unless required by learning.
 

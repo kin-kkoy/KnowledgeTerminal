@@ -197,6 +197,11 @@ export interface HomeSnapshot {
   /** Today's checklist, read from the active document's task list. */
   tasks: Array<{ text: string; done: boolean }>
   /**
+   * A larger body of work a contributor wants shown and ticked. Null when
+   * nothing offers one, and the surfaces that render it simply do not appear.
+   */
+  board: LobbyBoard | null
+  /**
    * Free-form substitutions for filename templates, e.g. `{ day: "2" }`.
    *
    * Deliberately untyped: the core substitutes whatever it is given without
@@ -205,6 +210,57 @@ export interface HomeSnapshot {
    */
   tokens: Record<string, string>
   recents: Array<{ title: string; path: RelPath }>
+}
+
+/**
+ * One tickable line, identified well enough to write back to.
+ *
+ * `index` is the item's position among ALL task items in `LobbyBoard.path`, in
+ * document order — the same counting `toggleTaskAt` does, which is what lets a
+ * surface flip the box without opening the document.
+ */
+export interface BoardItem {
+  text: string
+  done: boolean
+  index: number
+}
+
+/**
+ * A stretch of work a contributor nominates, in the vocabulary of no subject.
+ *
+ * Core renders four things and understands none of them: a heading, a list of
+ * items you can tick, some lists you cannot, and one item that ends the whole
+ * thing. A curriculum plugin fills this with milestones; a different workspace
+ * could fill it with chapters of a novel, and core would not notice.
+ *
+ * Everything lives in ONE document. That is what keeps this honest: the board
+ * is a view of a file the user can read, edit and diff, never a private store.
+ */
+export interface LobbyBoard {
+  /** Label for the surface that shows it, e.g. "The build". */
+  tab: string
+  /** Small line above the title, e.g. "Milestone 1 of 10". */
+  eyebrow: string | null
+  title: string
+  /** One sentence of intent, if the source states one. */
+  note: string | null
+  /** Something to say about where this sits, e.g. "pairs with Module 1". */
+  meta: string | null
+  /** The document every item's checkbox lives in. */
+  path: RelPath
+  /** Tickable work. May be empty — some stretches are all context. */
+  items: BoardItem[]
+  /**
+   * Named lists that are NOT work: scope, cast, materials. Shown because they
+   * say what the stretch covers, untickable because you cannot "finish" them.
+   */
+  groups: Array<{ label: string; items: string[] }>
+  /**
+   * The one box that ends this stretch and moves the board on. Separate from
+   * `items` because "all the boxes are ticked" and "it is actually done" are
+   * different claims, and only the second one should advance anything.
+   */
+  gate: BoardItem | null
 }
 
 /** One file in a notes folder, which may live outside the workspace. */

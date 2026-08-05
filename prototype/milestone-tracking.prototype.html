@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PROTOTYPE — Milestone tracking</title>
+<style>
+  :root{
+    --bg:#12141a; --panel:#191c24; --panel2:#1e222c; --line:#2b303c;
+    --ink:#e6e9ef; --dim:#8a92a6; --dimmer:#5d657a;
+    --accent:#6E9BC5; --good:#7bbf8f; --warn:#d8a657; --bad:#c76a6a;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+  header{padding:22px 28px 16px;border-bottom:1px solid var(--line)}
+  h1{margin:0 0 4px;font-size:18px;letter-spacing:.2px}
+  .sub{color:var(--dim);font-size:13px;max-width:70ch}
+  .tag{display:inline-block;background:var(--warn);color:#241d0c;font-weight:700;
+       font-size:10px;letter-spacing:.12em;padding:2px 7px;border-radius:3px;
+       vertical-align:3px;margin-right:9px}
+
+  .switch{display:flex;gap:0;margin:18px 28px 0;border:1px solid var(--line);
+          border-radius:8px;overflow:hidden;width:max-content}
+  .switch button{background:transparent;border:0;color:var(--dim);font-size:13px;
+          padding:9px 20px;cursor:pointer;font-family:inherit}
+  .switch button.on{background:var(--accent);color:#0f1620;font-weight:600}
+
+  main{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px 28px 60px;
+       align-items:start}
+  @media(max-width:1050px){main{grid-template-columns:1fr}}
+
+  .col > h2{font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+            color:var(--dimmer);margin:0 0 10px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+        padding:16px 18px;margin-bottom:14px}
+  .card.file{font-family:var(--mono);font-size:12.5px;line-height:1.7}
+  .path{font-family:var(--mono);font-size:11px;color:var(--dimmer);
+        margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+
+  .note{background:var(--panel2);border-left:3px solid var(--accent);
+        padding:11px 14px;border-radius:0 6px 6px 0;font-size:13px;
+        color:var(--dim);margin-bottom:14px}
+  .note b{color:var(--ink);font-weight:600}
+  .note.bad{border-left-color:var(--bad)}
+  .note.good{border-left-color:var(--good)}
+
+  /* ── the fake Lobby ─────────────────────────────── */
+  .lobby{background:linear-gradient(160deg,#1b2029,#171a21);
+         border:1px solid var(--line);border-radius:12px;padding:22px 24px}
+  .eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+           color:var(--accent);margin-bottom:6px}
+  .headline{font-size:22px;font-weight:600;margin:0 0 16px;letter-spacing:-.2px}
+  .row{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:18px}
+  .stat .k{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dimmer)}
+  .stat .v{font-size:14px;margin-top:2px}
+  .slot{border-top:1px solid var(--line);padding-top:14px;margin-top:4px}
+  .slot h3{font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+           color:var(--dimmer);margin:0 0 9px}
+  .empty{color:var(--dimmer);font-style:italic;font-size:13px}
+
+  ul.tasks{list-style:none;margin:0;padding:0}
+  ul.tasks li{display:flex;gap:9px;align-items:flex-start;padding:3px 0;font-size:13.5px}
+  ul.tasks li.done span{color:var(--dimmer);text-decoration:line-through}
+  ul.tasks input{margin-top:3px;accent-color:var(--accent);cursor:pointer}
+
+  /* scope — real milestone content, but not tickable work */
+  .scope{margin-top:13px}
+  .scope-label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+               color:var(--dimmer);margin-bottom:4px}
+  .scope ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .scope li{font-size:12.5px;color:var(--dim);background:#232733;
+            border:1px solid var(--line);border-radius:20px;padding:2px 10px}
+
+  .deliv{margin-top:16px;padding-top:13px;border-top:1px dashed var(--line)}
+  .deliv label{display:flex;gap:9px;align-items:flex-start;cursor:pointer;font-size:13.5px}
+  .deliv input{margin-top:3px;accent-color:var(--good);cursor:pointer}
+  .deliv b{color:var(--warn);font-weight:600;letter-spacing:.02em}
+  .deliv.done span{color:var(--dimmer)}
+  .deliv.done b{color:var(--good)}
+
+  .bar{height:5px;background:#252a35;border-radius:3px;overflow:hidden;margin-top:8px}
+  .bar i{display:block;height:100%;background:var(--good);transition:width .18s}
+
+  .src{white-space:pre-wrap;font-family:var(--mono);font-size:12px;line-height:1.75;
+       color:var(--dim);max-height:420px;overflow:auto}
+  .src .h{color:var(--accent);font-weight:700}
+  .src .box{color:var(--ink)}
+  .src .x{color:var(--good)}
+  .src del{color:var(--bad);text-decoration:line-through}
+  .src ins{color:var(--good);text-decoration:none}
+
+  .files{font-size:13px}
+  .files li{margin-bottom:7px}
+  code{font-family:var(--mono);font-size:12px;background:#232733;padding:1px 5px;
+       border-radius:3px;color:#c3cbdb}
+  .hint{font-size:12px;color:var(--dimmer);margin-top:10px}
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="tag">PROTOTYPE</span>Milestone tracking — before &amp; after</h1>
+  <p class="sub">Throwaway file. Nothing here is wired to the real app; it is a picture of the
+  change so you can decide whether you want it. Open it in a browser, tick the boxes on the
+  right, and watch what the Lobby does.</p>
+</header>
+
+<div class="switch">
+  <button id="bBefore" class="on">Before — how it works today</button>
+  <button id="bAfter">After — what I'd build</button>
+</div>
+
+<main id="stage"></main>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   The roadmap text, copied verbatim out of
+   workspace/dragon-merchant-guild/roadmap/implementation-roadmap.md
+   — except the bullets are checkboxes, which is the one edit the
+   real change needs.
+   ───────────────────────────────────────────────────────────── */
+const ROADMAP = `
+## Milestone 0 — Project Foundation
+
+**Curriculum** — Before Module 1
+
+**Goal** — Prepare the project.
+
+**Tasks**
+
+- [ ] Create solution
+- [ ] Create Git repository
+- [ ] Configure folder structure
+- [ ] Create README
+- [ ] Create project journal
+- [ ] Create assets folder
+- [ ] Create documentation folder
+
+**Deliverable**
+
+- [ ] A clean, organized project ready for development.
+
+## Milestone 1 — Console Prototype
+
+**Curriculum** — Module 1 — C# Fundamentals
+
+**Goal** — Create a playable console game.
+
+**Features**
+
+- [ ] Main menu
+- [ ] Exit
+- [ ] Create guild
+- [ ] Display guild information
+- [ ] Display dragons
+- [ ] Display workers
+- [ ] Pass one day
+- [ ] Basic logging
+
+**Dragons** — Initially only:
+
+- Stonejaw
+- Hearthscale
+- Riverveil
+
+**Resources** — Initially:
+
+- Gold
+- Stone
+- Food
+
+**Deliverable**
+
+- [ ] A playable console loop.
+
+## Milestone 2 — OOP Expansion
+
+**Curriculum** — Module 2
+
+**Goal** — Transform the procedural prototype into a proper object-oriented application.
+
+**Introduce**
+
+- Dragon class hierarchy
+- Worker classes
+- Contract classes
+- Buildings
+- Guild class
+
+**New Systems**
+
+- Dragon care
+- Building construction
+- Worker assignments
+
+**Deliverable**
+
+- [ ] Every major game object is represented by an appropriate class.
+`.trim()
+
+/* ─────────────────────────────────────────────────────────────
+   parseMilestones() — this IS the new function, written the way
+   it would go into src/renderer/plugins/curriculum/model.ts.
+   It is a near-copy of parseDayBlocks() that already lives there.
+   ───────────────────────────────────────────────────────────── */
+const HEADING = /^##\s+Milestone\s+(\d+)\s*[—–-]\s*(.*)$/
+const LABEL   = /^\*\*([A-Za-z ]+)\*\*\s*(?:[—–-]\s*(.*))?$/
+const TASK    = /^\s*[-*+]\s+\[([ xX])\]\s*(.*)$/
+const BULLET  = /^\s*[-*+]\s+(?!\[[ xX]\])(.*)$/
+
+/* Only these two labels list WORK. Everything else lists SCOPE. */
+const WORK = new Set(['tasks','features'])
+
+function parseMilestones(markdown){
+  const out = []
+  let cur = null, label = ''
+  for (const line of markdown.split('\n')){
+    const h = HEADING.exec(line)
+    if (h){
+      cur = { number:+h[1], title:h[2].trim(), curriculum:'', goal:'',
+              tasks:[], scope:[], deliverable:null }
+      out.push(cur); label=''; continue
+    }
+    if (!cur) continue
+
+    const l = LABEL.exec(line)
+    if (l){
+      label = l[1].trim().toLowerCase()
+      if (label==='curriculum') cur.curriculum = l[2] ?? ''
+      if (label==='goal')       cur.goal       = l[2] ?? ''
+      continue
+    }
+
+    const t = TASK.exec(line)
+    if (t){
+      const item = { text:t[2], done:t[1].toLowerCase()==='x' }
+      if (label==='deliverable') cur.deliverable = item
+      else cur.tasks.push(item)
+      continue
+    }
+
+    const b = BULLET.exec(line)
+    if (b && label && !WORK.has(label)){
+      let group = cur.scope[cur.scope.length-1]
+      if (!group || group.key !== label){
+        group = { key:label, label:l1(label), items:[] }; cur.scope.push(group)
+      }
+      group.items.push(b[1])
+    }
+  }
+  return out
+}
+const l1 = s => s.replace(/\b\w/g, c => c.toUpperCase())
+
+/**
+ * A milestone is finished when its DELIVERABLE is ticked — not when the task
+ * count happens to reach zero. That is the workspace's own rule, from
+ * PROGRESS.md: "A task is ✅ only when its done-when criterion is met."
+ * It also means a milestone that lists no tasks at all still has a way to end.
+ */
+function currentMilestone(list){
+  return list.find(m => !m.deliverable?.done) ?? list[list.length-1] ?? null
+}
+
+/* ── live state (in memory only, per the prototype rules) ───── */
+const milestones = parseMilestones(ROADMAP)
+let view = 'before'
+
+function render(){
+  const m   = currentMilestone(milestones)
+  const idx = milestones.indexOf(m)
+  const done  = m.tasks.filter(t=>t.done).length
+  const total = m.tasks.length
+  const allDone = milestones.every(x=>x.deliverable?.done)
+
+  document.getElementById('bBefore').className = view==='before' ? 'on':''
+  document.getElementById('bAfter').className  = view==='after'  ? 'on':''
+
+  document.getElementById('stage').innerHTML =
+    view==='before' ? before() : after(m, idx, done, total, allDone)
+
+  document.querySelectorAll('[data-tick]').forEach(el=>{
+    el.onchange = () => {
+      const [mi,ti] = el.dataset.tick.split(':')
+      const ms = milestones[+mi]
+      if (ti === 'D') ms.deliverable.done = el.checked
+      else ms.tasks[+ti].done = el.checked
+      render()
+    }
+  })
+}
+
+/* ── BEFORE ────────────────────────────────────────────────── */
+function before(){
+  return `
+  <div class="col">
+    <h2>The Lobby, today</h2>
+    <div class="lobby">
+      <div class="eyebrow">C# Core · Day 1 of 5</div>
+      <div class="headline">Variables and Types</div>
+      <div class="row">
+        <div class="stat"><div class="k">Core modules</div><div class="v">0 of 10 done</div></div>
+        <div class="stat"><div class="k">Next gate</div><div class="v">cp1</div></div>
+        <div class="stat"><div class="k">Streak</div><div class="v">—</div></div>
+      </div>
+      <div class="slot">
+        <h3>Milestone</h3>
+        <div class="empty">The Lobby has never heard of milestones.</div>
+      </div>
+    </div>
+    <div class="note bad" style="margin-top:14px">
+      <b>The gap.</b> The Lobby tracks your <b>lessons</b> (Day 1 of 5) automatically —
+      that part already works. It knows nothing about your <b>project milestones</b>,
+      because nobody ever told it they exist.
+    </div>
+  </div>
+
+  <div class="col">
+    <h2>Where milestones live today — in two places</h2>
+
+    <div class="card">
+      <p class="path">workspace/dragon-merchant-guild/roadmap/implementation-roadmap.md</p>
+      <div class="src"><span class="h">## Milestone 0 — Project Foundation</span>
+
+**Tasks**
+
+- Create solution
+- Create Git repository
+- Configure folder structure
+  …
+<span class="h">## Milestone 1 — Console Prototype</span>
+  …all ten milestones, fully written out
+</div>
+      <p class="hint">Plain bullets. Nothing to tick. The real, complete list.</p>
+    </div>
+
+    <div class="card">
+      <p class="path">workspace/dragon-merchant-guild/PROGRESS.md</p>
+      <div class="src"><span class="h">### Milestone 0 — Project Foundation</span>
+
+<span class="box">- [ ]</span> Create solution
+<span class="box">- [ ]</span> Create Git repository
+<span class="box">- [ ]</span> Configure folder structure
+  …
+
+<span style="color:var(--bad)">(Milestone 1 is not here. You would type it
+ yourself, copying from the file above.)</span>
+</div>
+      <p class="hint">A hand-made copy. Tickable, but it stops at Milestone 0 —
+      and copies go stale.</p>
+    </div>
+
+    <div class="note bad">
+      <b>What happens when you tick the last box?</b> The file saves with seven ticks.
+      That is all. No Milestone 1, no change anywhere in the app.
+    </div>
+  </div>`
+}
+
+/* ── AFTER ─────────────────────────────────────────────────── */
+function after(m, idx, done, total, allDone){
+  const pct = total ? Math.round(done/total*100) : 0
+
+  const lobbyBody = allDone ? `
+      <div class="slot"><h3>Milestone</h3>
+        <div class="v" style="color:var(--good)">All ten milestones complete. 🐉</div>
+      </div>` : `
+      <div class="slot">
+        <h3>Milestone ${m.number} of 10 — ${m.title}</h3>
+        <div style="color:var(--dim);font-size:13px;margin-bottom:4px">${m.goal}</div>
+        <div style="font-size:12px;color:var(--dimmer)">
+          ${total ? `${done} of ${total} done · ` : ''}pairs with ${m.curriculum}</div>
+        ${total ? `<div class="bar"><i style="width:${pct}%"></i></div>` : ''}
+
+        ${total ? `<ul class="tasks" style="margin-top:12px">
+          ${m.tasks.map((t,i)=>`
+            <li class="${t.done?'done':''}">
+              <input type="checkbox" ${t.done?'checked':''} data-tick="${idx}:${i}">
+              <span>${t.text}</span></li>`).join('')}
+        </ul>` : ''}
+
+        ${m.scope.map(g=>`
+          <div class="scope">
+            <div class="scope-label">${g.label}</div>
+            <ul>${g.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+          </div>`).join('')}
+
+        ${m.deliverable ? `
+        <div class="deliv ${m.deliverable.done?'done':''}">
+          <label>
+            <input type="checkbox" ${m.deliverable.done?'checked':''} data-tick="${idx}:D">
+            <span><b>Done when</b> — ${m.deliverable.text}</span>
+          </label>
+        </div>` : ''}
+
+        <div class="hint">Ticking here writes straight into the roadmap file —
+        exactly how lesson checkboxes already behave.</div>
+      </div>`
+
+  return `
+  <div class="col">
+    <h2>The Lobby, after</h2>
+    <div class="lobby">
+      <div class="eyebrow">C# Core · Day 1 of 5</div>
+      <div class="headline">Variables and Types</div>
+      <div class="row">
+        <div class="stat"><div class="k">Core modules</div><div class="v">0 of 10 done</div></div>
+        <div class="stat"><div class="k">Next gate</div><div class="v">cp1</div></div>
+        <div class="stat"><div class="k">Streak</div><div class="v">—</div></div>
+      </div>
+      ${lobbyBody}
+    </div>
+    <div class="note good" style="margin-top:14px">
+      <b>Try it.</b> Tick the tasks, then tick <b>Done when</b> at the bottom. The panel
+      rolls itself over to the next milestone with its own content loaded — no typing,
+      no copying. That is the whole point of the change.
+    </div>
+    <div class="note">
+      <b>Three tiers, on purpose.</b>
+      <br>• <b>Tasks / Features</b> — tickable work. These drive the progress bar.
+      <br>• <b>Introduce, New Systems, New Dragons, Resources…</b> — the grey pills.
+      Real parts of the milestone, but they are scope, not chores: you can't "finish"
+      <em>Dragon class hierarchy</em> the way you finish <em>Create README</em>.
+      Shown so you know what the milestone covers; never counted.
+      <br>• <b>Done when</b> — the single box that actually ends the milestone.
+    </div>
+    <div class="note">
+      <b>Why the last one matters.</b> Milestone 2 lists no tasks at all — only scope.
+      If completion were "all boxes ticked", it would have nothing to tick and the
+      Lobby would stall there forever. Gating on the deliverable is also your own
+      rule from PROGRESS.md: <em>a task is ✅ only when its done-when criterion is
+      met, not when time was spent on it.</em>
+    </div>
+  </div>
+
+  <div class="col">
+    <h2>What actually changes on disk</h2>
+
+    <div class="card">
+      <p class="path">roadmap/implementation-roadmap.md &nbsp;— one-time edit</p>
+      <div class="src">## Milestone 0 — Project Foundation
+
+**Tasks**
+<del>- Create solution</del>
+<ins>- [ ] Create solution</ins>
+<del>- Create Git repository</del>
+<ins>- [ ] Create Git repository</ins>
+
+**Introduce**            <span style="color:var(--dimmer)">← left exactly as it is</span>
+- Dragon class hierarchy
+- Worker classes
+
+<del>**Deliverable** — A clean, organized project ready for development.</del>
+<ins>**Deliverable**</ins>
+<ins>- [ ] A clean, organized project ready for development.</ins>
+</div>
+      <p class="hint">Two mechanical edits: boxes on Tasks/Features bullets, and the
+      Deliverable line becomes a single box. Scope lists are untouched. The document
+      still reads normally in any Markdown app.</p>
+    </div>
+
+    <div class="card">
+      <p class="path">PROGRESS.md &nbsp;— gets shorter</p>
+      <div class="src"><del>### Milestone 0 — Project Foundation</del>
+<del>- [ ] Create solution</del>
+<del>- [ ] Create Git repository …</del>
+
+<ins>Milestones live in [[implementation-roadmap]] and are</ins>
+<ins>shown live in the Lobby. This file keeps only the</ins>
+<ins>honest-state table you write by hand.</ins>
+</div>
+      <p class="hint">The hand-copied list disappears. Nothing left to keep in sync.</p>
+    </div>
+
+    <div class="card files">
+      <p class="path">code — three small files</p>
+      <ul style="margin:0;padding-left:18px;color:var(--dim)">
+        <li><code>model.ts</code> — add <code>parseMilestones()</code> and
+            <code>currentMilestone()</code>. They are the two functions running this
+            page right now, ~45 lines, copied in shape from the day-block versions
+            sitting next to them.</li>
+        <li><code>index.ts</code> — point the plugin at the roadmap file and re-read it
+            whenever it changes on disk. The watcher already exists; this joins it.</li>
+        <li><code>store.ts</code> — hold the parsed list. Three lines.</li>
+      </ul>
+      <p class="hint">No changes to the core app or its shared types — the milestone
+      panel rides slots the Lobby already renders.</p>
+    </div>
+
+    <div class="card">
+      <p class="path">PROGRESS.md — what survives</p>
+      <ul style="margin:0;padding-left:18px;color:var(--dim);font-size:13px">
+        <li><b style="color:var(--ink)">Kept</b> — the honest-state table. You write it;
+            no machine should guess it.</li>
+        <li><b style="color:var(--ink)">Kept</b> — the day loop and the non-negotiables.
+            Your rules.</li>
+        <li><b style="color:var(--bad)">Removed</b> — the hand-copied Milestone 0
+            checklist. That is the only casualty.</li>
+      </ul>
+      <p class="hint">PROGRESS.md = what you say is true. The Lobby = what the files
+      say is true. Neither pretends to be the other.</p>
+    </div>
+  </div>`
+}
+
+document.getElementById('bBefore').onclick = ()=>{ view='before'; render() }
+document.getElementById('bAfter').onclick  = ()=>{ view='after';  render() }
+render()
+</script>
+</body>
+</html>

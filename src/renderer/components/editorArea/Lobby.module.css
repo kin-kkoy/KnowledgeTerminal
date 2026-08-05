@@ -181,6 +181,157 @@
 .tileBig .tileName { font-size: var(--fs-ui); font-weight: 600; }
 .tileNote { font-size: var(--fs-ui-xs); line-height: 1.45; color: var(--text-faint); }
 
+/* ── 2b. the board ──────────────────────────────────────────────────────── */
+
+.board { max-width: 660px; margin: 0 auto; padding: 0 var(--s-7) var(--s-9); }
+
+.boardHead { margin-bottom: var(--s-7); }
+
+.boardEyebrow {
+  margin: 0 0 var(--s-2);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.boardTitle {
+  margin: 0 0 var(--s-3);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.boardNote {
+  max-width: var(--measure);
+  margin: 0 0 var(--s-4);
+  font-size: var(--fs-ui);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.boardSource {
+  display: inline-flex;
+  gap: var(--s-3);
+  align-items: center;
+  font-size: var(--fs-ui-sm);
+  color: var(--text-faint);
+  transition: color var(--t-fast);
+}
+
+.boardSource:hover { color: var(--accent-text); }
+
+.boardBarRow { display: flex; gap: var(--s-4); align-items: center; margin-bottom: var(--s-4); }
+
+.boardCount {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-xs);
+  color: var(--text-faint);
+}
+
+.boardBar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-inset);
+  overflow: hidden;
+}
+
+.boardBarFill {
+  display: block;
+  height: 100%;
+  background: var(--green);
+  transition: width var(--t-fast);
+}
+
+.boardItems { margin: 0; padding: 0; list-style: none; }
+
+.boardLine {
+  display: flex;
+  gap: var(--s-4);
+  align-items: flex-start;
+  width: 100%;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  text-align: left;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+
+.boardLine:hover { background: var(--bg-hover); border-color: var(--border); }
+
+.boardBox {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 3px;
+  color: var(--bg);
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+
+.boardLineDone .boardBox { background: var(--green); border-color: var(--green); }
+
+.boardText { font-size: var(--fs-ui); line-height: 1.5; color: var(--text); }
+.boardLineDone .boardText { color: var(--text-faint); text-decoration: line-through; }
+
+/* Scope: real content, deliberately not shaped like a checklist. */
+.boardScope { margin-top: var(--s-7); }
+
+.boardGroup { margin-bottom: var(--s-5); }
+
+.boardGroupLabel {
+  margin: 0 0 var(--s-3);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.boardChips { display: flex; flex-wrap: wrap; gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
+
+.boardChip {
+  padding: 3px var(--s-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-inset);
+  font-size: var(--fs-ui-sm);
+  color: var(--text-muted);
+}
+
+.boardScopeNote {
+  max-width: var(--measure);
+  margin: var(--s-5) 0 0;
+  font-size: var(--fs-ui-sm);
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+/* The gate. Set apart, because it is a different KIND of claim. */
+.boardGate {
+  margin-top: var(--s-7);
+  padding-top: var(--s-5);
+  border-top: 1px dashed var(--border-strong);
+}
+
+.boardPrefix {
+  margin-right: var(--s-3);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--peach);
+}
+
+.boardGate .boardLineDone .boardPrefix { color: var(--green); }
+
 /* ── 3. the day loop ────────────────────────────────────────────────────── */
 
 .loop { max-width: 660px; margin: 0 auto; padding: var(--s-8) var(--s-7) var(--s-9); }

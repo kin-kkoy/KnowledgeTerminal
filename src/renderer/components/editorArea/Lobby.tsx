@@ -5,8 +5,13 @@
  * pick up in it. It opens as a tab, and is also what an empty pane shows.
  *
  * THE DESK is permanent — where you are, and the documents that matter now.
- * Beneath it a tab picks between WHERE THINGS LIVE (the workspace by purpose)
- * and WHAT A SESSION LOOKS LIKE (the loop, and the documents each step uses).
+ * Beneath it a tab picks between THE BOARD (a contributed stretch of work you
+ * can tick off), WHERE THINGS LIVE (the workspace by purpose) and WHAT A
+ * SESSION LOOKS LIKE (the loop, and the documents each step uses).
+ *
+ * The board leads when one is contributed, because "what am I building" beats
+ * "where do files live" on the third visit and every visit after it. Nothing
+ * contributes one in a fresh workspace, and then the map leads as before.
  *
  * There is no live strip: the context panel already owns Today / Module / Gate
  * / Progress, and repeating them here was pure duplication.
@@ -22,9 +27,10 @@
  * grouped into `plan/1-core/`; looking the name up in the document index means
  * the buttons survive the folders moving again.
  */
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   ArrowRight,
+  Check,
   CornerDownRight,
   FileText,
   Library,
@@ -33,7 +39,10 @@ import {
 } from 'lucide-react'
 import { resolveIcon, type IconOverrides } from '../../icons/registry'
 import { useShallow, useStore } from '../../store'
-import type { HomeSnapshot } from '@shared/types'
+import { platform } from '../../platform'
+import { markSelfWrite } from '../../hooks/useDocument'
+import { toggleTaskAt } from '../../markdown/tasks'
+import type { BoardItem, HomeSnapshot, LobbyBoard, RelPath } from '@shared/types'
 
 import styles from './Lobby.module.css'
 
@@ -54,7 +63,7 @@ const EMPTY_ICONS: IconOverrides = {}
 export const LOBBY_PATH = 'kt://lobby'
 
 export function Lobby(): React.JSX.Element {
-  const [tab, setTab] = useState<'map' | 'loop'>('map')
+  const [tab, setTab] = useState<'board' | 'map' | 'loop'>('board')
 
   const docs = useStore(useShallow((s) => s.docs))
   const tree = useStore((s) => s.tree)
@@ -96,6 +105,19 @@ export function Lobby(): React.JSX.Element {
 
   const linkFor = (role: string): HomeSnapshot['links'][number] | undefined =>
     live.links?.find((l) => l.role === role)
+
+  const board = live.board ?? null
+
+  /**
+   * Fall back rather than show an empty first tab.
+   *
+   * The board leads, but only if one exists. A workspace whose contributor has
+   * nothing to offer — or which loses it mid-session — must not open onto a
+   * blank panel, and must not silently strand the user on a tab that vanished.
+   */
+  useEffect(() => {
+    if (!board && tab === 'board') setTab('map')
+  }, [board, tab])
 
   /** stem -> real path, so nothing here depends on where a file currently sits. */
   const byStem = useMemo(() => {
@@ -204,6 +226,17 @@ export function Lobby(): React.JSX.Element {
 
         {/* ── the switchable half ────────────────────────────────────────── */}
         <nav className={styles.tabs} role="tablist" aria-label="Lobby view">
+          {board && (
+            <button
+              type="button"
+              role="tab"
+              aria-selected={tab === 'board'}
+              className={tab === 'board' ? `${styles.tab} ${styles.tabOn}` : styles.tab}
+              onClick={() => setTab('board')}
+            >
+              {board.tab}
+            </button>
+          )}
           <button
             type="button"
             role="tab"
@@ -225,14 +258,16 @@ export function Lobby(): React.JSX.Element {
         </nav>
 
         <div className={styles.panel}>
-          {tab === 'map' ? (
+          {tab === 'board' && board && <BoardView board={board} onOpen={openPath} />}
+          {tab === 'map' && (
             <MapView
               groups={mapGroups}
               onOpen={openEntry}
               exists={exists}
               icons={iconOverrides}
             />
-          ) : (
+          )}
+          {tab === 'loop' && (
             <DayLoop
               openStem={openStem}
               hasStem={hasStem}
@@ -308,6 +343,167 @@ function StaticCard({
       <span className={styles.deskCardNote}>{enabled ? note : 'Not found'}</span>
       <span className={styles.deskCardTarget} style={{ color: colour }}>
         {enabled ? target : '—'}
+      </span>
+    </button>
+  )
+}
+
+// ── the board ──────────────────────────────────────────────────────────────
+
+/**
+ * A contributed stretch of work, with real checkboxes.
+ *
+ * Three tiers, and the distinction between them is the whole design:
+ *
+ *  - ITEMS are chores. They tick, and they fill the bar.
+ *  - GROUPS are scope — what the stretch covers. You cannot finish "dragon
+ *    class hierarchy" the way you finish "create README", so they are shown
+ *    and never counted.
+ *  - the GATE is the one box that says it is actually done, and the only one
+ *    that moves the board on.
+ *
+ * Core attaches no meaning to any of it. It was handed a title, some lines and
+ * a file to write them back to.
+ */
+function BoardView({
+  board,
+  onOpen,
+}: {
+  board: LobbyBoard
+  onOpen(path: string): () => void
+}): React.JSX.Element {
+  const done = board.items.filter((i) => i.done).length
+  const total = board.items.length
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0
+
+  return (
+    <div className={styles.board}>
+      <p className={styles.panelHint}>
+        <CornerDownRight size={12} strokeWidth={2} />
+        Ticking a box here writes it straight into the document.
+      </p>
+
+      <header className={styles.boardHead}>
+        {board.eyebrow && <p className={styles.boardEyebrow}>{board.eyebrow}</p>}
+        <h2 className={styles.boardTitle}>{board.title}</h2>
+        {board.note && <p className={styles.boardNote}>{board.note}</p>}
+        <button type="button" className={styles.boardSource} onClick={onOpen(board.path)}>
+          <FileText size={12} strokeWidth={1.9} />
+          {board.meta ? `${board.meta} · read the source` : 'Read the source'}
+        </button>
+      </header>
+
+      {total > 0 && (
+        <section className={styles.boardWork}>
+          <div className={styles.boardBarRow}>
+            <span className={styles.boardCount}>
+              {done} of {total} done
+            </span>
+            <span className={styles.boardBar}>
+              <span className={styles.boardBarFill} style={{ width: `${pct}%` }} />
+            </span>
+          </div>
+          <ul className={styles.boardItems}>
+            {board.items.map((item) => (
+              <li key={item.index}>
+                <BoardCheck item={item} path={board.path} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {board.groups.length > 0 && (
+        <section className={styles.boardScope}>
+          {board.groups.map((group) => (
+            <div key={group.label} className={styles.boardGroup}>
+              <p className={styles.boardGroupLabel}>{group.label}</p>
+              <ul className={styles.boardChips}>
+                {group.items.map((it) => (
+                  <li key={it} className={styles.boardChip}>
+                    {it}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          <p className={styles.boardScopeNote}>
+            What this covers — not a checklist. These are finished by building them,
+            not by ticking them.
+          </p>
+        </section>
+      )}
+
+      {board.gate && (
+        <section className={styles.boardGate}>
+          <BoardCheck item={board.gate} path={board.path} prefix="Done when" />
+        </section>
+      )}
+    </div>
+  )
+}
+
+/**
+ * One tickable line, written back to a document that is not open.
+ *
+ * Same two rules as the reader's own checkbox: flip optimistically, because a
+ * round trip still reads as lag, and mark the write as ours so the watcher does
+ * not treat it as an external edit. `index` counts task items in document
+ * order, which is exactly what `toggleTaskAt` expects.
+ */
+function BoardCheck({
+  item,
+  path,
+  prefix,
+}: {
+  item: BoardItem
+  path: RelPath
+  prefix?: string
+}): React.JSX.Element {
+  const [checked, setChecked] = useState(item.done)
+  const [busy, setBusy] = useState(false)
+  const workspaceId = useStore((s) => s.workspace?.id ?? null)
+  const pushNotice = useStore((s) => s.pushNotice)
+
+  // The file is the truth. If it changes underneath us — an edit in the
+  // reader, an external editor, a git checkout — the board follows it.
+  useEffect(() => setChecked(item.done), [item.done])
+
+  const toggle = useCallback(async () => {
+    if (busy || !workspaceId) return
+    const next = !checked
+    setChecked(next)
+    setBusy(true)
+    try {
+      const file = await platform.readTextFile(workspaceId, path)
+      const updated = toggleTaskAt(file.content, item.index, next)
+      if (updated === null) {
+        setChecked(!next)
+        pushNotice({ level: 'warn', message: 'Could not find that task in the file' })
+        return
+      }
+      markSelfWrite(path)
+      await platform.writeTextFile(workspaceId, path, updated)
+    } catch (err) {
+      setChecked(!next)
+      pushNotice({ level: 'error', message: 'Could not update the task', detail: String(err) })
+    } finally {
+      setBusy(false)
+    }
+  }, [busy, checked, item.index, path, pushNotice, workspaceId])
+
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      className={checked ? `${styles.boardLine} ${styles.boardLineDone}` : styles.boardLine}
+      onClick={() => void toggle()}
+    >
+      <span className={styles.boardBox}>{checked && <Check size={11} strokeWidth={3} />}</span>
+      <span className={styles.boardText}>
+        {prefix && <b className={styles.boardPrefix}>{prefix}</b>}
+        {item.text}
       </span>
     </button>
   )

@@ -309,6 +309,7 @@ export async function writeHomeSnapshot(): Promise<void> {
     recents: state.recents.slice(0, 6).map((r) => ({ title: r.title, path: r.path })),
     ...contributed,
     // Contributions may omit these, and the shape must stay complete.
+    board: contributed.board ?? null,
     tasks: contributed.tasks ?? [],
     tokens: contributed.tokens ?? {},
     links: contributed.links ?? [],

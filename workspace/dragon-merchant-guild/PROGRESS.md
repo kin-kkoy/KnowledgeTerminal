@@ -24,17 +24,12 @@ This is the honest state, not an aspiration. Update it at CLOSE each day.
 | Dragon Merchant Guild code | Not started — Milestone 0 tasks are all open |
 | Documentation | Complete — 14 documents converted and readable |
 
-### Milestone 0 — Project Foundation
+The milestone you are on is not written here any more. It lives in
+[[implementation-roadmap]] and is shown live in the Lobby, under **What to
+build** — tick a task there and it goes straight into the roadmap; tick a
+milestone's **done-when** and the Lobby moves to the next one on its own.
 
-None of these are done yet. They are the gate to Milestone 1.
-
-- [ ] Create solution
-- [ ] Create Git repository
-- [ ] Configure folder structure
-- [ ] Create README
-- [ ] Create project journal
-- [ ] Create assets folder
-- [ ] Create documentation folder
+A copy of that list used to sit here, and a copy is exactly what goes stale.
 
 ---
 

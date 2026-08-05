@@ -42,6 +42,7 @@ function normalise(snap: HomeSnapshot | null): HomeSnapshot | null {
     nextGate: snap.nextGate ?? null,
     progressLabel: snap.progressLabel ?? null,
     progressValue: snap.progressValue ?? null,
+    board: snap.board ?? null,
     tasks: Array.isArray(snap.tasks) ? snap.tasks : [],
     links: Array.isArray(snap.links) ? snap.links : [],
     recents: Array.isArray(snap.recents) ? snap.recents : [],

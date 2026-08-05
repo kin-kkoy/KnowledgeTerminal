@@ -5,7 +5,8 @@
  * slice, or the separation the plugin exists to demonstrate is fiction.
  */
 import { useSyncExternalStore } from 'react'
-import type { Curriculum, DayBlock, Progress } from './model'
+import type { RelPath } from '@shared/types'
+import type { Curriculum, DayBlock, Milestone, Progress } from './model'
 import { EMPTY_PROGRESS } from './model'
 
 interface State {
@@ -13,10 +14,23 @@ interface State {
   progress: Progress
   /** Derived from the current module's document, not stored. */
   days: DayBlock[]
+  /** Derived from the roadmap document, not stored. Empty when unconfigured. */
+  milestones: Milestone[]
+  /** Where those milestones were read from, so a tick can be written back. */
+  roadmapPath: RelPath | null
   error: string | null
 }
 
-let state: State = { curriculum: null, progress: EMPTY_PROGRESS, days: [], error: null }
+const EMPTY: State = {
+  curriculum: null,
+  progress: EMPTY_PROGRESS,
+  days: [],
+  milestones: [],
+  roadmapPath: null,
+  error: null,
+}
+
+let state: State = EMPTY
 const listeners = new Set<() => void>()
 
 function emit(): void {
@@ -38,12 +52,17 @@ export function setProgress(progress: Progress): void {
   emit()
 }
 
+export function setMilestones(milestones: Milestone[], roadmapPath: RelPath | null): void {
+  state = { ...state, milestones, roadmapPath }
+  emit()
+}
+
 export function getState(): State {
   return state
 }
 
 export function reset(): void {
-  state = { curriculum: null, progress: EMPTY_PROGRESS, days: [], error: null }
+  state = EMPTY
   emit()
 }
 

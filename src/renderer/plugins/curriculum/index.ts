@@ -17,13 +17,16 @@
  */
 import { definePlugin } from '../api'
 import { curriculumAnswerProvider } from './answers'
+import type { LobbyBoard, RelPath } from '@shared/types'
 import {
   chaptersOf,
   completionOf,
   currentChapter,
   currentDay,
+  currentMilestone,
   parseCurriculum,
   parseDayBlocks,
+  parseMilestones,
   EMPTY_PROGRESS,
   type Progress,
 } from './model'
@@ -34,6 +37,7 @@ import {
   getState,
   setCurriculum,
   setDays,
+  setMilestones,
   setPersister,
   setProgress,
   subscribeExternal,
@@ -51,6 +55,14 @@ export const curriculumPlugin = definePlugin({
   async activate(ctx) {
     const source = typeof ctx.options['source'] === 'string' ? ctx.options['source'] : null
     const docBase = typeof ctx.options['docBase'] === 'string' ? ctx.options['docBase'] : ''
+    /**
+     * The project's own milestone ladder, which is a different document from
+     * the curriculum: one is what you learn, the other is what you build. A
+     * workspace with no such thing simply leaves this unset and no board is
+     * contributed.
+     */
+    const roadmap =
+      typeof ctx.options['roadmap'] === 'string' ? (ctx.options['roadmap'] as RelPath) : null
 
     if (!source) {
       setCurriculum(null, 'Set `plugins.curriculum.source` in .kt/settings.json.')
@@ -97,10 +109,29 @@ export const curriculumPlugin = definePlugin({
         setDays([])
       }
     }
-    await refreshDays()
+    /**
+     * Re-read the roadmap and work out which milestone is live.
+     *
+     * Same bargain as `refreshDays`: derived from the document, never stored,
+     * so the milestone advances the moment its deliverable is ticked — whether
+     * that happened in this app or in any other Markdown editor.
+     */
+    const refreshMilestones = async (): Promise<void> => {
+      if (!roadmap || !(await ctx.fs.exists(roadmap))) {
+        setMilestones([], null)
+        return
+      }
+      try {
+        setMilestones(parseMilestones(await ctx.fs.readText(roadmap)), roadmap)
+      } catch {
+        setMilestones([], null)
+      }
+    }
 
-    // Reload when the curriculum OR the module document changes on disk —
-    // the second is what makes ticking a checkbox move the day along.
+    await Promise.all([refreshDays(), refreshMilestones()])
+
+    // Reload when the curriculum, the module document OR the roadmap changes
+    // on disk — the last two are what make ticking a checkbox move things on.
     ctx.fs.watch((changes) => {
       void (async () => {
         if (changes.some((c) => c.path === source)) {
@@ -110,17 +141,44 @@ export const curriculumPlugin = definePlugin({
             setCurriculum(null, `curriculum.json could not be parsed: ${String(err)}`)
           }
         }
-        await refreshDays()
+        await Promise.all([refreshDays(), refreshMilestones()])
       })()
     })
+
+    /**
+     * The milestone ladder, translated out of this plugin's vocabulary.
+     *
+     * Core is handed a heading, some tickable lines, some untickable ones and
+     * a gate. The word "milestone" appears only in the strings — which is what
+     * lets the same surface show something else entirely in another workspace.
+     */
+    const board = (): LobbyBoard | null => {
+      const { milestones, roadmapPath } = getState()
+      if (milestones.length === 0 || !roadmapPath) return null
+      const m = currentMilestone(milestones)
+      if (!m) return null
+      return {
+        tab: 'What to build',
+        eyebrow: `Milestone ${m.number} of ${milestones.length}`,
+        title: m.title,
+        note: m.goal || null,
+        meta: m.curriculum ? `Pairs with ${m.curriculum}` : null,
+        path: roadmapPath,
+        items: m.tasks,
+        groups: m.scope,
+        gate: m.deliverable,
+      }
+    }
 
     // Feeds the dashboard. The core knows none of these words — it just draws
     // whatever the source hands back.
     ctx.registerDashboardSource(() => {
       const { curriculum: c, progress } = getState()
-      if (!c) return {}
+      // The board does not depend on the curriculum, so it is offered even
+      // when there is no chapter to talk about.
+      if (!c) return { board: board() }
       const chapter = currentChapter(c, progress)
-      if (!chapter) return {}
+      if (!chapter) return { board: board() }
       const core = completionOf(c, progress, 'core')
       const branch = c.branches.find((b) => b.key === chapter.branch)
       const { days } = getState()
@@ -143,6 +201,7 @@ export const curriculumPlugin = definePlugin({
         progressLabel: 'Core modules',
         progressValue: `${core.done} of ${core.total} done`,
         tasks: [],
+        board: board(),
         // Offered under generic roles. The core surface that renders these has
         // no idea what a chapter or a day plan is — it only knows one of them
         // was nominated as the thing to read and one as the thing to do.

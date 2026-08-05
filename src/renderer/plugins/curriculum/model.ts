@@ -241,3 +241,155 @@ export function currentDay(blocks: DayBlock[]): DayBlock | null {
   if (blocks.length === 0) return null
   return blocks.find((b) => b.total === 0 || b.done < b.total) ?? blocks[blocks.length - 1]!
 }
+
+
+// ── milestones ────────────────────────────────────────────────────────
+
+export interface MilestoneItem {
+  text: string
+  done: boolean
+  /** Position among all task items in the roadmap, for write-back. */
+  index: number
+}
+
+export interface Milestone {
+  number: number
+  title: string
+  /** Which part of the curriculum it pairs with, verbatim from the source. */
+  curriculum: string
+  goal: string
+  /** Tickable work — the bullets under **Tasks** and **Features**. */
+  tasks: MilestoneItem[]
+  /** Everything else the milestone lists. Real content, but not chores. */
+  scope: Array<{ label: string; items: string[] }>
+  /** The **Deliverable** box. Ticking it is what finishes the milestone. */
+  deliverable: MilestoneItem | null
+}
+
+const MILESTONE_HEADING = /^#{2,3}\s+Milestone\s+(\d+)\s*[—–-]\s*(.*)$/i
+const LABEL = /^\*\*([A-Za-z][A-Za-z ]*)\*\*\s*(?:[—–-]\s*(.*))?$/
+const CHECKBOX = /^\s*(?:[-*+]|\d+[.)])\s+\[([ xX])\]\s*(.*)$/
+const PLAIN_BULLET = /^\s*[-*+]\s+(?!\[[ xX]\])(.+)$/
+
+/**
+ * Labels whose bullets are WORK. Everything else under a milestone is scope.
+ *
+ * A roadmap says "Introduce: dragon class hierarchy" and "Tasks: create
+ * README". Only the second is a chore you tick off; the first describes what
+ * the milestone covers. Counting both would make the progress bar a lie.
+ */
+const WORK_LABELS = new Set(['tasks', 'features'])
+
+const titleCase = (s: string): string => s.replace(/\b\w/g, (c) => c.toUpperCase())
+
+/**
+ * Split a roadmap document into milestones.
+ *
+ * Sibling of `parseDayBlocks` above, and derived the same way: the document is
+ * the source of truth, so which milestone is live is computed rather than
+ * stored, and ticking a box in the file moves it with nothing to keep in sync.
+ *
+ * Task indices are counted across the WHOLE document, fenced blocks excluded,
+ * so they line up exactly with `toggleTaskAt` in `markdown/tasks.ts` — that is
+ * what lets the Lobby tick a box in a document nobody has opened.
+ */
+export function parseMilestones(markdown: string): Milestone[] {
+  const out: Milestone[] = []
+  let current: Milestone | null = null
+  let label = ''
+  let fence: string | null = null
+  let taskIndex = -1
+
+  for (const line of markdown.split('\n')) {
+    const fenceMatch = FENCE.exec(line)
+    if (fenceMatch) {
+      const marker = fenceMatch[1]!
+      if (fence === null) fence = marker[0]!
+      else if (marker[0] === fence) fence = null
+      continue
+    }
+    if (fence !== null) continue
+
+    // Counted before anything else: every checkbox in the file advances the
+    // index, including ones outside any milestone, or the numbering would
+    // drift out of step with the writer.
+    const checkbox = CHECKBOX.exec(line)
+    if (checkbox) taskIndex++
+
+    const heading = MILESTONE_HEADING.exec(line)
+    if (heading) {
+      current = {
+        number: Number(heading[1]),
+        title: (heading[2] ?? '').trim(),
+        curriculum: '',
+        goal: '',
+        tasks: [],
+        scope: [],
+        deliverable: null,
+      }
+      out.push(current)
+      label = ''
+      continue
+    }
+    if (!current) continue
+
+    const labelMatch = LABEL.exec(line)
+    if (labelMatch) {
+      label = labelMatch[1]!.trim().toLowerCase()
+      const value = (labelMatch[2] ?? '').trim()
+      if (label === 'curriculum') current.curriculum = value
+      if (label === 'goal') current.goal = value
+      continue
+    }
+
+    if (checkbox) {
+      const item: MilestoneItem = {
+        text: checkbox[2]!.trim(),
+        done: checkbox[1]!.toLowerCase() === 'x',
+        index: taskIndex,
+      }
+      if (label === 'deliverable') current.deliverable = item
+      else current.tasks.push(item)
+      continue
+    }
+
+    /**
+     * The deliverable ENDS a milestone, even when prose keeps going.
+     *
+     * The last milestone in a roadmap is usually followed by closing sections
+     * — things deliberately deferred, what success looks like — and without
+     * this they would all be swept up as that milestone's scope, which is
+     * simply untrue.
+     */
+    if (current.deliverable) continue
+
+    const bullet = PLAIN_BULLET.exec(line)
+    if (bullet && !WORK_LABELS.has(label)) {
+      // A list under no heading at all still says something; dropping it
+      // silently would lose content the document plainly states.
+      const groupLabel = label ? titleCase(label) : 'Includes'
+      let group = current.scope[current.scope.length - 1]
+      if (!group || group.label !== groupLabel) {
+        group = { label: groupLabel, items: [] }
+        current.scope.push(group)
+      }
+      group.items.push(bullet[1]!.trim())
+    }
+  }
+
+  return out
+}
+
+/**
+ * The milestone being worked on: the first whose deliverable is unticked.
+ *
+ * Gated on the DELIVERABLE rather than on the task count, for two reasons. It
+ * is the workspace's own rule — "a task is ✅ only when its done-when criterion
+ * is met, not when time was spent on it" — and it is the only rule that works
+ * for a milestone listing no tasks at all, which would otherwise have no way to
+ * ever end and would strand the board on it forever.
+ */
+export function currentMilestone(list: Milestone[]): Milestone | null {
+  if (list.length === 0) return null
+  return list.find((m) => !m.deliverable?.done) ?? list[list.length - 1]!
+}

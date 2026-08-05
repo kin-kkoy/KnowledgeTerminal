@@ -2,8 +2,8 @@
   "version": 1,
   "workspace": {
     "name": "Dragon Merchant Guild",
-    "mission": "Module 01 \u2014 C# Fundamentals \u00b7 Day 1: types and the value/reference split",
-    "goal": "Close Milestone 0 \u2014 solution, repo, folder structure, README",
+    "mission": "Module 01 — C# Fundamentals · Day 1: types and the value/reference split",
+    "goal": "Close Milestone 0 — solution, repo, folder structure, README",
     "quote": {
       "text": "A task is done when its done-when criterion is met, not when time was spent on it.",
       "source": "curriculum/README.md"
@@ -188,7 +188,8 @@
       "enabled": true,
       "source": "curriculum/curriculum.json",
       "docBase": "curriculum",
-      "stateFile": ".kt/progress.json"
+      "stateFile": ".kt/progress.json",
+      "roadmap": "roadmap/implementation-roadmap.md"
     }
   },
   "notes": {
@@ -203,7 +204,7 @@
   "gate": {
     "enabled": true,
     "title": "Write today's log before you stop.",
-    "body": "Open your notes app and write it. This window stays until you say you're done \u2014 drag it aside if you need the screen."
+    "body": "Open your notes app and write it. This window stays until you say you're done — drag it aside if you need the screen."
   },
   "lobby": {
     "map": [
